@@ -1,0 +1,4 @@
+[TestingAndDebugging::ProhibitNoStrict]
+allow=refs
+[-Subroutines::ProhibitSubroutinePrototypes]
+[-Subroutines::ProhibitExplicitReturnUndef]
