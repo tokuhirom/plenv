@@ -2,11 +2,12 @@
 use strict;
 use warnings;
 use Getopt::Long;
-use LWP::UserAgent;
 use Cwd;
 use Pod::Usage;
-use File::Path qw/make_path/;
-require local::lib;
+use File::Path qw/mkpath/;
+use Config;
+use constant WIN32 => $^O eq 'MSWin32';
+my $quote = WIN32 ? q/"/ : q/'/;
 
 our $VERSION = '0.01';
 
@@ -16,10 +17,11 @@ GetOptions(
 pod2usage() if $help;
 
 my $CPANM_URL = 'http://github.com/miyagawa/cpanminus/raw/master/cpanm';
+my $LOCAL_LIB_URL = 'http://cpansearch.perl.org/src/APEIRON/local-lib-1.005001/lib/local/lib.pm';
 
 @ARGV==1 or pod2usage;
 
-&main;exit;
+&init_tools;&main;exit;
 
 sub main {
     my $dest = shift @ARGV;
@@ -29,12 +31,23 @@ sub main {
 sub setup {
     my $dest = shift;
     $dest = Cwd::abs_path($dest);
-    make_path("$dest", "$dest/bin", {error => \my $err});
+    mkpath(
+        "$dest", "$dest/lib/perl5/local/",
+        "$dest/bin", { error => \my $err }
+    );
     die @$err if @$err;
 
-    local::lib->import($dest);
-
     {
+        my $fname = "$dest/lib/perl5/local/lib.pm";
+        my $content = get($LOCAL_LIB_URL);
+        open my $fh, '>', $fname
+            or die "oops $fname, $!";
+        print $fh $content;
+        close $fh;
+        unshift @INC, "$dest/lib/perl5/";
+    }
+    {
+        require local::lib;
         my $fname = "$dest/bin/activate";
         open my $ll_fh, '>', \my $local_lib_src
             or die "oops";
@@ -49,10 +62,16 @@ sub setup {
 # you cannot run it directly
 
 deactivate () {
-    if [ -n "$_OLD_VIRTUAL_PATH" ] ; then
-        PATH="$_OLD_VIRTUAL_PATH"
+    if [ -n "$_OLD_PL_PATH" ] ; then
+        PATH="$_OLD_PL_PATH"
         export PATH
-        unset _OLD_VIRTUAL_PATH
+        unset _OLD_PL_PATH
+    fi
+
+    if [ -n "$_OLD_PL_PERL5LIB" ] ; then
+        PERL5LIB="$_OLD_PL_PERL5LIB"
+        export PERL5LIB
+        unset _OLD_PL_PERL5LIB
     fi
 
     # This should detect bash and zsh, which have a hash command that must
@@ -62,13 +81,13 @@ deactivate () {
         hash -r
     fi
 
-    if [ -n "$_OLD_VIRTUAL_PS1" ] ; then
-        PS1="$_OLD_VIRTUAL_PS1"
+    if [ -n "$_OLD_PL_PS1" ] ; then
+        PS1="$_OLD_PL_PS1"
         export PS1
-        unset _OLD_VIRTUAL_PS1
+        unset _OLD_PL_PS1
     fi
 
-    unset VIRTUAL_ENV
+    unset PL_ENV
     if [ ! "$1" = "nondestructive" ] ; then
     # Self destruct!
         unset -f deactivate
@@ -78,24 +97,26 @@ deactivate () {
 # unset irrelavent variables
 deactivate nondestructive
 
-VIRTUAL_ENV="<<<$dest>>>"
-export VIRTUAL_ENV
+PL_ENV=$(cd $(dirname $0)/..; pwd)
+export PL_ENV
 
-_OLD_VIRTUAL_PATH="$PATH"
-PATH="$VIRTUAL_ENV/bin:$PATH"
+_OLD_PL_PATH="$PATH"
+PATH="$PL_ENV/bin:$PATH"
 export PATH
 
-_OLD_VIRTUAL_PS1="$PS1"
-if [ "`basename \"$VIRTUAL_ENV\"`" = "__" ] ; then
+_OLD_PL_PS1="$PS1"
+if [ "`basename \"$PL_ENV\"`" = "__" ] ; then
     # special case for Aspen magic directories
     # see http://www.zetadev.com/software/aspen/
-    PS1="[`basename \`dirname \"$VIRTUAL_ENV\"\``] $PS1"
+    PS1="[`basename \`dirname \"$PL_ENV\"\``] $PS1"
 else
-    PS1="(`basename \"$VIRTUAL_ENV\"`)$PS1"
+    PS1="(`basename \"$PL_ENV\"`)$PS1"
 fi
 export PS1
 
-<<<$local_lib_src>>>
+_OLD_PL_PERL5LIB="$PERL5LIB"
+
+<<<$^X>>> -I$PL_ENV/lib/perl5/ -Mlocal::lib=$PL_ENV | eval
 
 # This should detect bash and zsh, which have a hash command that must
 # be called to get it to forget past commands.  Without forgetting
@@ -104,7 +125,7 @@ if [ -n "$BASH" -o -n "$ZSH_VERSION" ] ; then
     hash -r
 fi
 ...
-        $src =~ s/<<<(\$[a-z_]+)>>>/$1/gee;
+        $src =~ s/<<<(\$[A-Za-z_^]+)>>>/$1/gee;
         print {$fh} $src;
         close $fh;
     }
@@ -114,7 +135,7 @@ fi
         open my $fh, '>', $fname
             or die "cannot open file($fname): $!";
         my $cpanm = get($CPANM_URL);
-        $cpanm =~ s{#!/usr/bin/env perl}{#!$^X\nuse local::lib "$dest";\n};
+        $cpanm =~ s{#!/usr/bin/env perl}{#!$^X\nuse FindBin;\nuse File::Spec;\nuse local::lib File::Spec->catfile(\$FindBin::Bin, '..');\n};
         print {$fh} $cpanm;
         close $fh;
         chmod 0755, $fname;
@@ -133,12 +154,33 @@ exec '$^X', '-Mlocal::lib=$dest', \@ARGV
     }
 }
 
-sub get {
-    my ($url) = @_;
-    my $ua = LWP::UserAgent->new();
-    my $res = $ua->get($url);
-    $res->is_success or die $res->status_line;
-    return $res->content;
+# taken from cpanminus
+sub which {
+    my($name) = @_;
+    my $exe_ext = $Config{_exe};
+    foreach my $dir(File::Spec->path){
+        my $fullpath = File::Spec->catfile($dir, $name);
+        if (-x $fullpath || -x ($fullpath .= $exe_ext)){
+            if ($fullpath =~ /\s/ && $fullpath !~ /^$quote/) {
+                $fullpath = "$quote$fullpath$quote"
+            }
+            return $fullpath;
+        }
+    }
+    return;
+}
+
+sub init_tools {
+    if (!$ENV{DEBUG_WGET} && eval { require LWP::Simple }) {
+        *get = sub { LWP::Simple::get(@_) };
+    } elsif (my $wget = which 'wget') {
+        *get = sub {
+            my($uri, $path) = @_;
+            system($wget, '--quiet', $uri, '-O', '-') == 0;
+        };
+    } else {
+        die "Cannot find LWP::Simple and wget.\n";
+    }
 }
 
 __END__
