@@ -135,7 +135,7 @@ fi
         open my $fh, '>', $fname
             or die "cannot open file($fname): $!";
         my $cpanm = get($CPANM_URL);
-        $cpanm =~ s{#!/usr/bin/env perl}{#!$^X\nuse FindBin;\nuse File::Spec;\nuse local::lib File::Spec->catfile(\$FindBin::Bin, '..');\n};
+        $cpanm =~ s{#!/usr/bin/env perl}{#!$^X\nuse FindBin;\nuse File::Spec;\nuse lib File::Spec->catfile(\$FindBin::Bin, '..', 'lib', 'perl5');use local::lib File::Spec->catfile(\$FindBin::Bin, '..');\n};
         print {$fh} $cpanm;
         close $fh;
         chmod 0755, $fname;
@@ -147,7 +147,9 @@ fi
             or die "cannot open file($fname): $!";
         print {$fh} <<"...";
 #!$^X
-exec '$^X', '-Mlocal::lib=$dest', \@ARGV
+use FindBin;
+use File::Spec;
+exec '$^X', '-I' . File::Spec->catfile(\$FindBin::Bin, '..', 'lib', 'perl5'), '-Mlocal::lib=$dest', \@ARGV
 ...
         close $fh;
         chmod 0755, $fname;
@@ -189,3 +191,21 @@ __END__
 
     % plenv ./env/
 
+    % source ./env/bin/activate
+    # going to the virtual environment.
+
+    % ./env/bin/cpanm-local Plack
+    # install CPAN module to virtual environment
+
+    (env)% deactivate
+    # back to normal state
+
+=head1 DESCRIPTION
+
+plenv creates virtual environment for perl5.
+
+This script setting up L<local::lib> environment very easy.
+
+=head1 SEE ALSO
+
+virtualenv

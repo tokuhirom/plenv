@@ -1,24 +1,22 @@
-# NAME
-
-App::plenv -
-
 # SYNOPSIS
 
-  use App::plenv;
+    % plenv ./env/
+
+    % source ./env/bin/activate
+    # going to the virtual environment.
+
+    % ./env/bin/cpanm-local Plack
+    # install CPAN module to virtual environment
+
+    (env)% deactivate
+    # back to normal state
 
 # DESCRIPTION
 
-App::plenv is
+plenv creates virtual environment for perl5.
 
-# AUTHOR
-
-Tokuhiro Matsuno <tokuhirom AAJKLFJEF GMAIL COM>
+This script setting up [local::lib](http://search.cpan.org/search?mode=module&query=local::lib) environment very easy.
 
 # SEE ALSO
 
-# LICENSE
-
-Copyright (C) Tokuhiro Matsuno
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
+virtualenv
