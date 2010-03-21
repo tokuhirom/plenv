@@ -39,11 +39,10 @@ sub setup {
 
     {
         my $fname = "$dest/lib/perl5/local/lib.pm";
-        my $content = get($LOCAL_LIB_URL);
-        open my $fh, '>', $fname
-            or die "oops $fname, $!";
-        print $fh $content;
-        close $fh;
+        my $content =
+          eval { require local::lib; slurp( '<', $INC{'local/lib.pm'} ) }
+          || get($LOCAL_LIB_URL);
+        write_file($fname, $content);
         unshift @INC, "$dest/lib/perl5/";
     }
     {
@@ -55,8 +54,6 @@ sub setup {
             local *STDOUT = $ll_fh;
             local::lib->print_environment_vars_for($dest);
         }
-        open my $fh, '>', $fname
-            or die "cannot open file($fname): $!";
         my $src = <<'...';
 # This file must be used with "source bin/activate" *from bash*
 # you cannot run it directly
@@ -125,32 +122,25 @@ if [ -n "$BASH" -o -n "$ZSH_VERSION" ] ; then
 fi
 ...
         $src =~ s/<<<(\$[A-Za-z_^]+)>>>/$1/gee;
-        print {$fh} $src;
-        close $fh;
+        write_file($fname, $src);
     }
 
     {
         my $fname = "$dest/bin/cpanm-local";
-        open my $fh, '>', $fname
-            or die "cannot open file($fname): $!";
         my $cpanm = get($CPANM_URL);
         $cpanm =~ s{#!/usr/bin/env perl}{#!$^X\nuse FindBin;\nuse File::Spec;\nuse lib File::Spec->catfile(\$FindBin::Bin, '..', 'lib', 'perl5');use local::lib File::Spec->catfile(\$FindBin::Bin, '..');\n};
-        print {$fh} $cpanm;
-        close $fh;
+        write_file($fname, $cpanm);
         chmod 0755, $fname;
     }
 
     {
         my $fname = "$dest/bin/perl";
-        open my $fh, '>', $fname
-            or die "cannot open file($fname): $!";
-        print {$fh} <<"...";
+        write_file($fname, <<"...");
 #!$^X
 use FindBin;
 use File::Spec;
 exec '$^X', '-I' . File::Spec->catfile(\$FindBin::Bin, '..', 'lib', 'perl5'), '-Mlocal::lib=$dest', \@ARGV
 ...
-        close $fh;
         chmod 0755, $fname;
     }
 }
@@ -181,6 +171,29 @@ sub init_tools {
         };
     } else {
         die "Cannot find LWP::Simple and wget.\n";
+    }
+}
+
+sub write_file {
+    my ($fname, $content) = @_;
+    print "writing $fname\n";
+    utf8::encode($content) if utf8::is_utf8($content);
+    open my $fh, '>', $fname
+        or die "cannot open file($fname): $!";
+    print {$fh} $content;
+    close $fh;
+}
+
+# my $content = slurp '<', $fname;
+# my $content = slurp $fname;
+sub slurp {
+    if ( @_ == 1 ) {
+        open( my $fh, '<', $_[0] ) or return;
+        return do { local $/; <$fh> };
+    }
+    else {
+        open( my $fh, @_ ) or return;    ## no critic.
+        return do { local $/; <$fh> };
     }
 }
 
