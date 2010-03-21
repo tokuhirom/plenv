@@ -7,6 +7,7 @@ use Pod::Usage;
 use File::Path qw/mkpath/;
 use Config;
 use constant WIN32 => $^O eq 'MSWin32';
+use File::Temp;
 my $quote = WIN32 ? q/"/ : q/'/;
 
 our $VERSION = '0.01';
@@ -134,15 +135,62 @@ fi
     }
 
     {
-        my $fname = "$dest/bin/perl";
-        write_file($fname, <<"...");
-#!$^X
-use FindBin;
-use File::Spec;
-exec '$^X', '-I' . File::Spec->catfile(\$FindBin::Bin, '..', 'lib', 'perl5'), '-Mlocal::lib=$dest', \@ARGV
-...
-        chmod 0755, $fname;
+        mk_perl($dest)
     }
+}
+
+sub mk_perl {
+    my ($dest) = @_;
+    # Meant to mimic the shell command
+    #     exec perl -Mperl5i::latest "$@"
+    #
+    # This is a C program so it works in a #! line.
+
+    my $src = <<'...';
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+int main (int argc, char* argv[]) {
+    int i;
+    const char* perl_cmd = "<<<$^X>>>";
+    char* perl_args[argc+1];
+    perl_args[0] = argv[0];
+    perl_args[1] = "-I<<<$p1>>>";
+    perl_args[2] = "-I<<<$p2>>>";
+
+    for( i = 1;  i < argc;  i++ ) {
+        #if defined(WIN32)
+            /* Windows arguments aren't really a list but a single string,
+             * execv() fakes it, so we need to put the quotes back.
+             */
+            char* wrapped_arg = (char *)malloc( strlen(argv[i]) + 3 );
+            sprintf(wrapped_arg, "\"%%s\"", argv[i]);
+            perl_args[i+2] = wrapped_arg;
+        #else
+            perl_args[i+2] = argv[i];
+        #endif
+    }
+
+    /* Argument array must be terminated by a null */
+    perl_args[argc+2] = (char *)NULL;
+
+    return execv( perl_cmd, perl_args );
+}
+...
+    my $p1 = local::lib->install_base_perl_path($dest);
+    my $p2 = local::lib->install_base_arch_path($dest);
+    $src =~ s/<<<(\$[A-Za-z0-9_^]+)>>>/$1/gee;
+
+    my $fh = File::Temp->new(UNLINK => 1, SUFFIX => '.c');
+    print {$fh} $src;
+    close $fh;
+
+    system($Config{cc}, '-o', "$dest/bin/perl", $fh->filename) == 0
+        or die "cannot compile 'perl' command";
+
+    print "compiled $dest/bin/perl\n";
 }
 
 # taken from cpanminus
