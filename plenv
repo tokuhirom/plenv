@@ -17,7 +17,6 @@ GetOptions(
 );
 pod2usage() if $help;
 
-my $CPANM_URL = 'http://github.com/miyagawa/cpanminus/raw/master/cpanm';
 my $LOCAL_LIB_URL = 'http://cpansearch.perl.org/src/APEIRON/local-lib-1.005001/lib/local/lib.pm';
 
 @ARGV==1 or pod2usage;
@@ -127,10 +126,15 @@ fi
     }
 
     {
-        my $fname = "$dest/bin/cpanm-local";
-        my $cpanm = get($CPANM_URL);
-        $cpanm =~ s{#!/usr/bin/env perl}{#!$^X\nuse FindBin;\nuse File::Spec;\nuse lib File::Spec->catfile(\$FindBin::Bin, '..', 'lib', 'perl5');use local::lib File::Spec->catfile(\$FindBin::Bin, '..');\n};
-        write_file($fname, $cpanm);
+        my $fname = "$dest/bin/cpanm";
+        my $cpanm = which('cpanm');
+        my $src = <<'...';
+#!<<<$^X>>>
+exec '<<<$cpanm>>>', '-l', '<<<$dest>>>', @ARGV;
+die "cannot exec: $!";
+...
+        $src =~ s/<<<(\$[A-Za-z_^]+)>>>/$1/gee;
+        write_file($fname, $src);
         chmod 0755, $fname;
     }
 
