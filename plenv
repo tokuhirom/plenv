@@ -129,14 +129,16 @@ fi
     {
         my $fname = "$dest/bin/cpanm";
         my $cpanm = which('cpanm');
-        my $src = <<'...';
+        if ($cpanm) {
+            my $src = <<'...';
 #!<<<$^X>>>
 exec '<<<$cpanm>>>', '-l', '<<<$dest>>>', @ARGV;
 die "cannot exec: $!";
 ...
-        $src =~ s/<<<(\$[A-Za-z_^]+)>>>/$1/gee;
-        write_file($fname, $src);
-        chmod 0755, $fname;
+            $src =~ s/<<<(\$[A-Za-z_^]+)>>>/$1/gee;
+            write_file($fname, $src);
+            chmod 0755, $fname;
+        }
     }
 
     {
