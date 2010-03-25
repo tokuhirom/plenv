@@ -41,6 +41,7 @@ sub setup {
         my $fname = "$dest/lib/perl5/local/lib.pm";
         my $content =
           eval { require local::lib; slurp( '<', $INC{'local/lib.pm'} ) }
+          || do { my $fh; -f 'inc/inc_local-lib/local/lib.pm' && open($fh, '<', 'inc/inc_local-lib/local/lib.pm') && do { local $/; <$fh> } }
           || get($LOCAL_LIB_URL);
         write_file($fname, $content);
         unshift @INC, "$dest/lib/perl5/";
@@ -214,15 +215,10 @@ sub which {
 }
 
 sub init_tools {
-    if (!$ENV{DEBUG_WGET} && eval { require LWP::Simple }) {
+    if (!$ENV{DEBUG_HTTP_LITE} && eval { require LWP::Simple }) {
         *get = sub { LWP::Simple::get(@_) };
-    } elsif (my $wget = which 'wget') {
-        *get = sub {
-            my($uri, $path) = @_;
-            system($wget, '--quiet', $uri, '-O', '-') == 0;
-        };
     } else {
-        die "Cannot find LWP::Simple and wget.\n";
+        die "Cannot find LWP::Simple.\n";
     }
 }
 
