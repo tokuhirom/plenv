@@ -18,3 +18,4 @@
 ^[^/]+\.pl$
 ^\.shipit$
 \.sw[po]$
+^MYMETA.yml$

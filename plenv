@@ -21,7 +21,7 @@ my $LOCAL_LIB_URL = 'http://cpansearch.perl.org/src/APEIRON/local-lib-1.005001/l
 
 @ARGV==1 or pod2usage;
 
-&init_tools;&main;exit;
+&main;exit;
 
 sub main {
     my $dest = shift @ARGV;
@@ -31,18 +31,14 @@ sub main {
 sub setup {
     my $dest = shift;
     $dest = Cwd::abs_path($dest);
-    mkpath(
-        "$dest", "$dest/lib/perl5/local/",
-        "$dest/bin", { error => \my $err }
-    );
-    die @$err if @$err;
+    mkpath( [ "$dest", "$dest/lib/perl5/local/", "$dest/bin" ] );
 
     {
         my $fname = "$dest/lib/perl5/local/lib.pm";
         my $content =
           eval { require local::lib; slurp( '<', $INC{'local/lib.pm'} ) }
           || do { my $fh; -f 'inc/inc_local-lib/local/lib.pm' && open($fh, '<', 'inc/inc_local-lib/local/lib.pm') && do { local $/; <$fh> } }
-          || get($LOCAL_LIB_URL);
+          || do { init_tools(); get($LOCAL_LIB_URL) };
         write_file($fname, $content);
         unshift @INC, "$dest/lib/perl5/";
     }

@@ -16,7 +16,10 @@ if (eval "use Pod::Markdown;1") {
 my $build = Module::Build->new(
     module_name          => 'App::plenv',
     build_requires       => { 'Test::More' => 0, },
-    requries             => {},
+    requries             => {
+        'LWP::Simple' => 0,
+        'local::lib'  => 0,
+    },
     recommends           => {},
     recursive_test_files => 1,
     sign                 => 0,
