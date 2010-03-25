@@ -4,7 +4,7 @@ all_from 'plenv';
 
 install_script 'plenv';
 
-readme_markdown_from 'plenv';
+readme_markdown_from('plenv');
 tests 't/*.t t/*/*.t t/*/*/*.t t/*/*/*/*.t';
 test_requires 'Test::More';
 test_requires 'YAML';
