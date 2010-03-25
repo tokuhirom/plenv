@@ -30,7 +30,7 @@ sub main {
 
 sub setup {
     my $dest = shift;
-    $dest = Cwd::abs_path($dest);
+    $dest = Cwd::abs_path($dest) || $dest;
     mkpath( [ "$dest", "$dest/lib/perl5/local/", "$dest/bin" ] );
 
     {
