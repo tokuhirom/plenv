@@ -403,6 +403,6 @@ Push following command to your .zshrc.
 
 Try to use following command.
 
-    % curl -L http://cpanmin.us | perl - --self-upgrade
+    % plenv install-cpanm
 
 =back
