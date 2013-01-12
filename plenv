@@ -170,24 +170,52 @@ sub CMD_install {
 sub install {
     my $stuff = shift @ARGV;
 
+    my $installation_name;
+    my $test;
+    my (@D, @A, @U);
+    Getopt::Long::Configure(
+        'pass_through',
+        'no_ignore_case',
+        'bundling',
+    );
+    GetOptions(
+        'test' => \$test,
+        'as=s', \$installation_name,
+        'D=s@' => \@D,
+        'A=s@' => \@A,
+        'U=s@' => \@U,
+    );
+    my @configure_options = @ARGV;
+    unless (@configure_options) {
+        push @configure_options, '-de';
+    }
+
+    for (@D, @A, @U) {
+        for (@_) {
+            s/^=//;
+        }
+    }
+
+    push @configure_options, map { "-D$_" } @D;
+    push @configure_options, map { "-A$_" } @A;
+    push @configure_options, map { "-U$_" } @U;
+
     if ($stuff =~ /\.(gz|bz2)$/) {
         # install from file
         my $dist_tarball_path = $stuff;
 
-        my $installation_name = basename($dist_tarball_path);
-        $installation_name =~ s!\.tar\..+$!!; # remove ext
-        $installation_name =~ s!^perl-!!; # remove prefix
-
-        GetOptions(
-            'as=s', \$installation_name,
-        );
+        $installation_name ||= do {
+            my $name = basename($dist_tarball_path);
+            $name =~ s!\.tar\..+$!!; # remove ext
+            $name =~ s!^perl-!!; # remove prefix
+            $name;
+        };
 
         if (is_installed( $installation_name )) {
             die "\nABORT: $installation_name is already installed.\n\n";
         }
 
         # -de means "use default settings without interactive questions"
-        my @configure_options = @ARGV ? @ARGV : ('-de');
         my $dst_path = catdir($PLENV_HOME, 'versions', $installation_name);
         Perl::Build->install_from_tarball(
             $dist_tarball_path => (
@@ -205,15 +233,14 @@ sub install {
     } else {
         # install from CPAN
         my $version = $stuff;
-        my $installation_name = $version;
-
-        GetOptions(
-            'as=s', \$installation_name,
-        );
-        my @configure_options = @ARGV ? @ARGV : ('-de');
+        $installation_name ||= $version;
 
         if (is_installed( $installation_name )) {
             die "\nABORT: $installation_name is already installed.\n\n";
+        }
+
+        if ($version =~ /^5\.1[13579]\./) {
+            push @configure_options, '-Dusedevel';
         }
 
         my $dst_path = catdir($PLENV_HOME, 'versions', $installation_name);
