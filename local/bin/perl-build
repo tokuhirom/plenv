@@ -1,0 +1,72 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use Perl::Build;
+use Getopt::Long;
+use Pod::Usage;
+use Getopt::Long;
+
+my $test = undef;
+my (@D, @A, @U);
+Getopt::Long::Configure(
+    'pass_through',
+    'no_ignore_case',
+    'bundling',
+);
+GetOptions(
+    'test' => \$test,
+    'D=s@' => \@D,
+    'A=s@' => \@A,
+    'U=s@' => \@U,
+);
+for (@D, @A, @U) {
+    for (@_) {
+        s/^=//;
+    }
+}
+
+my $stuff   = shift @ARGV or pod2usage();
+my $dest    = shift @ARGV or pod2usage();
+
+my @configure_options = @ARGV ? @ARGV : ('-de');
+push @configure_options, map { "-D$_" } @D;
+push @configure_options, map { "-A$_" } @A;
+push @configure_options, map { "-U$_" } @U;
+
+if ($stuff =~ /\.(gz|bz2)$/) {
+    Perl::Build->install_from_tarball(
+        $stuff => (
+            dst_path          => $dest,
+            configure_options => \@configure_options,
+            test              => $test,
+        )
+    );
+} else {
+    my $version = $stuff;
+    Perl::Build->install_from_cpan(
+        $version => (
+            dst_path          => $dest,
+            configure_options => \@configure_options,
+            test              => $test,
+        )
+    );
+}
+
+__END__
+
+=head1 NAME
+
+perl-build - perl binary builder
+
+=head1 SYNOPSIS
+
+    perl-build 5.16.2 /usr/local/perl-5.16.2
+
+=head1 DESCRIPTION
+
+This script builds perl5 from CPAN or tar ball.
+
+=head1 SEE ALSO
+
+L<perlbrew>, L<plenv>
+
