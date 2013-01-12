@@ -5,7 +5,6 @@ use utf8;
 use File::Spec::Functions qw(catfile catdir rel2abs);
 use File::Basename;
 use lib catdir(dirname(__FILE__), 'local', 'lib', 'perl5');
-use lib catdir(dirname(__FILE__), 'lib');
 use Pod::Usage;
 use File::Path qw(mkpath);
 use Getopt::Long;
@@ -189,14 +188,19 @@ sub install {
 
         # -de means "use default settings without interactive questions"
         my @configure_options = @ARGV ? @ARGV : ('-de');
+        my $dst_path = catdir($PLENV_HOME, 'versions', $installation_name);
         Perl::Build->install_from_tarball(
             $dist_tarball_path => (
                 build_dir => catdir($PLENV_HOME, 'build'),
-                dst_path => catdir($PLENV_HOME, 'versions', $installation_name),
+                dst_path => $dst_path,
                 configure_options => \@configure_options,
                 patchperl => patchperl_cmd(),
                 test => 0,
             )
+        );
+
+        Perl::Build->symlink_devel_executables(
+            catdir($dst_path, 'bin'),
         );
     } else {
         # install from CPAN
@@ -212,15 +216,19 @@ sub install {
             die "\nABORT: $installation_name is already installed.\n\n";
         }
 
+        my $dst_path = catdir($PLENV_HOME, 'versions', $installation_name);
         Perl::Build->install_from_cpan(
             $version => (
                 tarball_dir => catdir($PLENV_HOME, 'dists'),
                 build_dir => catdir($PLENV_HOME, 'build'),
-                dst_path => catdir($PLENV_HOME, 'versions', $installation_name),
+                dst_path => $dst_path,
                 configure_options => \@configure_options,
                 patchperl => patchperl_cmd(),
                 test => 0,
             )
+        );
+        Perl::Build->symlink_devel_executables(
+            catdir($dst_path, 'bin'),
         );
     }
 }
