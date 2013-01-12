@@ -6,9 +6,10 @@ use File::Spec::Functions qw(catfile catdir rel2abs);
 use File::Basename;
 use lib catdir(dirname(__FILE__), 'local', 'lib', 'perl5');
 use Pod::Usage;
-use File::Path qw(mkpath);
+use File::Path qw(mkpath rmtree);
 use Getopt::Long;
 use Perl::Build;
+use POSIX ();
 
 my $PLENV_HOME;
 
@@ -18,6 +19,8 @@ my $PLENV_HOME;
 
 sub main {
     my $cmd = shift @ARGV or CMD_help();
+    $cmd =~ s/-/_/g;
+
     my $code = __PACKAGE__->can("CMD_$cmd");
     if ($code) {
         $code->();
@@ -200,6 +203,9 @@ sub install {
     push @configure_options, map { "-A$_" } @A;
     push @configure_options, map { "-U$_" } @U;
 
+    my $build_dir = catdir(File::Spec->tmpdir(), POSIX::strftime("perl-build-%Y%m%d-%H%M%S$$", localtime()));
+    mkpath($build_dir);
+
     if ($stuff =~ /\.(gz|bz2)$/) {
         # install from file
         my $dist_tarball_path = $stuff;
@@ -219,7 +225,7 @@ sub install {
         my $dst_path = catdir($PLENV_HOME, 'versions', $installation_name);
         Perl::Build->install_from_tarball(
             $dist_tarball_path => (
-                build_dir => catdir($PLENV_HOME, 'build'),
+                build_dir => $build_dir,
                 dst_path => $dst_path,
                 configure_options => \@configure_options,
                 patchperl => patchperl_cmd(),
@@ -244,10 +250,11 @@ sub install {
         }
 
         my $dst_path = catdir($PLENV_HOME, 'versions', $installation_name);
+        print "Install $version to $dst_path\n";
         Perl::Build->install_from_cpan(
             $version => (
-                tarball_dir => catdir($PLENV_HOME, 'dists'),
-                build_dir => catdir($PLENV_HOME, 'build'),
+                # tarball_dir => catdir($PLENV_HOME, 'dists'),
+                build_dir => $build_dir,
                 dst_path => $dst_path,
                 configure_options => \@configure_options,
                 patchperl => patchperl_cmd(),
@@ -258,6 +265,9 @@ sub install {
             catdir($dst_path, 'bin'),
         );
     }
+
+    # build dir was not useful after install successfully.
+    rmtree($build_dir);
 }
 
 sub patchperl_cmd {
@@ -329,6 +339,11 @@ exec "%s" exec "$program" "$@"
     }
 }
 
+sub CMD_install_cpanm {
+    print("Installing cpanm to current perl\n");
+    system("curl -L http://cpanmin.us | perl - --self-upgrade");
+}
+
 sub CMD_available {
     my @available = Perl::Build->available_perls();
     print $_, "\n" for @available;
@@ -358,6 +373,9 @@ __END__
     # run this command after install cpan module, contains executable script.
     plenv rehash
 
+    # install cpanm to current perl
+    plenv install-cpanm
+
 =head1 INSTALLATION
 
     git clone ... ~/.plenv/
@@ -384,10 +402,6 @@ Push following command to your .zshrc.
 =item How can I install cpanm?
 
 Try to use following command.
-
-    % plenv exec cpan -i App::cpanminus
-
-Or
 
     % curl -L http://cpanmin.us | perl - --self-upgrade
 
