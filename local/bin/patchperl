@@ -1,0 +1,39 @@
+#!/Users/tokuhirom/perl5/perlbrew/perls/perl-5.16.1/bin/perl
+
+eval 'exec /Users/tokuhirom/perl5/perlbrew/perls/perl-5.16.1/bin/perl  -S $0 ${1+"$@"}'
+    if 0; # not running under some shell
+
+package
+  patchperl;
+# ABSTRACT: patch a perl source tree
+
+use strict;
+use warnings;
+use Devel::PatchPerl;
+
+Devel::PatchPerl->patch_source($ARGV[1], $ARGV[0]);
+
+__END__
+=pod
+
+=head1 NAME
+
+patchperl - patch a perl source tree
+
+=head1 VERSION
+
+version 0.76
+
+=head1 AUTHOR
+
+Chris Williams <chris@bingosnet.co.uk>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2012 by Chris Williams and Marcus Holland-Moritz.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+

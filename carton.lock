@@ -1,0 +1,208 @@
+{
+   "modules" : {
+      "CPAN::Perl::Releases" : {
+         "dist" : "CPAN-Perl-Releases-0.92",
+         "mymeta" : {
+            "abstract" : "Mapping Perl releases on CPAN to the location of the tarballs",
+            "author" : [
+               "Chris Williams <chris@bingosnet.co.uk>"
+            ],
+            "dynamic_config" : 0,
+            "generated_by" : "Dist::Zilla version 4.300028, CPAN::Meta::Converter version 2.120921, CPAN::Meta::Converter version 2.120630",
+            "license" : [
+               "perl_5"
+            ],
+            "meta-spec" : {
+               "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+               "version" : "2"
+            },
+            "name" : "CPAN-Perl-Releases",
+            "prereqs" : {
+               "build" : {
+                  "requires" : {
+                     "Test::More" : "0.47"
+                  }
+               },
+               "configure" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : "6.30"
+                  }
+               },
+               "runtime" : {
+                  "requires" : {}
+               }
+            },
+            "release_status" : "stable",
+            "resources" : {
+               "homepage" : "https://github.com/bingos/cpan-perl-releases",
+               "repository" : {
+                  "url" : "https://github.com/bingos/cpan-perl-releases.git"
+               }
+            },
+            "version" : "0.92"
+         },
+         "name" : "CPAN::Perl::Releases",
+         "pathname" : "B/BI/BINGOS/CPAN-Perl-Releases-0.92.tar.gz",
+         "provides" : {
+            "CPAN::Perl::Releases" : {
+               "file" : "CPAN/Perl/Releases.pm",
+               "version" : "0.92"
+            }
+         },
+         "target" : "CPAN::Perl::Releases",
+         "version" : "0.92"
+      },
+      "Devel::PatchPerl" : {
+         "dist" : "Devel-PatchPerl-0.76",
+         "mymeta" : {
+            "abstract" : "Patch perl source a la Devel::PPPort's buildperl.pl",
+            "author" : [
+               "Chris Williams <chris@bingosnet.co.uk>"
+            ],
+            "dynamic_config" : 0,
+            "generated_by" : "Dist::Zilla version 4.300021, CPAN::Meta::Converter version 2.120921, CPAN::Meta::Converter version 2.120630",
+            "license" : [
+               "perl_5"
+            ],
+            "meta-spec" : {
+               "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+               "version" : "2"
+            },
+            "name" : "Devel-PatchPerl",
+            "prereqs" : {
+               "build" : {
+                  "requires" : {}
+               },
+               "configure" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : "6.30"
+                  }
+               },
+               "runtime" : {
+                  "requires" : {
+                     "File::pushd" : "1.00",
+                     "IO::File" : "0",
+                     "IPC::Cmd" : "0.40",
+                     "MIME::Base64" : "0",
+                     "Module::Pluggable" : "0"
+                  }
+               }
+            },
+            "release_status" : "stable",
+            "resources" : {
+               "homepage" : "https://github.com/bingos/devel-patchperl",
+               "repository" : {
+                  "url" : "https://github.com/bingos/devel-patchperl.git"
+               }
+            },
+            "version" : "0.76"
+         },
+         "name" : "Devel::PatchPerl",
+         "pathname" : "B/BI/BINGOS/Devel-PatchPerl-0.76.tar.gz",
+         "provides" : {
+            "Devel::PatchPerl" : {
+               "file" : "Devel/PatchPerl.pm",
+               "version" : "0.76"
+            },
+            "Devel::PatchPerl::Hints" : {
+               "file" : "Devel/PatchPerl/Hints.pm",
+               "version" : "0.76"
+            },
+            "Devel::PatchPerl::Plugin" : {
+               "file" : "Devel/PatchPerl/Plugin.pm",
+               "version" : "0.76"
+            }
+         },
+         "target" : "Devel::PatchPerl",
+         "version" : "0.76"
+      },
+      "File::pushd" : {
+         "dist" : "File-pushd-1.003",
+         "mymeta" : {
+            "abstract" : "change directory temporarily for a limited scope",
+            "author" : [
+               "David A Golden <dagolden@cpan.org>"
+            ],
+            "dynamic_config" : 0,
+            "generated_by" : "Dist::Zilla version 4.300025, CPAN::Meta::Converter version 2.120921, CPAN::Meta::Converter version 2.120630",
+            "license" : [
+               "apache_2_0"
+            ],
+            "meta-spec" : {
+               "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+               "version" : "2"
+            },
+            "name" : "File-pushd",
+            "no_index" : {
+               "directory" : [
+                  "t",
+                  "xt",
+                  "examples",
+                  "corpus"
+               ],
+               "package" : [
+                  "DB"
+               ]
+            },
+            "prereqs" : {
+               "build" : {
+                  "requires" : {
+                     "File::Basename" : "0",
+                     "File::Find" : "0",
+                     "File::Spec::Functions" : "0",
+                     "Test::More" : "0"
+                  }
+               },
+               "configure" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : "6.30"
+                  }
+               },
+               "runtime" : {
+                  "requires" : {
+                     "Carp" : "0",
+                     "Cwd" : "0",
+                     "Exporter" : "0",
+                     "File::Path" : "0",
+                     "File::Spec" : "0",
+                     "File::Temp" : "0",
+                     "overload" : "0",
+                     "strict" : "0",
+                     "vars" : "0",
+                     "warnings" : "0"
+                  }
+               }
+            },
+            "provides" : {
+               "File::pushd" : {
+                  "file" : "lib/File/pushd.pm",
+                  "version" : "1.003"
+               }
+            },
+            "release_status" : "stable",
+            "resources" : {
+               "bugtracker" : {
+                  "web" : "https://rt.cpan.org/Public/Dist/Display.html?Name=File-pushd"
+               },
+               "homepage" : "https://metacpan.org/release/File-pushd",
+               "repository" : {
+                  "type" : "git",
+                  "url" : "git://github.com/dagolden/file-pushd.git"
+               }
+            },
+            "version" : "1.003"
+         },
+         "name" : "File::pushd",
+         "pathname" : "D/DA/DAGOLDEN/File-pushd-1.003.tar.gz",
+         "provides" : {
+            "File::pushd" : {
+               "file" : "File/pushd.pm",
+               "version" : "1.003"
+            }
+         },
+         "target" : "File::pushd",
+         "version" : "1.003"
+      }
+   },
+   "version" : "0.9"
+}
