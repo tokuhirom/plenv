@@ -1,32 +1,33 @@
+use strict;
+use warnings;
 use Module::Build;
-use inc::latest 'local::lib';
-
-for my $mod ( inc::latest->loaded_modules ) {
-    inc::latest->bundle_module( $mod, 'inc' );
-}
-
-if (eval "use Pod::Markdown;1") {
-    my $parser = Pod::Markdown->new;
-    $parser->parse_from_file('plenv');
-    open my $fh, '>', 'README.mkdn' or die "$!";
-    print $fh $parser->as_markdown;
-    close $fh or die $!;
-}
 
 my $build = Module::Build->new(
-    module_name          => 'App::plenv',
-    build_requires       => { 'Test::More' => 0, },
-    requries             => {
-        'LWP::Simple' => 0,
-        'local::lib'  => 0,
+    license              => 'perl',
+    dynamic_config       => 0,
+
+    build_requires       => {
+        'Test::More' => '0.98',
+        'Test::Requires' => 0,
     },
-    recommends           => {},
+    configure_requires   => { 'Module::Build' => '0.38' },
+    requires             => {
+        perl => '5.008005',
+        # 'Exporter'                      => '0',
+        'parent'                        => '0',
+        # 'Plack'                         => '0.9949',
+    },
+
+    no_index    => { 'directory' => [ 'inc' ] },
+    name        => 'App-plenv',
+    module_name => 'App::plenv',
+
+    # script_files => [''],
+
+    test_files => (-d '.git' || $ENV{RELEASE_TESTING}) ? 't/ xt/' : 't/',
     recursive_test_files => 1,
-    sign                 => 0,
-    create_license       => 1,
-    license              => 'artistic_2',
-    dist_author          => 'Tokuhiro Matsuno <tokuhirom gmail.com>',
-    create_makefile_pl   => 1,
-    script_files         => 'plenv',
+   
+    create_readme  => 1,
+    create_license => 1,
 );
-$build->create_build_script;
+$build->create_build_script();

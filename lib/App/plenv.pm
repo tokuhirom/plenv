@@ -1,7 +1,7 @@
 package App::plenv;
 use strict;
 use warnings;
-use 5.00800;
+use 5.008005;
 our $VERSION = '0.01';
 
 
@@ -13,7 +13,7 @@ __END__
 
 =head1 NAME
 
-App::plenv -
+App::plenv - ...
 
 =head1 SYNOPSIS
 
@@ -23,9 +23,11 @@ App::plenv -
 
 App::plenv is
 
+B<THIS IS A DEVELOPMENT RELEASE. API MAY CHANGE WITHOUT NOTICE>.
+
 =head1 AUTHOR
 
-Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF GMAIL COME<gt>
+Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF@ GMAIL COME<gt>
 
 =head1 SEE ALSO
 

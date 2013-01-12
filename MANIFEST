@@ -1,0 +1,16 @@
+.travis.yml
+Build.PL
+Changes
+lib/App/plenv.pm
+MANIFEST			This list of files
+t/00_compile.t
+xt/01_podspell.t
+xt/02_perlcritic.t
+xt/03_pod.t
+xt/04_minimum_version.t
+xt/05_cpan_meta.t
+xt/06_meta_author.t
+README
+LICENSE
+META.yml
+META.json
