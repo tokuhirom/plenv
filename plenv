@@ -1,17 +1,17 @@
-#!/usr/bin/env perl
+#!/usr/bin/perl
 use strict;
 use warnings;
 use utf8;
 use File::Spec::Functions qw(catfile catdir rel2abs);
 use File::Basename;
 use lib catdir(dirname(__FILE__), 'local', 'lib', 'perl5');
+use lib catdir(dirname(__FILE__), 'lib');
 use Pod::Usage;
 use File::Path qw(mkpath);
 use Getopt::Long;
-use CPAN::Perl::Releases;
+use Perl::Build;
 
 my $PLENV_HOME;
-my $CPAN_MIRROR = $ENV{PLENV_CPAN_MIRROR} || 'http://search.cpan.org/CPAN';
 
 &main;exit;
 
@@ -52,9 +52,23 @@ sub CMD_exec {
 
     my $bin = shift @ARGV or CMD_help();
     my $file = find_plenv_version_file();
+    my $version = 'system';
     if ($file) {
-        my $version = slurp_version($file);
-        $ENV{PATH}="$PLENV_HOME/versions/$version/bin/:$ENV{PATH}";
+        $version = slurp_version($file);
+    }
+
+    if ($version eq 'system') {
+        # remove shims path from ENV[PATH].
+        $ENV{PATH} = join(
+            ':', 
+            grep { File::Spec->canonpath($_) ne File::Spec->canonpath("$PLENV_HOME/shims/") } File::Spec->path()
+        );
+    } else {
+        my $bindir = "$PLENV_HOME/versions/$version/bin/";
+        unless (-x catfile($bindir, $bin)) {
+            die "[plenv] There is no $bin in $bindir.(determined by @{[ $file || '-' ]})\n";
+        }
+        $ENV{PATH}="$bindir:$ENV{PATH}";
     }
     exec $bin, @ARGV;
     die $!;
@@ -94,7 +108,7 @@ sub find_local_plenv_version_file {
     my $dir = Cwd::getcwd();
     my %seen;
     while (-d $dir) {
-        last if $seen{$dir}++; # guard from deep recursion
+        return undef if $seen{$dir}++; # guard from deep recursion
         if (-f "$dir/.perl-version") {
             return "$dir/.perl-version";
         }
@@ -102,11 +116,40 @@ sub find_local_plenv_version_file {
     }
 }
 
-sub find_rbenv_version {
-}
-
 sub CMD_help {
     pod2usage();
+}
+
+sub CMD_global {
+    home_init();
+
+    my $version = shift @ARGV
+        or pod2usage();
+
+    write_version_file($version, "$PLENV_HOME/version");
+}
+
+sub CMD_local {
+    home_init();
+
+    my $version = shift @ARGV
+        or pod2usage();
+
+    write_version_file($version, "./.perl-version");
+}
+
+sub write_version_file {
+    my ($version, $versionfile) = @_;
+    $version =~ s/\s//g;
+
+    unless (is_installed($version)) {
+        die "$version is not installed on plenv.";
+    }
+
+    open my $fh, '>', $versionfile
+        or die "$versionfile: $!";
+    print $fh $version;
+    close $fh;
 }
 
 sub CMD_install {
@@ -117,28 +160,87 @@ sub CMD_install {
         exit(-1);
     }
 
-    my $version = shift @ARGV;
-    my $installation_name = $version;
+    install();
 
-    GetOptions(
-        'as=s', \$installation_name,
-    );
-    # -de means "use default settings without interactive questions"
-    my @configure_options = @ARGV || ('-de');
-
-    if (is_installed( $installation_name )) {
-        die "\nABORT: $installation_name is already installed.\n\n";
-    }
-
-    my $dist_extracted_path = do_fetch_release( $version, $installation_name );
-    do_install_this( $dist_extracted_path, $version, $installation_name, \@configure_options );
+    # rehash the ~/.plenv/shims/
+    rehash();
 
     return;
 }
 
+sub install {
+    my $stuff = shift @ARGV;
+
+    if ($stuff =~ /\.(gz|bz2)$/) {
+        # install from file
+        my $dist_tarball_path = $stuff;
+
+        my $installation_name = basename($dist_tarball_path);
+        $installation_name =~ s!\.tar\..+$!!; # remove ext
+        $installation_name =~ s!^perl-!!; # remove prefix
+
+        GetOptions(
+            'as=s', \$installation_name,
+        );
+
+        if (is_installed( $installation_name )) {
+            die "\nABORT: $installation_name is already installed.\n\n";
+        }
+
+        # -de means "use default settings without interactive questions"
+        my @configure_options = @ARGV ? @ARGV : ('-de');
+        Perl::Build->install_from_tarball(
+            $dist_tarball_path => (
+                build_dir => catdir($PLENV_HOME, 'build'),
+                dst_path => catdir($PLENV_HOME, 'versions', $installation_name),
+                configure_options => \@configure_options,
+                patchperl => patchperl_cmd(),
+                test => 0,
+            )
+        );
+    } else {
+        # install from CPAN
+        my $version = $stuff;
+        my $installation_name = $version;
+
+        GetOptions(
+            'as=s', \$installation_name,
+        );
+        my @configure_options = @ARGV ? @ARGV : ('-de');
+
+        if (is_installed( $installation_name )) {
+            die "\nABORT: $installation_name is already installed.\n\n";
+        }
+
+        Perl::Build->install_from_cpan(
+            $version => (
+                tarball_dir => catdir($PLENV_HOME, 'dists'),
+                build_dir => catdir($PLENV_HOME, 'build'),
+                dst_path => catdir($PLENV_HOME, 'versions', $installation_name),
+                configure_options => \@configure_options,
+                patchperl => patchperl_cmd(),
+                test => 0,
+            )
+        );
+    }
+}
+
+sub patchperl_cmd {
+    [
+        $^X,
+        "-Mlib=@{[ rel2abs(dirname(__FILE__)) ]}/local/lib/perl5/",
+        catfile( rel2abs(dirname(__FILE__)), "local/bin/patchperl" )
+    ]
+}
+
 sub is_installed {
     my ($name) = @_;
-    return grep { $name eq $_->{name} } installed_perls();
+    return grep { $name eq $_ } installed_perls();
+}
+
+sub CMD_list {
+    home_init();
+    print "$_\n" for installed_perls();
 }
 
 sub installed_perls {
@@ -149,134 +251,17 @@ sub installed_perls {
         my ($name) = $_ =~ m/\/([^\/]+$)/;
         my $executable = catfile($_, 'bin', 'perl');
 
-        push @result, {
-            name        => $name,
-            version     => $self->format_perl_version(`$executable -e 'print \$]'`),
-            is_current  => ($self->current_perl eq $name) && !$self->env("PERLBREW_LIB"),
-            libs => [ $self->local_libs($name) ],
-            executable  => $executable
-        };
+        push @result, $name;
     }
 
     return @result;
 }
 
-sub perl_release {
-    my ($version) = @_;
-
-    # TODO: switch to metacpan API?
-    my $tarballs = CPAN::Perl::Releases::perl_tarballs($version);
-
-    my $x = (values %$tarballs)[0];
-
-    if ($x) {
-        my $dist_tarball = (split("/", $x))[-1];
-        my $dist_tarball_url = $CPAN_MIRROR . "/authors/id/$x";
-        return ($dist_tarball, $dist_tarball_url);
-    }
-
-    my $html = http_get("http://search.cpan.org/dist/perl-${version}");
-
-    unless ($html) {
-        die "ERROR: Failed to download perl-${version} tarball.";
-    }
-
-    my ($dist_path, $dist_tarball) =
-        $html =~ m[<a href="(/CPAN/authors/id/.+/(perl-${version}.tar.(gz|bz2)))">Download</a>];
-    die "ERROR: Cannot find the tarball for perl-$version\n"
-        if !$dist_path and !$dist_tarball;
-    my $dist_tarball_url = "http://search.cpan.org${dist_path}";
-    return ($dist_tarball, $dist_tarball_url);
-}
-
-sub do_fetch_release {
-    my ($dist_version, $installation_name) = @_;
-
-    my ($dist_tarball, $dist_tarball_url) = perl_release($dist_version);
-    my $dist_tarball_path = catfile($PLENV_HOME, "dists", $dist_tarball);
-
-    if (-f $dist_tarball_path) {
-        print "Use the previously fetched ${dist_tarball}\n";
-    }
-    else {
-        print "Fetching $dist_version as $dist_tarball_path\n";
-        download( $dist_tarball_url, $dist_tarball_path );
-    }
-
-    my $dist_extracted_path = do_extract_tarball($dist_tarball_path);
-    return $dist_extracted_path;
-}
-
-sub do_extract_tarball {
-    my $dist_tarball = shift;
-
-    # Was broken on Solaris, where GNU tar is probably
-    # installed as 'gtar' - RT #61042
-    my $tarx =
-        ($^O eq 'solaris' ? 'gtar ' : 'tar ') .
-        ( $dist_tarball =~ m/bz2$/ ? 'xjf' : 'xzf' );
-    my $extract_command = "cd @{[ $PLENV_HOME ]}/build; $tarx $dist_tarball";
-    die "Failed to extract $dist_tarball" if system($extract_command);
-    $dist_tarball =~ s{.*/([^/]+)\.tar\.(?:gz|bz2)$}{$1};
-    return "@{[ $PLENV_HOME ]}/build/$dist_tarball"; # Note that this is incorrect for blead
-}
-
-sub do_install_this {
-    my ($dist_extracted_dir, $dist_version, $installation_name, $configure_options) = @_;
-
-    my $version = perl_version_to_integer($dist_version);
-
-    my $perlpath = $PLENV_HOME . "/versions/$installation_name";
-    my $patchperl = [
-        $^X,
-        "-Mlib=@{[ rel2abs(dirname(__FILE__)) ]}/local/lib/perl5/",
-        catfile( rel2abs(dirname(__FILE__)), "local/bin/patchperl" )
-    ];
-
-    unshift @$configure_options, qq(-Dprefix=$perlpath);
-    push @$configure_options, "usedevel" if $dist_version =~ /5\.1[13579]|git|blead/;
-
-    print "Installing $dist_extracted_dir into $PLENV_HOME/versions/$installation_name\n\n";
-
-    my @preconfigure_commands = (
-        "rm -f config.sh Policy.sh",
-        $patchperl,
-    );
-
-    my @configure_commands = (
-        ['sh', 'Configure', @$configure_options]
-    );
-    if ($version < perl_version_to_integer( '5.8.9' )) {
-       push @configure_commands, "$^X -i -nle 'print unless /command-line/' makefile x2p/makefile";
-    }
-
-    my @commands = (
-        @preconfigure_commands,
-        @configure_commands,
-        "make",
-        "make install"
-    );
-
-    delete $ENV{$_} for qw(PERL5LIB PERL5OPT);
-    chdir($dist_extracted_dir);
-    for (@commands) {
-        if (ref $_ eq 'ARRAY') {
-            print join(' ', @$_), "\n";
-            system(@$_) == 0
-                or die "Installation failure.";
-        } else {
-            print $_, "\n";
-            system(ref $_ eq 'ARRAY' ? @$_ : $_) == 0
-                or die "Installation failure.";
-        }
-    }
-
-    rehash();
-}
-
 sub rehash {
+    my %seen;
     for my $bin (map { basename($_) } grep { -x $_ } <$PLENV_HOME/versions/*/bin/*>) {
-        print "Processing $bin\n";
+        next if $seen{$bin}++;
+
         my $shimbin = catfile($PLENV_HOME, 'shims', $bin);
 
         open my $fh, '>', $shimbin or die "$shimbin: $!";
@@ -310,125 +295,8 @@ exec "%s" exec "$program" "$@"
 }
 
 sub CMD_available {
-    my @available = available_perls();
+    my @available = Perl::Build->available_perls();
     print $_, "\n" for @available;
-}
-
-# taken from perlbrew
-sub download {
-    my ($url, $path, $on_error) = @_;
-
-    my $header = undef;
-
-    open my $BALL, ">", $path or die "Failed to open $path for writing.\n";
-
-    http_get(
-        $url,
-        $header,
-        sub {
-            my ($body) = @_;
-
-            unless ($body) {
-                if (ref($on_error) eq 'CODE') {
-                    $on_error->($url);
-                }
-                else {
-                    die "ERROR: Failed to download $url.\n"
-                }
-            }
-
-
-            print $BALL $body;
-        }
-    );
-    close $BALL;
-}
-
-# taken from App::perlbrew.pm
-{
-    my @command;
-    sub http_get {
-        my ($url, $header, $cb) = @_;
-
-        if (ref($header) eq 'CODE') {
-            $cb = $header;
-            $header = undef;
-        }
-
-        if (! @command) {
-            my @commands = (
-                # curl's --fail option makes the exit code meaningful
-                [qw( curl --silent --location --fail --insecure )],
-                [qw( fetch -o - )],
-                [qw( wget --no-check-certificate --quiet -O - )],
-            );
-            for my $command (@commands) {
-                my $program = $command->[0];
-                my $code = system("$program --version >/dev/null 2>&1") >> 8;
-                if ($code != 127) {
-                    @command = @$command;
-                    last;
-                }
-            }
-            die "You have to install either curl or wget\n"
-                unless @command;
-        }
-
-        open my $fh, '-|', @command, $url
-            or die "open() for '@command $url': $!";
-
-        local $/;
-        my $body = <$fh>;
-        close $fh;
-        die 'Page not retrieved; HTTP error code 400 or above.'
-            if $command[0] eq 'curl' # Exit code is 22 on 404s etc
-            and $? >> 8 == 22; # exit code is packed into $?; see perlvar
-        die 'Page not retrieved: fetch failed.'
-            if $command[0] eq 'fetch' # Exit code is not 0 on error
-            and $?;
-        die 'Server issued an error response.'
-            if $command[0] eq 'wget' # Exit code is 8 on 404s etc
-            and $? >> 8 == 8;
-
-        return $cb ? $cb->($body) : $body;
-    }
-}
-
-# taken from App::perlbrew.pm
-sub available_perls {
-    my ( $self, $dist, $opts ) = @_;
-
-    my $url = "http://www.cpan.org/src/README.html";
-    my $html = http_get( $url, undef, undef );
-
-    unless($html) {
-        die "\nERROR: Unable to retrieve the list of perls.\n\n";
-    }
-
-    my @available_versions;
-
-    for ( split "\n", $html ) {
-        push @available_versions, $1
-          if m|<td><a href="http://www.cpan.org/src/.+?">(.+?)</a></td>|;
-    }
-    s/\.tar\.gz// for @available_versions;
-
-    return @available_versions;
-}
-
-sub perl_version_to_integer {
-    my $version = shift;
-    my @v = split(/[\.\-_]/, $version);
-    if ($v[1] <= 5) {
-        $v[2] ||= 0;
-        $v[3] = 0;
-    }
-    else {
-        $v[3] ||= $v[1] >= 6 ? 9 : 0;
-        $v[3] =~ s/[^0-9]//g;
-    }
-
-    return $v[1]*1000000 + $v[2]*1000 + $v[3];
 }
 
 __END__
@@ -436,9 +304,43 @@ __END__
 =head1 SYNOPSIS
 
     plenv help
+
+    # list available perl versions
     plenv available
-    plenv install 5.16.2
+
+    # install perl5 binary
+    plenv install 5.16.2 -- -Dusethreads
+
+    # execute command on current perl
     plenv exec ack
+
+    # change global default perl to 5.16.2
+    plenv global 5.16.2
+
+    # change local perl to 5.14.0
+    plenv local 5.14.0
+
+    # run this command after install cpan module, contains executable script.
+    plenv rehash
+
+=head1 INSTALLATION
+
+    git clone ... ~/.plenv/
+
+=head1 UPGRADE
+
+    cd ~/.plenv/ && git pull origin master
+
+=head1 SETUP
+
+Push following command to your .zshrc.
+
+    export PATH="$HOME/.plenv/shims:${PATH}"
+
+=head1 DEPENDENCIES
+
+  * Perl 5.8.1+
+  * wget or curl or fetch.
 
 =head1 HINTS
 
@@ -448,7 +350,7 @@ __END__
 
 Try to use following command.
 
-    % perlbuild exec cpan -i App::cpanminus
+    % plenv exec cpan -i App::cpanminus
 
 Or
 
