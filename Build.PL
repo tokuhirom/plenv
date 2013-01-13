@@ -20,7 +20,7 @@ my $build = Module::Build->new(
     name        => 'App-plenv',
     module_name => 'App::plenv',
 
-    # script_files => [''],
+    script_files => ['bin/plenv'],
 
     test_files => (-d '.git' || $ENV{RELEASE_TESTING}) ? 't/ xt/' : 't/',
     recursive_test_files => 1,
