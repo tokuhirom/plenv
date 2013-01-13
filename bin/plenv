@@ -45,6 +45,13 @@ sub home_init {
     mkpath("$PLENV_HOME/versions");
 }
 
+sub CMD_init {
+    home_init();
+    print <<"...";
+export PATH="$PLENV_HOME/shims:\${PATH}"
+...
+}
+
 sub CMD_rehash {
     home_init();
     rehash();
@@ -54,11 +61,8 @@ sub CMD_exec {
     home_init();
 
     my $bin = shift @ARGV or CMD_help();
-    my $file = find_plenv_version_file();
-    my $version = 'system';
-    if ($file) {
-        $version = slurp_version($file);
-    }
+
+    my ($version, $file) = detect_version();
 
     if ($version eq 'system') {
         # remove shims path from ENV[PATH].
@@ -77,16 +81,24 @@ sub CMD_exec {
     die $!;
 }
 
+sub detect_version {
+    if ($ENV{PLENV_VERSION}) {
+        return ($ENV{PLENV_VERSION});
+    }
+    if (my $file = find_plenv_version_file()) {
+        my $version = slurp_version($file);
+        return ($version, $file);
+    }
+    return ('system');
+}
+
 sub CMD_version {
     home_init();
 
-    my $file = find_plenv_version_file();
-    if ($file) {
-        my $version = slurp_version($file);
-        print "$version (set by $file)\n";
-    } else {
-        print "system\n";
-    }
+    my ($version, $file) = detect_version();
+    print "$version ";
+    print "(set by $file)" if $file;
+    print "\n";
 }
 
 sub slurp_version {
@@ -383,15 +395,73 @@ plenv - perl binary manager
     # install cpanm to current perl
     plenv install-cpanm
 
+=head1 DESCRIPTION
+
+Use rbenv to pick a Perl version for your application and guarantee
+that your development environment matches production. Put rbenv to work
+with [Carton](http://github.com/miyagawa/carton/) for painless Perl upgrades and bulletproof deployments.
+
+=head1 plenv vs. perlbrew
+
+plenv supports project local version determination.
+
 =head1 INSTALLATION
 
-    git clone ... ~/.plenv/
+=head2 INSTALL WITH HOMEBREW(Mac OSX Only)
 
-=head1 SETUP
+    $ brew install plenv
 
-Push following command to your .zshrc.
+=head2 INSTALL FROM CPAN
 
-    export PATH="$HOME/.plenv/shims:${PATH}"
+Install plenv with CPAN.
+
+    $ sudo -H cpan -i App::plenv
+
+=head2 INSTALL WITH GIT
+
+1. Check out plenv into ~/.plenv/
+
+    $ git clone git://github.com/tokuhirom/plenv.git ~/.plenv
+
+2. Add ~/.plenv/bin/ to your $PATH for access to the `plenv` command-line utility.
+
+    $ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
+
+    **Ubuntu note**: Modify your `~/.profile` instead of `~/.bash_profile`.
+
+    **Zsh note**: Modify your `~/.zshrc` file instead of `~/.bash_profile`.
+
+=head1 SETUP SHELL SETTINGS
+
+=over 4
+
+=item Add `rbenv init` to your shell to enable shims and autocompletion.
+
+    $ echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
+
+I<Same as in previous step, use `~/.profile` on Ubuntu, `~/.zshrc` for Zsh.>
+
+=item Restart your shell as a login shell so the path changes take effect.
+
+You can now begin using rbenv.
+
+    $ exec $SHELL -l
+
+=back
+
+=head1 Perl version detection
+
+=over 4
+
+=item PLENV_VERSION environment variable
+
+=item .perl-version file in current and upper directories.
+
+=item global settings(~/.plenv/version)
+
+=item use system perl
+
+=back
 
 =head1 DEPENDENCIES
 
