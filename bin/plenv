@@ -41,8 +41,6 @@ sub home_init {
     } else {
         die "There is no ENV[PLENV_HOME] and ENV[HOME]. Please set ENV{PLENV_HOME].";
     }
-    mkpath("$PLENV_HOME/shims");
-    mkpath("$PLENV_HOME/versions");
 }
 
 sub CMD_init {
@@ -169,6 +167,7 @@ sub write_version_file {
 
 sub CMD_install {
     home_init();
+    mkpath("$PLENV_HOME/versions");
 
     if (@ARGV == 0) {
         CMD_help();
@@ -316,6 +315,8 @@ sub installed_perls {
 }
 
 sub rehash {
+    mkpath("$PLENV_HOME/shims");
+
     my %seen;
     for my $bin (map { basename($_) } grep { -x $_ } <$PLENV_HOME/versions/*/bin/*>) {
         next if $seen{$bin}++;
