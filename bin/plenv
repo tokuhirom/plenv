@@ -2,6 +2,7 @@
 use strict;
 use warnings;
 use utf8;
+use 5.008_001;
 use File::Spec::Functions qw(catfile catdir rel2abs);
 use File::Basename;
 use FindBin;
@@ -351,6 +352,12 @@ sub CMD_available {
 
 __END__
 
+=encoding utf8
+
+=head1 NAME
+
+plenv - perl binary manager
+
 =head1 SYNOPSIS
 
     plenv help
@@ -380,10 +387,6 @@ __END__
 
     git clone ... ~/.plenv/
 
-=head1 UPGRADE
-
-    cd ~/.plenv/ && git pull origin master
-
 =head1 SETUP
 
 Push following command to your .zshrc.
@@ -395,7 +398,7 @@ Push following command to your .zshrc.
   * Perl 5.8.1+
   * wget or curl or fetch.
 
-=head1 HINTS
+=head1 FAQ
 
 =over 4
 
@@ -405,4 +408,23 @@ Try to use following command.
 
     % plenv install-cpanm
 
+This command install cpanm to current environment.
+
 =back
+
+=head1 AUTHOR
+
+Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF@ GMAIL COME<gt>
+
+=head1 SEE ALSO
+
+L<App::perlbrew> provides same feature.
+
+=head1 LICENSE
+
+Copyright (C) Tokuhiro Matsuno
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
