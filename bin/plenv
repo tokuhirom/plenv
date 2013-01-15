@@ -251,6 +251,7 @@ sub install {
     } else {
         # install from CPAN
         my $version = $stuff;
+        $version =~ s!^perl-!!;
         $installation_name ||= $version;
 
         if (is_installed( $installation_name )) {
