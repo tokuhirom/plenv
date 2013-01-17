@@ -79,6 +79,36 @@ sub CMD_exec {
     die $!;
 }
 
+sub CMD_which {
+    home_init();
+    my $bin = shift @ARGV or CMD_help();
+    my ($version, $file) = detect_version();
+
+    my @path = grep { File::Spec->canonpath($_) ne File::Spec->canonpath("$PLENV_HOME/shims/") } File::Spec->path();
+    if ($version ne 'system') {
+        unshift @path, "$PLENV_HOME/versions/$version/bin/";
+    }
+
+    if (my $fullpath = which($bin, @path)) {
+        print "$fullpath\n";
+        exit 0;
+    } else {
+        print "plenv: $bin: command not found\n";
+        exit 1;
+    }
+}
+
+sub which {
+    my ($bin, @path) = @_;
+    for my $dir (@path) {
+        my $fullpath = catfile($dir, $bin);
+        if (-x $fullpath) {
+            return $fullpath;
+        }
+    }
+    return undef;
+}
+
 sub detect_version {
     if ($ENV{PLENV_VERSION}) {
         return ($ENV{PLENV_VERSION});
@@ -155,7 +185,7 @@ sub write_version_file {
     my ($version, $versionfile) = @_;
     $version =~ s/\s//g;
 
-    unless (is_installed($version)) {
+    if ($version ne 'system' && !is_installed($version)) {
         die "$version is not installed on plenv.";
     }
 
@@ -426,6 +456,9 @@ plenv - perl binary manager
 
     # migrate modules
     plenv migrate-modules 5.8.9 5.16.2
+
+    # locate a program file in the plenv's path
+    plenv which cpanm
 
 =head1 DESCRIPTION
 
