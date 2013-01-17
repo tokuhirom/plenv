@@ -79,6 +79,36 @@ sub CMD_exec {
     die $!;
 }
 
+sub CMD_which {
+    home_init();
+    my $bin = shift @ARGV or CMD_help();
+    my ($version, $file) = detect_version();
+
+    my @path = grep { File::Spec->canonpath($_) ne File::Spec->canonpath("$PLENV_HOME/shims/") } File::Spec->path();
+    if ($version ne 'system') {
+        unshift @path, "$PLENV_HOME/versions/$version/bin/";
+    }
+
+    if (my $fullpath = which($bin, @path)) {
+        print "$fullpath\n";
+        exit 0;
+    } else {
+        print "plenv: $bin: command not found\n";
+        exit 1;
+    }
+}
+
+sub which {
+    my ($bin, @path) = @_;
+    for my $dir (@path) {
+        my $fullpath = catfile($dir, $bin);
+        if (-x $fullpath) {
+            return $fullpath;
+        }
+    }
+    return undef;
+}
+
 sub detect_version {
     if ($ENV{PLENV_VERSION}) {
         return ($ENV{PLENV_VERSION});
@@ -155,7 +185,7 @@ sub write_version_file {
     my ($version, $versionfile) = @_;
     $version =~ s/\s//g;
 
-    unless (is_installed($version)) {
+    if ($version ne 'system' && !is_installed($version)) {
         die "$version is not installed on plenv.";
     }
 
@@ -251,6 +281,7 @@ sub install {
     } else {
         # install from CPAN
         my $version = $stuff;
+        $version =~ s!^perl-!!;
         $installation_name ||= $version;
 
         if (is_installed( $installation_name )) {
@@ -363,6 +394,33 @@ sub CMD_available {
     print $_, "\n" for @available;
 }
 
+sub CMD_migrate_modules {
+    home_init();
+    @ARGV==2 or pod2usage(1);
+    my ($src, $dst) = @ARGV;
+
+    my $srcperl = "${PLENV_HOME}/versions/${src}/bin/perl";
+    my $dstperl = "${PLENV_HOME}/versions/${dst}/bin/perl";
+    my $dstcpanm = "${PLENV_HOME}/versions/${dst}/bin/cpanm";
+    install_cpanm($dstperl);
+    open my $srcfh, "-|", $srcperl, '-MExtUtils::Installed', '-e', 'print $_, "\n" for ExtUtils::Installed->new->modules'
+        or die "Cannot exec: $!";
+    open my $dstfh, "|-", $dstcpanm
+        or die "Cannot exec $dstcpanm: $!";
+    while (<$srcfh>) {
+        print $dstfh $_;
+    }
+    close $srcfh;
+    close $dstfh;
+}
+
+sub install_cpanm {
+    my ($perl) = @_;
+    $perl ||= 'perl';
+    system("curl -L http://cpanmin.us | $perl - --self-upgrade")
+        == 0 or die "Cannot install cpanm to $perl";
+}
+
 __END__
 
 =encoding utf8
@@ -395,6 +453,12 @@ plenv - perl binary manager
 
     # install cpanm to current perl
     plenv install-cpanm
+
+    # migrate modules
+    plenv migrate-modules 5.8.9 5.16.2
+
+    # locate a program file in the plenv's path
+    plenv which cpanm
 
 =head1 DESCRIPTION
 
@@ -480,6 +544,14 @@ Try to use following command.
     % plenv install-cpanm
 
 This command install cpanm to current environment.
+
+=item What should I do for installing the module which I used for new Perl until now? 
+
+You can use C< migrate-modules > subcommand.
+
+    % plenv migrate-modules 5.8.2 5.16.2
+
+It make a list of installed modules in 5.8.2, and install these modules to 5.16.2 environment.
 
 =back
 
