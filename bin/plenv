@@ -6,7 +6,7 @@ use 5.008_001;
 use File::Spec::Functions qw(catfile catdir rel2abs);
 use File::Basename;
 use FindBin;
-use lib catdir($FindBin::RealBin, '..', 'local', 'lib', 'perl5');
+use lib catdir($FindBin::RealBin, '..', 'share', 'plenv', 'lib', 'perl5');
 use Pod::Usage;
 use File::Path qw(mkpath rmtree);
 use Getopt::Long;
