@@ -1,8 +1,11 @@
 use strict;
 use warnings;
-use Module::Build;
+use lib 'inc';
+use Module::Build::Pluggable (
+    '+Module::Build::Pluggable::Carton',
+);
 
-my $build = Module::Build->new(
+my $build = Module::Build::Pluggable->new(
     license              => 'perl',
     dynamic_config       => 0,
 
@@ -10,7 +13,10 @@ my $build = Module::Build->new(
         'Test::More' => '0.98',
         'Test::Requires' => 0,
     },
-    configure_requires   => { 'Module::Build' => '0.38' },
+    configure_requires   => {
+        'Module::Build' => '0.38',
+        'Module::Build::Pluggable' => '0.04',
+    },
     requires             => {
         perl => '5.008005',
         'Perl::Build' => '0.01',

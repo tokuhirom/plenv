@@ -1,0 +1,1 @@
+{"provides":{"App::perlbuild":{"version":"0.01","file":"App/perlbuild.pm"},"Perl::Build":{"version":"0.01","file":"Perl/Build.pm"}},"target":"Perl::Build","version":"0.01","name":"Perl::Build","dist":"Perl-Build-0.01","pathname":"T/TO/TOKUHIROM/Perl-Build-0.01.tar.gz"}

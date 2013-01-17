@@ -202,6 +202,143 @@
          },
          "target" : "File::pushd",
          "version" : "1.003"
+      },
+      "Perl::Build" : {
+         "dist" : "Perl-Build-0.01",
+         "mymeta" : {
+            "abstract" : "perl builder",
+            "author" : [
+               "Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF@ GMAIL COME<gt>"
+            ],
+            "dynamic_config" : 0,
+            "generated_by" : "Module::Build version 0.4003, CPAN::Meta::Converter version 2.120630",
+            "license" : [
+               "perl_5"
+            ],
+            "meta-spec" : {
+               "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+               "version" : "2"
+            },
+            "name" : "Perl-Build",
+            "no_index" : {
+               "directory" : [
+                  "inc"
+               ]
+            },
+            "prereqs" : {
+               "build" : {
+                  "requires" : {
+                     "Test::More" : "0.98",
+                     "Test::Requires" : "0"
+                  }
+               },
+               "configure" : {
+                  "requires" : {
+                     "Module::Build" : "0.38"
+                  }
+               },
+               "runtime" : {
+                  "requires" : {
+                     "CPAN::Perl::Releases" : "0",
+                     "Devel::PatchPerl" : "0",
+                     "File::pushd" : "0",
+                     "perl" : "5.008005"
+                  }
+               }
+            },
+            "provides" : {
+               "App::perlbuild" : {
+                  "file" : "lib/App/perlbuild.pm",
+                  "version" : "0.01"
+               },
+               "Perl::Build" : {
+                  "file" : "lib/Perl/Build.pm",
+                  "version" : "0.01"
+               }
+            },
+            "release_status" : "stable",
+            "resources" : {
+               "license" : [
+                  "http://dev.perl.org/licenses/"
+               ]
+            },
+            "version" : "0.01"
+         },
+         "name" : "Perl::Build",
+         "pathname" : "T/TO/TOKUHIROM/Perl-Build-0.01.tar.gz",
+         "provides" : {
+            "App::perlbuild" : {
+               "file" : "App/perlbuild.pm",
+               "version" : "0.01"
+            },
+            "Perl::Build" : {
+               "file" : "Perl/Build.pm",
+               "version" : "0.01"
+            }
+         },
+         "target" : "Perl::Build",
+         "version" : "0.01"
+      },
+      "Test::Requires" : {
+         "dist" : "Test-Requires-0.06",
+         "mymeta" : {
+            "abstract" : "Checks to see if the module can be loaded",
+            "author" : [
+               "Tokuhiro Matsuno <tokuhirom @*(#RJKLFHFSDLJF gmail.com>"
+            ],
+            "dynamic_config" : 0,
+            "generated_by" : "Module::Install version 1.00, CPAN::Meta::Converter version 2.120630",
+            "license" : [
+               "perl_5"
+            ],
+            "meta-spec" : {
+               "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+               "version" : "2"
+            },
+            "name" : "Test-Requires",
+            "no_index" : {
+               "directory" : [
+                  "inc",
+                  "t",
+                  "xt"
+               ]
+            },
+            "prereqs" : {
+               "build" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : "6.42"
+                  }
+               },
+               "configure" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : "6.42"
+                  }
+               },
+               "runtime" : {
+                  "requires" : {
+                     "Test::More" : "0.61",
+                     "perl" : "5.006"
+                  }
+               }
+            },
+            "release_status" : "stable",
+            "resources" : {
+               "license" : [
+                  "http://dev.perl.org/licenses/"
+               ]
+            },
+            "version" : "0.06"
+         },
+         "name" : "Test::Requires",
+         "pathname" : "T/TO/TOKUHIROM/Test-Requires-0.06.tar.gz",
+         "provides" : {
+            "Test::Requires" : {
+               "file" : "Test/Requires.pm",
+               "version" : "0.06"
+            }
+         },
+         "target" : "Test::Requires",
+         "version" : "0.06"
       }
    },
    "version" : "0.9"

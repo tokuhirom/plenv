@@ -1,0 +1,88 @@
+=head2 Thu Jan 17 20:55:39 2013: C<Module> L<File::pushd|File::pushd>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.003>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Jan 17 20:55:39 2013: C<Module> L<Devel::PatchPerl|Devel::PatchPerl>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.76>
+
+=item *
+
+C<EXE_FILES: bin/patchperl>
+
+=back
+
+=head2 Thu Jan 17 20:55:48 2013: C<Module> L<Test::Requires|Test::Requires>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.06>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Jan 17 21:03:07 2013: C<Module> L<CPAN::Perl::Releases|CPAN::Perl::Releases>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.92>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
