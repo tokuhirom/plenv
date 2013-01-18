@@ -9,6 +9,7 @@ my $build = Module::Build::Pluggable->new(
     license              => 'perl',
     dynamic_config       => 0,
     dist_abstract        => "Yet another Perl5 installation manager",
+    dist_author          => "Tokuhiro Matsuno",
 
     build_requires       => {
         'Test::More' => '0.98',

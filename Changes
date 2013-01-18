@@ -1,4 +1,8 @@
 Revision history for Perl extension App::plenv
 
-0.01    Sat Jan 12 11:42:02 2013
+1.0.9
+
+    - first release to CPAN!
+
+0.0.1    Sat Jan 12 11:42:02 2013
     - original version
