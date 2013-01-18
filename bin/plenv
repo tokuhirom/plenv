@@ -460,7 +460,7 @@ plenv - perl binary manager
     # install cpanm to current perl
     plenv install-cpanm
 
-    # migrate modules
+    # migrate modules(install all installed modules for 5.8.9 to 5.16.2 environment.)
     plenv migrate-modules 5.8.9 5.16.2
 
     # locate a program file in the plenv's path
@@ -485,6 +485,12 @@ i.e. .perl-version file support.
 Install plenv with CPAN.
 
     $ sudo -H cpan -i App::plenv
+
+=head2 INSTALL FROM Homebrew
+
+You can use homebrew to install plenv.
+
+    $ brew install plenv
 
 =head2 INSTALL WITH GIT
 
@@ -519,6 +525,8 @@ You can now begin using plenv.
 =back
 
 =head1 Perl version detection
+
+plenv detects current perl version with following order.
 
 =over 4
 
