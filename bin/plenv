@@ -567,6 +567,10 @@ It make a list of installed modules in 5.8.2, and install these modules to 5.16.
 
 =back
 
+=head1 BUG REPORTING
+
+Plese use github issues: L<http://github.com/tokuhirom/plenv/>.
+
 =head1 AUTHOR
 
 Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF@ GMAIL COME<gt>
