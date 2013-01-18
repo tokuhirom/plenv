@@ -328,7 +328,11 @@ sub is_installed {
 
 sub CMD_list {
     home_init();
-    print "$_\n" for installed_perls();
+    my ($current, ) = detect_version();
+    for my $version (installed_perls(), 'system') {
+        print $version eq $current ? "* " : "  ";
+        print "$version\n"
+    }
 }
 
 sub CMD_versions { CMD_list(@_) } # alias
@@ -472,11 +476,9 @@ with [Carton](http://github.com/miyagawa/carton/) for painless Perl upgrades and
 
 plenv supports project local version determination.
 
+i.e. .perl-version file support.
+
 =head1 INSTALLATION
-
-=head2 INSTALL WITH HOMEBREW(Mac OSX Only)
-
-    $ brew install plenv
 
 =head2 INSTALL FROM CPAN
 
