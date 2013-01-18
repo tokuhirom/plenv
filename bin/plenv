@@ -160,7 +160,7 @@ sub find_local_plenv_version_file {
 }
 
 sub CMD_help {
-    pod2usage();
+    pod2usage(-verbose => 2);
 }
 
 sub CMD_global {
