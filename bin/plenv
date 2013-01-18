@@ -331,6 +331,8 @@ sub CMD_list {
     print "$_\n" for installed_perls();
 }
 
+sub CMD_versions { CMD_list(@_) } # alias
+
 sub installed_perls {
     my $self    = shift;
 
@@ -561,7 +563,9 @@ Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF@ GMAIL COME<gt>
 
 =head1 SEE ALSO
 
-L<App::perlbrew> provides same feature.
+L<App::perlbrew> provides same feature. But plenv provides project local file: B< .perl-version >.
+
+Most of part was inspired from L<rbenv|https://github.com/sstephenson/rbenv>.
 
 =head1 LICENSE
 
