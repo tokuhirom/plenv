@@ -464,8 +464,8 @@ plenv - perl binary manager
 
 =head1 DESCRIPTION
 
-Use rbenv to pick a Perl version for your application and guarantee
-that your development environment matches production. Put rbenv to work
+Use plenv to pick a Perl version for your application and guarantee
+that your development environment matches production. Put plenv to work
 with [Carton](http://github.com/miyagawa/carton/) for painless Perl upgrades and bulletproof deployments.
 
 =head1 plenv vs. perlbrew
@@ -492,7 +492,7 @@ Install plenv with CPAN.
 
 2. Add ~/.plenv/bin/ to your $PATH for access to the `plenv` command-line utility.
 
-    $ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
+    $ echo 'export PATH="$HOME/.plenv/bin:$PATH"' >> ~/.bash_profile
 
     **Ubuntu note**: Modify your `~/.profile` instead of `~/.bash_profile`.
 
@@ -502,15 +502,15 @@ Install plenv with CPAN.
 
 =over 4
 
-=item Add `rbenv init` to your shell to enable shims and autocompletion.
+=item Add `plenv init` to your shell to enable shims and autocompletion.
 
-    $ echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
+    $ echo 'eval "$(plenv init -)"' >> ~/.bash_profile
 
 I<Same as in previous step, use `~/.profile` on Ubuntu, `~/.zshrc` for Zsh.>
 
 =item Restart your shell as a login shell so the path changes take effect.
 
-You can now begin using rbenv.
+You can now begin using plenv.
 
     $ exec $SHELL -l
 
