@@ -569,6 +569,12 @@ You can use C< migrate-modules > subcommand.
 
 It make a list of installed modules in 5.8.2, and install these modules to 5.16.2 environment.
 
+=item How can I enable -g option without slowing down binary?
+
+Use following command.
+
+    % plenv install 5.16.2 -DDEBUGGING=-g
+
 =back
 
 =head1 BUG REPORTING
