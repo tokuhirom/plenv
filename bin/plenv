@@ -314,11 +314,15 @@ sub install {
 }
 
 sub patchperl_cmd {
-    [
-        $^X,
-        "-Mlib=$LOCAL/lib/perl5/",
-        catfile($LOCAL, "bin/patchperl" )
-    ]
+    if (-d $LOCAL) {
+        [
+            $^X,
+            "-Mlib=$LOCAL/lib/perl5/",
+            catfile($LOCAL, "bin/patchperl" )
+        ]
+    } else {
+        'patchperl'
+    }
 }
 
 sub is_installed {
