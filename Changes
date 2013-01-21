@@ -1,5 +1,9 @@
 Revision history for Perl extension App::plenv
 
+1.1.0
+
+    - fixed broken path
+
 1.0.9
 
     - first release to CPAN!
