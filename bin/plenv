@@ -14,7 +14,7 @@ use Perl::Build;
 use POSIX ();
 
 my $PLENV_HOME;
-my $LOCAL = "@{[ rel2abs($FindBin::RealBin) ]}/../local/";
+my $LOCAL = "@{[ rel2abs($FindBin::RealBin) ]}/../share/plenv/";
 
 &main;exit;
 
@@ -314,11 +314,15 @@ sub install {
 }
 
 sub patchperl_cmd {
-    [
-        $^X,
-        "-Mlib=$LOCAL/lib/perl5/",
-        catfile($LOCAL, "bin/patchperl" )
-    ]
+    if (-d $LOCAL) {
+        [
+            $^X,
+            "-Mlib=$LOCAL/lib/perl5/",
+            catfile($LOCAL, "bin/patchperl" )
+        ]
+    } else {
+        'patchperl'
+    }
 }
 
 sub is_installed {
