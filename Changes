@@ -1,5 +1,14 @@
 Revision history for Perl extension App::plenv
 
+1.2.0 2013-01-23T07:52:54
+
+    - added lots of documents
+      (tokuhirom)
+    - `global` command removes "perl-" prefix
+      `install` command removes "perl-" prefix but `global` doesn't.
+      (Masato Ikeda)
+
+
 1.1.0
 
     - fixed broken path

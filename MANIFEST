@@ -3,6 +3,20 @@ Build.PL
 Changes
 inc/Module/Build/Pluggable/Carton.pm
 lib/App/plenv.pm
+lib/App/plenv/available.pod
+lib/App/plenv/exec.pod
+lib/App/plenv/global.pod
+lib/App/plenv/help.pod
+lib/App/plenv/init.pod
+lib/App/plenv/install-cpanm.pod
+lib/App/plenv/install.pod
+lib/App/plenv/list.pod
+lib/App/plenv/local.pod
+lib/App/plenv/migrate-modules.pod
+lib/App/plenv/rehash.pod
+lib/App/plenv/version.pod
+lib/App/plenv/versions.pod
+lib/App/plenv/which.pod
 LICENSE
 MANIFEST			This list of files
 META.json
