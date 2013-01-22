@@ -17,7 +17,7 @@ my $build = Module::Build::Pluggable->new(
     },
     configure_requires   => {
         'Module::Build' => '0.38',
-        'Module::Build::Pluggable' => '0.04',
+        'Module::Build::Pluggable' => '0.05',
     },
     requires             => {
         perl => '5.008005',
