@@ -184,6 +184,7 @@ sub CMD_local {
 sub write_version_file {
     my ($version, $versionfile) = @_;
     $version =~ s/\s//g;
+    $version =~ s/^perl-//; # remove prefix
 
     if ($version ne 'system' && !is_installed($version)) {
         die "$version is not installed on plenv.";
