@@ -1,0 +1,16 @@
+=head1 NAME
+
+plenv-list - Show list of installed Perl5 versions
+
+=head1 SYNOPSIS
+
+    % plenv list
+      5.16.2
+      5.17.7
+      5.8.1
+      5.8.2
+    * system
+
+=head1 DESCRIPTION
+
+Show list of installed Perl5 versions.

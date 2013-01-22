@@ -1,0 +1,51 @@
+=head1 NAME
+
+plenv-install - install perl5 into ~/.plenv/
+
+=head1 SYNOPSIS
+
+    plenv install 5.16.2
+
+    plenv install 5.16.2 -Dusethreads --as 5.16.2-threads
+
+=head1 DESCRIPTION
+
+This subcommand install Perl binary into ~/.plenv/versions/.
+
+=head1 OPTIONS
+
+=over 4
+
+=item -Dxxx
+
+=item -Uxxx
+
+=item -Axxx
+
+Switches passed to perl Configure script.
+
+ex. C<plenv install 5.10.1 -D usemymalloc -U uselargefiles>
+
+=item --as
+
+plenv applies alternative name to installation.
+
+ex. C<plenv install 5.16.2 -Dusethreads --as 5.16.2-threads>
+
+=back
+
+=head1 INSTALLATION SOURCE
+
+Current version of plenv supports following installation source.
+
+=over 4
+
+=item <version>
+
+If you specify the version number, plenv fetches tar ball for the version from CPAN and install it.
+
+=item /path/to/perl.tar.gz
+
+When you specify the path to tar ball, plenv extract it and intall.
+
+=back

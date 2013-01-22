@@ -1,0 +1,15 @@
+=head1 NAME
+
+plenv-which - locate a program file in the plenv's path
+
+=head1 SYNOPSIS
+
+    % plenv which perl
+    /Users/tokuhirom/.plenv/versions/5.16.2/bin/perl
+
+    % plenv which carton
+    /Users/tokuhirom/.plenv/versions/5.16.2/bin/carton
+
+=head1 DESCRIPTION
+
+Find a executable from current perl5's path and display it.
