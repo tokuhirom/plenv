@@ -7,7 +7,8 @@ use File::Spec::Functions qw(catfile catdir rel2abs);
 use File::Basename;
 use FindBin;
 use lib catdir($FindBin::RealBin, '..', 'share', 'plenv', 'lib', 'perl5');
-use Pod::Usage;
+use Pod::Usage qw/pod2usage/;
+use Pod::Find qw/pod_where/;
 use File::Path qw(mkpath rmtree);
 use Getopt::Long;
 use Perl::Build;
@@ -58,7 +59,7 @@ sub CMD_rehash {
 sub CMD_exec {
     home_init();
 
-    my $bin = shift @ARGV or CMD_help();
+    my $bin = shift @ARGV or show_help('exec');
 
     my ($version, $file) = detect_version();
 
@@ -81,7 +82,7 @@ sub CMD_exec {
 
 sub CMD_which {
     home_init();
-    my $bin = shift @ARGV or CMD_help();
+    my $bin = shift @ARGV or show_help('which');
     my ($version, $file) = detect_version();
 
     my @path = grep { File::Spec->canonpath($_) ne File::Spec->canonpath("$PLENV_HOME/shims/") } File::Spec->path();
@@ -141,10 +142,7 @@ sub find_plenv_version_file {
     my $file = find_local_plenv_version_file();
     return $file if $file;
 
-    if (-f "$PLENV_HOME/version") {
-        return "$PLENV_HOME/version";
-    }
-    return undef;
+    return find_global_plenv_version_file();
 }
 
 sub find_local_plenv_version_file {
@@ -159,31 +157,69 @@ sub find_local_plenv_version_file {
     }
 }
 
+sub find_global_plenv_version_file {
+    if (-f "$PLENV_HOME/version") {
+        return "$PLENV_HOME/version";
+    }
+    return undef;
+}
+
 sub CMD_help {
-    pod2usage(-verbose => 2);
+    if (@ARGV==1) {
+        show_help($ARGV[0]);
+    } else {
+        pod2usage(-verbose => 2);
+    }
+}
+
+sub show_help {
+    my $cmd = shift;
+    my $input = pod_where( { -inc => 1, -dirs => [
+        catdir($FindBin::RealBin, '..', 'lib')
+    ]}, "App::plenv::$cmd" );
+    Carp::croak "Unknown subcommand: $input" unless $input;
+    pod2usage( -verbose => 2, -input => $input );
 }
 
 sub CMD_global {
     home_init();
 
-    my $version = shift @ARGV
-        or pod2usage();
-
-    write_version_file($version, "$PLENV_HOME/version");
+    if (my $version = shift @ARGV) {
+        # write it
+        write_version_file($version, "$PLENV_HOME/version");
+    } else {
+        # read from global settings file
+        my $version = do {
+            if (my $file = find_global_plenv_version_file()) {
+                slurp_version($file);
+            } else {
+                'system'
+            }
+        };
+        print "$version\n";
+    }
 }
 
 sub CMD_local {
     home_init();
 
-    my $version = shift @ARGV
-        or pod2usage();
-
-    write_version_file($version, "./.perl-version");
+    if (my $version = shift @ARGV) {
+        # set it.
+        write_version_file($version, "./.perl-version");
+    } else {
+        if (my $file = find_local_plenv_version_file()) {
+            my $version = slurp_version($file);
+            print "$version\n";
+        } else {
+            print "plenv: no local version configured for this directory\n";
+        }
+    }
 }
 
 sub write_version_file {
     my ($version, $versionfile) = @_;
     $version =~ s/\s//g;
+    $version =~ s/^perl-//; # remove prefix
 
     if ($version ne 'system' && !is_installed($version)) {
         die "$version is not installed on plenv.";
@@ -200,7 +236,7 @@ sub CMD_install {
     mkpath("$PLENV_HOME/versions");
 
     if (@ARGV == 0) {
-        CMD_help();
+        show_help('install');
         exit(-1);
     }
 
@@ -406,7 +442,7 @@ sub CMD_available {
 
 sub CMD_migrate_modules {
     home_init();
-    @ARGV==2 or pod2usage(1);
+    @ARGV==2 or show_help('migrate_modules');
     my ($src, $dst) = @ARGV;
 
     my $srcperl = "${PLENV_HOME}/versions/${src}/bin/perl";
@@ -568,6 +604,12 @@ You can use C< migrate-modules > subcommand.
     % plenv migrate-modules 5.8.2 5.16.2
 
 It make a list of installed modules in 5.8.2, and install these modules to 5.16.2 environment.
+
+=item How can I enable -g option without slowing down binary?
+
+Use following command.
+
+    % plenv install 5.16.2 -DDEBUGGING=-g
 
 =back
 

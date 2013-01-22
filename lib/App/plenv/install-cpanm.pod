@@ -1,0 +1,14 @@
+=head1 NAME
+
+plenv-install-cpanm - Install cpanm to current Perl.
+
+=head1 SYNOPSIS
+
+    % plenv install-cpanm
+
+=head1 DESCRIPTION
+
+This command installs L<cpanm> command to current Perl environment.
+
+This command is useful if you are fun of cpanm command.
+

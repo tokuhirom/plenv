@@ -1,0 +1,11 @@
+=head1 NAME
+
+plenv-init - initialize
+
+=head1 SYNOPSIS
+
+    % eval $(plenv init -)
+
+=head1 DESCRIPTION
+
+This subcommand outputs shell script to setup plenv.
