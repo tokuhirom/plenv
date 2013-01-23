@@ -11,7 +11,6 @@ use Pod::Usage qw/pod2usage/;
 use Pod::Find qw/pod_where/;
 use File::Path qw(mkpath rmtree);
 use Getopt::Long;
-use Perl::Build;
 use POSIX ();
 
 my $PLENV_HOME;
@@ -251,6 +250,8 @@ sub CMD_install {
 sub install {
     my $stuff = shift @ARGV;
 
+    require Perl::Build;
+
     my $installation_name;
     my $test;
     my (@D, @A, @U);
@@ -436,6 +437,7 @@ sub CMD_install_cpanm {
 }
 
 sub CMD_available {
+    require Perl::Build;
     my @available = Perl::Build->available_perls();
     print $_, "\n" for @available;
 }
