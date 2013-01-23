@@ -4,6 +4,7 @@ Changes
 inc/Module/Build/Pluggable/Carton.pm
 lib/App/plenv.pm
 lib/App/plenv/available.pod
+lib/App/plenv/cpanm.pod
 lib/App/plenv/exec.pod
 lib/App/plenv/global.pod
 lib/App/plenv/help.pod

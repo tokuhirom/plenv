@@ -78,13 +78,8 @@ sub CMD_exec {
 sub CMD_which {
     home_init();
     my $bin = shift @ARGV or show_help('which');
-    my ($version, $file) = detect_version();
 
-    my @path = grep { File::Spec->canonpath($_) ne File::Spec->canonpath("$PLENV_HOME/shims/") } File::Spec->path();
-    if ($version ne 'system') {
-        unshift @path, "$PLENV_HOME/versions/$version/bin/";
-    }
-
+    my @path = get_bin_path();
     if (my $fullpath = which($bin, @path)) {
         print "$fullpath\n";
         exit 0;
@@ -92,6 +87,16 @@ sub CMD_which {
         print "plenv: $bin: command not found\n";
         exit 1;
     }
+}
+
+sub get_bin_path {
+    my ($version, $file) = detect_version();
+
+    my @path = grep { File::Spec->canonpath($_) ne File::Spec->canonpath("$PLENV_HOME/shims/") } File::Spec->path();
+    if ($version ne 'system') {
+        unshift @path, "$PLENV_HOME/versions/$version/bin/";
+    }
+    return @path;
 }
 
 sub which {
@@ -470,6 +475,12 @@ sub install_cpanm {
     $perl ||= 'perl';
     system("curl -L http://cpanmin.us | $perl - --self-upgrade")
         == 0 or die "Cannot install cpanm to $perl";
+}
+
+sub CMD_cpanm {
+    home_init();
+    system(which('cpanm', get_bin_path()), @ARGV) == 0 or die "cpanm failed";
+    rehash();
 }
 
 __END__
