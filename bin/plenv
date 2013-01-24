@@ -3,19 +3,14 @@ use strict;
 use warnings;
 use utf8;
 use 5.008_001;
-use File::Spec::Functions qw(catfile catdir rel2abs);
-use File::Basename;
-use FindBin;
-use lib catdir($FindBin::RealBin, '..', 'share', 'plenv', 'lib', 'perl5');
-use Pod::Usage qw/pod2usage/;
-use Pod::Find qw/pod_where/;
+use File::Spec ();
+use File::Basename qw/dirname basename/;
+use FindBin ();
+use lib File::Spec->catdir($FindBin::RealBin, '..', 'share', 'plenv', 'lib', 'perl5');
 use File::Path qw(mkpath rmtree);
-use Getopt::Long;
-use Perl::Build;
-use POSIX ();
 
 my $PLENV_HOME;
-my $LOCAL = "@{[ rel2abs($FindBin::RealBin) ]}/../share/plenv/";
+my $LOCAL = "@{[ File::Spec->rel2abs($FindBin::RealBin) ]}/../share/plenv/";
 
 &main;exit;
 
@@ -37,7 +32,7 @@ sub home_init {
     if ($ENV{PLENV_HOME}) {
         $PLENV_HOME = $ENV{PLENV_HOME};
     } elsif ($ENV{HOME}) {
-        $PLENV_HOME = catdir($ENV{HOME}, ".plenv");
+        $PLENV_HOME = File::Spec->catdir($ENV{HOME}, ".plenv");
         $ENV{PLENV_HOME} = $PLENV_HOME;
     } else {
         die "There is no ENV[PLENV_HOME] and ENV[HOME]. Please set ENV{PLENV_HOME].";
@@ -71,7 +66,7 @@ sub CMD_exec {
         );
     } else {
         my $bindir = "$PLENV_HOME/versions/$version/bin/";
-        unless (-x catfile($bindir, $bin)) {
+        unless (-x File::Spec->catfile($bindir, $bin)) {
             die "[plenv] There is no $bin in $bindir.(determined by @{[ $file || '-' ]})\n";
         }
         $ENV{PATH}="$bindir:$ENV{PATH}";
@@ -102,7 +97,7 @@ sub CMD_which {
 sub which {
     my ($bin, @path) = @_;
     for my $dir (@path) {
-        my $fullpath = catfile($dir, $bin);
+        my $fullpath = File::Spec->catfile($dir, $bin);
         if (-x $fullpath) {
             return $fullpath;
         }
@@ -168,17 +163,21 @@ sub CMD_help {
     if (@ARGV==1) {
         show_help($ARGV[0]);
     } else {
-        pod2usage(-verbose => 2);
+        require Pod::Usage;
+        Pod::Usage::pod2usage(-verbose => 2);
     }
 }
 
 sub show_help {
     my $cmd = shift;
-    my $input = pod_where( { -inc => 1, -dirs => [
-        catdir($FindBin::RealBin, '..', 'lib')
+    require Pod::Find;
+    require Pod::Usage;
+
+    my $input = Pod::Find::pod_where( { -inc => 1, -dirs => [
+        File::Spec->catdir($FindBin::RealBin, '..', 'lib')
     ]}, "App::plenv::$cmd" );
     Carp::croak "Unknown subcommand: $input" unless $input;
-    pod2usage( -verbose => 2, -input => $input );
+    Pod::Usage::pod2usage( -verbose => 2, -input => $input );
 }
 
 sub CMD_global {
@@ -251,6 +250,9 @@ sub CMD_install {
 sub install {
     my $stuff = shift @ARGV;
 
+    require Perl::Build;
+    require Getopt::Long;
+
     my $installation_name;
     my $test;
     my (@D, @A, @U);
@@ -259,7 +261,7 @@ sub install {
         'no_ignore_case',
         'bundling',
     );
-    GetOptions(
+    Getopt::Long::GetOptions(
         'test' => \$test,
         'as=s', \$installation_name,
         'D=s@' => \@D,
@@ -281,7 +283,9 @@ sub install {
     push @configure_options, map { "-A$_" } @A;
     push @configure_options, map { "-U$_" } @U;
 
-    my $build_dir = catdir(File::Spec->tmpdir(), POSIX::strftime("perl-build-%Y%m%d-%H%M%S$$", localtime()));
+    require POSIX;
+
+    my $build_dir = File::Spec->catdir(File::Spec->tmpdir(), POSIX::strftime("perl-build-%Y%m%d-%H%M%S$$", localtime()));
     mkpath($build_dir);
 
     if ($stuff =~ /\.(gz|bz2)$/) {
@@ -300,7 +304,7 @@ sub install {
         }
 
         # -de means "use default settings without interactive questions"
-        my $dst_path = catdir($PLENV_HOME, 'versions', $installation_name);
+        my $dst_path = File::Spec->catdir($PLENV_HOME, 'versions', $installation_name);
         Perl::Build->install_from_tarball(
             $dist_tarball_path => (
                 build_dir => $build_dir,
@@ -312,7 +316,7 @@ sub install {
         );
 
         Perl::Build->symlink_devel_executables(
-            catdir($dst_path, 'bin'),
+            File::Spec->catdir($dst_path, 'bin'),
         );
     } else {
         # install from CPAN
@@ -328,11 +332,11 @@ sub install {
             push @configure_options, '-Dusedevel';
         }
 
-        my $dst_path = catdir($PLENV_HOME, 'versions', $installation_name);
+        my $dst_path = File::Spec->catdir($PLENV_HOME, 'versions', $installation_name);
         print "Install $version to $dst_path\n";
         Perl::Build->install_from_cpan(
             $version => (
-                # tarball_dir => catdir($PLENV_HOME, 'dists'),
+                # tarball_dir => File::Spec->catdir($PLENV_HOME, 'dists'),
                 build_dir => $build_dir,
                 dst_path => $dst_path,
                 configure_options => \@configure_options,
@@ -341,7 +345,7 @@ sub install {
             )
         );
         Perl::Build->symlink_devel_executables(
-            catdir($dst_path, 'bin'),
+            File::Spec->catdir($dst_path, 'bin'),
         );
     }
 
@@ -354,7 +358,7 @@ sub patchperl_cmd {
         [
             $^X,
             "-Mlib=$LOCAL/lib/perl5/",
-            catfile($LOCAL, "bin/patchperl" )
+            File::Spec->catfile($LOCAL, "bin/patchperl" )
         ]
     } else {
         'patchperl'
@@ -383,7 +387,7 @@ sub installed_perls {
     my @result;
     for (<$PLENV_HOME/versions/*>) {
         my ($name) = $_ =~ m/\/([^\/]+$)/;
-        my $executable = catfile($_, 'bin', 'perl');
+        my $executable = File::Spec->catfile($_, 'bin', 'perl');
 
         push @result, $name;
     }
@@ -398,10 +402,10 @@ sub rehash {
     for my $bin (map { basename($_) } grep { -x $_ } <$PLENV_HOME/versions/*/bin/*>) {
         next if $seen{$bin}++;
 
-        my $shimbin = catfile($PLENV_HOME, 'shims', $bin);
+        my $shimbin = File::Spec->catfile($PLENV_HOME, 'shims', $bin);
 
         open my $fh, '>', $shimbin or die "$shimbin: $!";
-        print $fh sprintf(<<'...', $PLENV_HOME, rel2abs($0));
+        print $fh sprintf(<<'...', $PLENV_HOME, File::Spec->rel2abs($0));
 #!/usr/bin/env bash
 set -e
 [ -n "$PLENV_DEBUG" ] && set -x
@@ -436,6 +440,7 @@ sub CMD_install_cpanm {
 }
 
 sub CMD_available {
+    require Perl::Build;
     my @available = Perl::Build->available_perls();
     print $_, "\n" for @available;
 }
