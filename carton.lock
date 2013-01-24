@@ -204,7 +204,7 @@
          "version" : "1.003"
       },
       "Perl::Build" : {
-         "dist" : "Perl-Build-0.01",
+         "dist" : "Perl-Build-0.03",
          "mymeta" : {
             "abstract" : "perl builder",
             "author" : [
@@ -247,13 +247,9 @@
                }
             },
             "provides" : {
-               "App::perlbuild" : {
-                  "file" : "lib/App/perlbuild.pm",
-                  "version" : "0.01"
-               },
                "Perl::Build" : {
                   "file" : "lib/Perl/Build.pm",
-                  "version" : "0.01"
+                  "version" : "0.03"
                }
             },
             "release_status" : "stable",
@@ -262,22 +258,18 @@
                   "http://dev.perl.org/licenses/"
                ]
             },
-            "version" : "0.01"
+            "version" : "0.03"
          },
          "name" : "Perl::Build",
-         "pathname" : "T/TO/TOKUHIROM/Perl-Build-0.01.tar.gz",
+         "pathname" : "T/TO/TOKUHIROM/Perl-Build-0.03.tar.gz",
          "provides" : {
-            "App::perlbuild" : {
-               "file" : "App/perlbuild.pm",
-               "version" : "0.01"
-            },
             "Perl::Build" : {
                "file" : "Perl/Build.pm",
-               "version" : "0.01"
+               "version" : "0.03"
             }
          },
          "target" : "Perl::Build",
-         "version" : "0.01"
+         "version" : "0.03"
       },
       "Test::Requires" : {
          "dist" : "Test-Requires-0.06",
