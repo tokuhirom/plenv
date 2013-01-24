@@ -287,10 +287,16 @@ sub install {
     require POSIX;
 
     my $remove_build_dir = 0;
-    unless ($build_dir) {
+    if ($build_dir) {
+        # do not remove if user provides --build-dir parameter.
+        $remove_build_dir = 0;
+        # expand ~ in directory path.
+        $build_dir =~ s!~!glob("~")!ge;
+    } else {
         $remove_build_dir = 1;
         $build_dir = File::Spec->catdir(File::Spec->tmpdir(), POSIX::strftime("perl-build-%Y%m%d-%H%M%S$$", localtime()));
     }
+    print "Creating $build_dir(building directory)\n";
     mkpath($build_dir);
 
     if ($stuff =~ /\.(gz|bz2)$/) {
