@@ -264,6 +264,7 @@ sub install {
     Getopt::Long::GetOptions(
         'test' => \$test,
         'as=s', \$installation_name,
+        'build-dir=s' => \my $build_dir,
         'D=s@' => \@D,
         'A=s@' => \@A,
         'U=s@' => \@U,
@@ -285,7 +286,11 @@ sub install {
 
     require POSIX;
 
-    my $build_dir = File::Spec->catdir(File::Spec->tmpdir(), POSIX::strftime("perl-build-%Y%m%d-%H%M%S$$", localtime()));
+    my $remove_build_dir = 0;
+    unless ($build_dir) {
+        $remove_build_dir = 1;
+        $build_dir = File::Spec->catdir(File::Spec->tmpdir(), POSIX::strftime("perl-build-%Y%m%d-%H%M%S$$", localtime()));
+    }
     mkpath($build_dir);
 
     if ($stuff =~ /\.(gz|bz2)$/) {
@@ -350,7 +355,11 @@ sub install {
     }
 
     # build dir was not useful after install successfully.
-    rmtree($build_dir);
+    # And, do not remove working directory when user specified.
+    # Because hackers need to save object file for debugging with gdb.
+    if ($remove_build_dir) {
+        rmtree($build_dir);
+    }
 }
 
 sub patchperl_cmd {

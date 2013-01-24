@@ -32,6 +32,14 @@ plenv applies alternative name to installation.
 
 ex. C<plenv install 5.16.2 -Dusethreads --as 5.16.2-threads>
 
+=item --build-dir=~/.plenv/build/
+
+You can specify the directory to work building.
+
+It is useful to save object files for debugging.
+
+(Default: temporary directory to use)
+
 =back
 
 =head1 INSTALLATION SOURCE
