@@ -59,3 +59,10 @@ Miyashita
 mysqldiff
 mmm
 JSON
+CPAN
+Axxx
+Dxxx
+Uxxx
+init
+plenv's
+cpanm

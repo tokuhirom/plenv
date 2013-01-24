@@ -54,6 +54,6 @@ If you specify the version number, plenv fetches tar ball for the version from C
 
 =item /path/to/perl.tar.gz
 
-When you specify the path to tar ball, plenv extract it and intall.
+When you specify the path to tar ball, plenv extract it and install.
 
 =back
