@@ -1,5 +1,11 @@
 Revision history for Perl extension App::plenv
 
+1.3.0 2013-01-24T11:28:10
+
+    - added '--build-dir' argumetns for plenv-install.
+      It helps to save object files for debugging with gdb.
+      (tokuhirom)
+
 1.2.1 2013-01-23T08:15:49
 
     - fixed installation issue
