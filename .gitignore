@@ -21,3 +21,5 @@ dists/
 build/
 shims/
 .carton/
+nytprof.out
+nytprof/

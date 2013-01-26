@@ -4,7 +4,7 @@ use warnings;
 use utf8;
 
 use 5.008005;
-our $VERSION = '0.01';
+our $VERSION = '0.03';
 
 use File::Basename;
 use File::Spec::Functions qw(catfile catdir rel2abs);
@@ -94,10 +94,10 @@ sub extract_tarball {
     my $tarx =
         ($^O eq 'solaris' ? 'gtar ' : 'tar ') .
         ( $dist_tarball =~ m/bz2$/ ? 'xjf' : 'xzf' );
-    my $extract_command = "cd @{[ $destdir ]}; $tarx $dist_tarball";
+    my $extract_command = "cd @{[ $destdir ]}; $tarx @{[ File::Spec->rel2abs($dist_tarball) ]}";
     system($extract_command) == 0
         or die "Failed to extract $dist_tarball";
-    $dist_tarball =~ s{.*/([^/]+)\.tar\.(?:gz|bz2)$}{$1};
+    $dist_tarball =~ s{(?:.*/)?([^/]+)\.tar\.(?:gz|bz2)$}{$1};
     return "$destdir/$dist_tarball"; # Note that this is incorrect for blead
 }
 
@@ -260,18 +260,18 @@ sub do_system {
     if (ref $cmd eq 'ARRAY') {
         $class->info(join(' ', @$cmd));
         system(@$cmd) == 0
-            or die "Installation failure.";
+            or die "Installation failure: @$cmd";
     } else {
         $class->info($cmd);
         system($cmd) == 0
-            or die "Installation failure.";
+            or die "Installation failure: $cmd";
     }
 }
 
 sub symlink_devel_executables {
     my ($class, $bin_dir) = @_;
 
-    for my $executable (<$bin_dir/*>) {
+    for my $executable (glob("$bin_dir/*")) {
         my ($name, $version) = $executable =~ m/bin\/(.+?)(5\.\d.*)?$/;
         if ($version) {
             my $cmd = "ln -fs $executable $bin_dir/$name";
@@ -391,6 +391,8 @@ Path to L<patchperl>. patchperl is a patch set for older perls.
 
 Build and install Perl5 from extracted source directory.
 
+=over 4
+
 =item src_path(Required)
 
 Source code directory to build.  That contains extracted Perl5 source code.
@@ -416,6 +418,12 @@ Path to L<patchperl>. patchperl is a patch set for older perls.
 If you set this value as true, Perl::Build runs C<< make test >> after building.
 
 (Default: 0)
+
+=back
+
+=item Perl::Build->symlink_devel_executables($bin_dir:Str)
+
+Perl5 binary generated with C< -Dusedevel >, is "perl-5.12.2" form. This method symlinks "perl-5.12.2" to "perl".
 
 =back
 
