@@ -425,28 +425,25 @@ sub rehash {
         my $shimbin = File::Spec->catfile($PLENV_HOME, 'shims', $bin);
 
         open my $fh, '>', $shimbin or die "$shimbin: $!";
-        print $fh sprintf(<<'...', $PLENV_HOME, File::Spec->rel2abs($0));
+        my $cmd = do {
+            if ($bin eq 'cpanm') {
+                join("\n",
+                    sprintf(q{"%s" exec "$program" "$@"}, File::Spec->rel2abs($0)),
+                    sprintf(q{"%s" rehash}, File::Spec->rel2abs($0))
+                )
+            } else {
+                sprintf(q{exec "%s" exec "$program" "$@"}, File::Spec->rel2abs($0))
+            }
+        };
+        print $fh sprintf(<<'...', $PLENV_HOME, $cmd);
 #!/usr/bin/env bash
 set -e
 [ -n "$PLENV_DEBUG" ] && set -x
 
 program="${0##*/}"
-if [ "$program" = "perl" ]; then
-  for arg; do
-    case "$arg" in
-    -e* | -- ) break ;;
-    */* )
-      if [ -f "$arg" ]; then
-        export PLENV_DIR="${arg%%/*}"
-        break
-      fi
-      ;;
-    esac
-  done
-fi
 
 export PLENV_ROOT="%s"
-exec "%s" exec "$program" "$@"
+%s
 ...
         close $fh;
 
