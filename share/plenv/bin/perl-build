@@ -20,10 +20,10 @@ GetOptions(
     'U=s@' => \@U,
 );
 for (@D, @A, @U) {
-    for (@_) {
-        s/^=//;
-    }
+    s/^=//;
 }
+
+shift @ARGV if @ARGV >= 1 && $ARGV[0] eq '--';
 
 my $stuff   = shift @ARGV or pod2usage();
 my $dest    = shift @ARGV or pod2usage();

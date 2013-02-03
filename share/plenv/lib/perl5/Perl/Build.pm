@@ -4,13 +4,14 @@ use warnings;
 use utf8;
 
 use 5.008005;
-our $VERSION = '0.03';
+our $VERSION = '0.05';
 
 use File::Basename;
 use File::Spec::Functions qw(catfile catdir rel2abs);
 use CPAN::Perl::Releases;
 use File::pushd qw(pushd);
 use File::Temp;
+use HTTP::Tiny;
 
 our $CPAN_MIRROR = $ENV{PERL_BUILD_CPAN_MIRROR} || 'http://search.cpan.org/CPAN';
 
@@ -18,7 +19,7 @@ sub available_perls {
     my ( $class, $dist ) = @_;
 
     my $url = "http://www.cpan.org/src/README.html";
-    my $html = http_get( $url, undef, undef );
+    my $html = http_get( $url );
 
     unless($html) {
         die "\nERROR: Unable to retrieve the list of perls.\n\n";
@@ -33,56 +34,6 @@ sub available_perls {
     s/\.tar\.gz// for @available_versions;
 
     return @available_versions;
-}
-
-# taken from App::perlbrew.pm
-{
-    my @command;
-    sub http_get {
-        my ($url, $header, $cb) = @_;
-
-        if (ref($header) eq 'CODE') {
-            $cb = $header;
-            $header = undef;
-        }
-
-        if (! @command) {
-            my @commands = (
-                # curl's --fail option makes the exit code meaningful
-                [qw( curl --silent --location --fail --insecure )],
-                [qw( fetch -o - )],
-                [qw( wget --no-check-certificate --quiet -O - )],
-            );
-            for my $command (@commands) {
-                my $program = $command->[0];
-                my $code = system("$program --version >/dev/null 2>&1") >> 8;
-                if ($code != 127) {
-                    @command = @$command;
-                    last;
-                }
-            }
-            die "You have to install either curl or wget\n"
-                unless @command;
-        }
-
-        open my $fh, '-|', @command, $url
-            or die "open() for '@command $url': $!";
-
-        local $/;
-        my $body = <$fh>;
-        close $fh;
-        die 'Page not retrieved; HTTP error code 400 or above.'
-            if $command[0] eq 'curl' # Exit code is 22 on 404s etc
-            and $? >> 8 == 22; # exit code is packed into $?; see perlvar
-        die 'Page not retrieved: fetch failed.'
-            if $command[0] eq 'fetch' # Exit code is not 0 on error
-            and $?;
-        die 'Server issued an error response.'
-            if $command[0] eq 'wget' # Exit code is 8 on 404s etc
-            and $? >> 8 == 8;
-
-        return $cb ? $cb->($body) : $body;
-    }
 }
 
 # @return extracted source directory
@@ -129,33 +80,28 @@ sub perl_release {
     return ($dist_tarball, $dist_tarball_url);
 }
 
+sub http_get {
+    my ($url) = @_;
+
+    my $http = HTTP::Tiny->new();
+    my $response = $http->get($url);
+    if ($response->{success}) {
+        return $response->{content};
+    } else {
+        return "Cannot get content from $url: $response->{status} $response->{reason}";
+    }
+}
+
 sub http_mirror {
-    my ($class, $url, $path, $on_error) = @_;
+    my ($url, $path) = @_;
 
-    my $header = undef;
-
-    open my $BALL, ">", $path or die "Failed to open $path for writing.\n";
-
-    http_get(
-        $url,
-        $header,
-        sub {
-            my ($body) = @_;
-
-            unless ($body) {
-                if (ref($on_error) eq 'CODE') {
-                    $on_error->($url);
-                }
-                else {
-                    die "ERROR: Failed to download $url.\n"
-                }
-            }
-
-
-            print $BALL $body;
-        }
-    );
-    close $BALL;
+    my $http = HTTP::Tiny->new();
+    my $response = $http->mirror($url, $path);
+    if ($response->{success}) {
+        print "Downloaded $url to $path.\n";
+    } else {
+        die "Cannot get file from $url: $response->{status} $response->{reason}";
+    }
 }
 
 sub install_from_cpan {
@@ -178,7 +124,7 @@ sub install_from_cpan {
     }
     else {
         print "Fetching $version as $dist_tarball_path\n";
-        Perl::Build->http_mirror( $dist_tarball_url, $dist_tarball_path );
+        http_mirror( $dist_tarball_url, $dist_tarball_path );
     }
 
     # and extract tar ball.

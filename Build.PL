@@ -21,7 +21,7 @@ my $build = Module::Build::Pluggable->new(
     },
     requires             => {
         perl => '5.008005',
-        'Perl::Build' => '0.03',
+        'Perl::Build' => '0.05',
         'Pod::Find' => 0,
         'Pod::Usage' => 0,
     },
