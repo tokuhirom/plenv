@@ -274,15 +274,16 @@ sub install {
         'A=s@' => \@A,
         'U=s@' => \@U,
     );
+
+    shift @ARGV if @ARGV >= 1 && $ARGV[0] eq '--';
+
     my @configure_options = @ARGV;
     unless (@configure_options) {
         push @configure_options, '-de';
     }
 
     for (@D, @A, @U) {
-        for (@_) {
-            s/^=//;
-        }
+        s/^=//;
     }
 
     push @configure_options, map { "-D$_" } @D;
@@ -511,7 +512,7 @@ plenv - perl binary manager
     plenv available
 
     # install perl5 binary
-    plenv install 5.16.2 -- -Dusethreads
+    plenv install 5.16.2 -Dusethreads
 
     # execute command on current perl
     plenv exec ack
