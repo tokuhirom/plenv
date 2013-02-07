@@ -108,3 +108,25 @@ C<EXE_FILES: bin/cpanm>
 
 =back
 
+=head2 Thu Feb  7 11:46:07 2013: C<Module> L<IPC::Cmd|IPC::Cmd>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.78>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+

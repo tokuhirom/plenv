@@ -268,6 +268,70 @@
          "target" : "File::pushd",
          "version" : "1.003"
       },
+      "IPC::Cmd" : {
+         "dist" : "IPC-Cmd-0.78",
+         "mymeta" : {
+            "abstract" : "A cross platform way of running (interactive) commandline programs.",
+            "author" : [
+               "Jos Boumans <kane[at]cpan.org>"
+            ],
+            "dynamic_config" : 0,
+            "generated_by" : "ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.120921",
+            "license" : [
+               "perl_5"
+            ],
+            "meta-spec" : {
+               "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+               "version" : "2"
+            },
+            "name" : "IPC-Cmd",
+            "no_index" : {
+               "directory" : [
+                  "t",
+                  "inc"
+               ]
+            },
+            "prereqs" : {
+               "build" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : "0"
+                  }
+               },
+               "configure" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : "0"
+                  }
+               },
+               "runtime" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : "0",
+                     "File::Spec" : "0",
+                     "Locale::Maketext::Simple" : "0",
+                     "Module::Load::Conditional" : "0",
+                     "Params::Check" : "0.20",
+                     "Test::More" : "0"
+                  }
+               }
+            },
+            "release_status" : "stable",
+            "resources" : {
+               "repository" : {
+                  "url" : "https://github.com/jib/ipc-cmd"
+               }
+            },
+            "version" : "0.78"
+         },
+         "name" : "IPC::Cmd",
+         "pathname" : "B/BI/BINGOS/IPC-Cmd-0.78.tar.gz",
+         "provides" : {
+            "IPC::Cmd" : {
+               "file" : "IPC/Cmd.pm",
+               "version" : "0.78"
+            }
+         },
+         "target" : "IPC::Cmd",
+         "version" : "0.78"
+      },
       "Perl::Build" : {
          "dist" : "Perl-Build-0.03",
          "mymeta" : {
