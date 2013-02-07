@@ -449,7 +449,9 @@ export PLENV_ROOT="%s"
 
 sub CMD_install_cpanm {
     print("Installing cpanm to current perl\n");
-    system("curl -L http://cpanmin.us | perl - --self-upgrade");
+    home_init();
+    my ($version, $file) = detect_version();
+    install_cpanm($version);
 }
 
 sub CMD_available {
@@ -460,13 +462,12 @@ sub CMD_available {
 
 sub CMD_migrate_modules {
     home_init();
-    @ARGV==2 or show_help('migrate_modules');
+    @ARGV==2 or show_help('migrate-modules');
     my ($src, $dst) = @ARGV;
 
     my $srcperl = "${PLENV_HOME}/versions/${src}/bin/perl";
-    my $dstperl = "${PLENV_HOME}/versions/${dst}/bin/perl";
     my $dstcpanm = "${PLENV_HOME}/versions/${dst}/bin/cpanm";
-    install_cpanm($dstperl);
+    install_cpanm($dst);
     open my $srcfh, "-|", $srcperl, '-MExtUtils::Installed', '-e', 'print $_, "\n" for ExtUtils::Installed->new->modules'
         or die "Cannot exec: $!";
     open my $dstfh, "|-", $dstcpanm
@@ -479,10 +480,24 @@ sub CMD_migrate_modules {
 }
 
 sub install_cpanm {
-    my ($perl) = @_;
-    $perl ||= 'perl';
-    system("curl -L http://cpanmin.us | $perl - --self-upgrade")
+    my ($version) = @_;
+    my $perl = "${PLENV_HOME}/versions/${version}/bin/perl";
+    my $cpanm = _find_cpanm_path();
+    system("$perl $cpanm App::cpanminus")
         == 0 or die "Cannot install cpanm to $perl";
+}
+
+sub _find_cpanm_path {
+    {
+        my $cpanm = File::Spec->catfile($FindBin::RealBin, '..', 'share/plenv/bin/cpanm');
+        return $cpanm if -f $cpanm;
+    }
+    {
+        my $cpanm = $^X;
+        $cpanm =~ s!/perl([0-9\.]*)$!/cpanm!;
+        return $cpanm if -f $cpanm;
+    }
+    die "[ABORT] Cannot find bundled `cpanm` command\n";
 }
 
 __END__
