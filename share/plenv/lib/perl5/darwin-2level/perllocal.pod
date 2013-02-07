@@ -130,3 +130,91 @@ C<EXE_FILES: >
 
 =back
 
+=head2 Fri Feb  8 08:05:19 2013: C<Module> L<ExtUtils::MakeMaker|ExtUtils::MakeMaker>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 6.64>
+
+=item *
+
+C<EXE_FILES: bin/instmodsh>
+
+=back
+
+=head2 Fri Feb  8 08:05:21 2013: C<Module> L<ExtUtils::Install|ExtUtils::Install>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.54>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Feb  8 08:05:26 2013: C<Module> L<Test::Simple|Test::Simple>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.98>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Feb  8 08:05:27 2013: C<Module> L<HTTP::Tiny|HTTP::Tiny>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.025>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
