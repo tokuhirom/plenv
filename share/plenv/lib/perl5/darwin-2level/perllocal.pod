@@ -86,3 +86,25 @@ C<EXE_FILES: >
 
 =back
 
+=head2 Thu Feb  7 09:44:39 2013: C<Module> L<App::cpanminus|App::cpanminus>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.5021>
+
+=item *
+
+C<EXE_FILES: bin/cpanm>
+
+=back
+
