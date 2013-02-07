@@ -25,6 +25,10 @@ my $build = Module::Build::Pluggable->new(
         'Pod::Find' => 0,
         'Pod::Usage' => 0,
         'App::cpanminus' => 0,
+        # install IPC::Cmd to install it to share/plenv/.
+        # IPC::Cmd is required by Devel::PatchPerl
+        # > IPC::Cmd was first released with perl v5.9.5
+        'IPC::Cmd' => '0.78',
     },
 
     no_index    => { 'directory' => [ 'inc' ] },
