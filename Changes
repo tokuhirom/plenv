@@ -1,5 +1,10 @@
 Revision history for Perl extension App::plenv
 
+1.4.1 2013-02-07T11:50:56
+
+    - bundle IPC::Cmd
+    (This version is not uploaded to CPAN)
+
 1.4.0 2013-02-07T09:48:26
 
     - bundle cpanm and just use it in `install-cpanm` command
