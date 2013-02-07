@@ -94,3 +94,5 @@ perltidy.ERR$
 ^share/plenv/
 ^carton\.lock$
 ^\.travis\.yml$
+^\.carton/
+^\.gitattributes$

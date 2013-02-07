@@ -23,6 +23,10 @@ META.json
 META.yml
 README
 t/00_compile.t
+t/perl-dummy.tar.gz
+t/perl-dummy/Configure
+t/perl-dummy/hints/darwin.sh
+t/perl-dummy/patchlevel.h
 xt/01_podspell.t
 xt/02_perlcritic.t
 xt/03_pod.t

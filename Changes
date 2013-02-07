@@ -1,5 +1,17 @@
 Revision history for Perl extension App::plenv
 
+1.4.0 2013-02-07T09:48:26
+
+    - bundle cpanm and just use it in `install-cpanm` command
+      (Reported by @turugina, and thanks to @miyagawa)
+    - Fix for parsing command line argument
+      - Loop for @D, @A, @U makes no sense
+      - Remove '--' if @ARGV contains it(See also Getopt::Long document).
+     (Syohei YOSHIDA)
+   - speciallize the shim file for cpanm. Speciallized version of 'cpanm'
+     shim runs rehashing after installing.
+     (tokuhirom)
+
 1.3.1 2013-01-24T11:56:38
 
     [BUG FIX]
