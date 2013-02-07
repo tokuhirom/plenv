@@ -24,6 +24,7 @@ my $build = Module::Build::Pluggable->new(
         'Perl::Build' => '0.05',
         'Pod::Find' => 0,
         'Pod::Usage' => 0,
+        'App::cpanminus' => 0,
     },
 
     no_index    => { 'directory' => [ 'inc' ] },
