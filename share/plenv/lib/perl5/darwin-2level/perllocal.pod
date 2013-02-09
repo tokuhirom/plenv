@@ -218,3 +218,399 @@ C<EXE_FILES: >
 
 =back
 
+=head2 Sat Feb  9 11:39:53 2013: C<Module> L<Locale::Maketext::Simple|Locale::Maketext::Simple>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.21>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Feb  9 11:39:53 2013: C<Module> L<Params::Check|Params::Check>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.36>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Feb  9 11:41:20 2013: C<Module> L<version|version>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.9901>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Feb  9 11:41:20 2013: C<Module> L<Module::Metadata|Module::Metadata>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.000011>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Feb  9 11:41:22 2013: C<Module> L<Module::Load|Module::Load>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.24>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Feb  9 11:41:24 2013: C<Module> L<Module::CoreList|Module::CoreList>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.80>
+
+=item *
+
+C<EXE_FILES: corelist>
+
+=back
+
+=head2 Sat Feb  9 11:41:25 2013: C<Module> L<Module::Load::Conditional|Module::Load::Conditional>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.54>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Feb  9 11:42:00 2013: C<Module> L<Test::Harness|Test::Harness>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 3.26>
+
+=item *
+
+C<EXE_FILES: bin/prove>
+
+=back
+
+=head2 Sat Feb  9 11:42:04 2013: C<Module> L<JSON::PP|JSON::PP>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.27200>
+
+=item *
+
+C<EXE_FILES: bin/json_pp>
+
+=back
+
+=head2 Sat Feb  9 11:42:07 2013: C<Module> L<CPAN::Meta::YAML|CPAN::Meta::YAML>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.008>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Feb  9 11:42:07 2013: C<Module> L<Parse::CPAN::Meta|Parse::CPAN::Meta>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.4404>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Feb  9 11:42:10 2013: C<Module> L<File::Temp|File::Temp>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.22>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Feb  9 11:42:14 2013: C<Module> L<CPAN::Meta::Requirements|CPAN::Meta::Requirements>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.122>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Feb  9 11:42:15 2013: C<Module> L<CPAN::Meta|CPAN::Meta>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.120921>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Feb  9 11:42:17 2013: C<Module> L<Perl::OSType|Perl::OSType>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.002>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Feb  9 11:42:22 2013: C<Module> L<Cwd|Cwd>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 3.40>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Feb  9 11:42:22 2013: C<Module> L<ExtUtils::CBuilder|ExtUtils::CBuilder>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.280205>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Feb  9 11:42:25 2013: C<Module> L<ExtUtils::ParseXS|ExtUtils::ParseXS>
+
+=over 4
+
+=item *
+
+C<installed into: /Users/tokuhirom/dev/plenv/share/plenv/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 3.18>
+
+=item *
+
+C<EXE_FILES: lib/ExtUtils/xsubpp>
+
+=back
+

@@ -14,6 +14,7 @@ my $build = Module::Build::Pluggable->new(
     build_requires       => {
         'Test::More' => '0.98',
         'Test::Requires' => 0,
+        'lib::core::only' => 0,
     },
     configure_requires   => {
         'Module::Build' => '0.38',
