@@ -10,6 +10,7 @@ use_ok 'Devel::PatchPerl';
 use_ok 'App::plenv';
 use_ok 'IPC::Cmd';
 use_ok 'Module::Metadata';
+note "version: $version::VERSION";
 
 done_testing;
 
