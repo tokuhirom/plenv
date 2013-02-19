@@ -24,3 +24,4 @@ shims/
 nytprof.out
 nytprof/
 **/Params/Util/*.so
+share/plenv/lib/perl5/x86_64-linux
