@@ -65,7 +65,7 @@ sub CMD_exec {
             grep { File::Spec->canonpath($_) ne File::Spec->canonpath("$PLENV_HOME/shims/") } File::Spec->path()
         );
     } else {
-        my $bindir = "$PLENV_HOME/versions/$version/bin/";
+        my $bindir = "$PLENV_HOME/versions/$version/bin";
         unless (-x File::Spec->catfile($bindir, $bin)) {
             die "[plenv] There is no $bin in $bindir.(determined by @{[ $file || '-' ]})\n";
         }
@@ -82,7 +82,7 @@ sub CMD_which {
 
     my @path = grep { File::Spec->canonpath($_) ne File::Spec->canonpath("$PLENV_HOME/shims/") } File::Spec->path();
     if ($version ne 'system') {
-        unshift @path, "$PLENV_HOME/versions/$version/bin/";
+        unshift @path, "$PLENV_HOME/versions/$version/bin";
     }
 
     if (my $fullpath = which($bin, @path)) {
