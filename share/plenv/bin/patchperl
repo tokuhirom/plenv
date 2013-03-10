@@ -1,6 +1,6 @@
-#!/Users/tokuhirom/.plenv/versions/5.16.2/bin/perl
+#!/home/tokuhirom/.plenv/versions/5.8.9/bin/perl
 
-eval 'exec /Users/tokuhirom/.plenv/versions/5.16.2/bin/perl  -S $0 ${1+"$@"}'
+eval 'exec /home/tokuhirom/.plenv/versions/5.8.9/bin/perl  -S $0 ${1+"$@"}'
     if 0; # not running under some shell
 
 package
@@ -14,6 +14,7 @@ use Devel::PatchPerl;
 Devel::PatchPerl->patch_source($ARGV[1], $ARGV[0]);
 
 __END__
+
 =pod
 
 =head1 NAME
@@ -22,7 +23,7 @@ patchperl - patch a perl source tree
 
 =head1 VERSION
 
-version 0.76
+version 0.84
 
 =head1 AUTHOR
 
@@ -30,10 +31,9 @@ Chris Williams <chris@bingosnet.co.uk>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Chris Williams and Marcus Holland-Moritz.
+This software is copyright (c) 2013 by Chris Williams and Marcus Holland-Moritz.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

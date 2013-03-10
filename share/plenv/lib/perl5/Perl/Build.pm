@@ -4,7 +4,7 @@ use warnings;
 use utf8;
 
 use 5.008005;
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 use File::Basename;
 use File::Spec::Functions qw(catfile catdir rel2abs);
