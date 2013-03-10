@@ -96,3 +96,4 @@ perltidy.ERR$
 ^\.travis\.yml$
 ^\.carton/
 ^\.gitattributes$
+^\.perl-version$

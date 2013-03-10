@@ -1,6 +1,7 @@
 bin/plenv
 Build.PL
 Changes
+cpanfile
 inc/Module/Build/Pluggable/Carton.pm
 lib/App/plenv.pm
 lib/App/plenv/available.pod
@@ -23,6 +24,8 @@ META.json
 META.yml
 README
 t/00_compile.t
+t/01_bin.t
+t/02_deps.t
 t/perl-dummy.tar.gz
 t/perl-dummy/Configure
 t/perl-dummy/hints/darwin.sh
