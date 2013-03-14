@@ -1,0 +1,22 @@
+=head1 NAME
+
+plenv-list-modules - Show installed module list from current perl
+
+=head1 SYNOPSIS
+
+    % plenv list-modules
+    Algorithm::C3
+    App::cpanminus
+    Archive::Tar
+    Archive::Zip
+    Astro::FITS::Header
+    CPAN::DistnameInfo
+    CPAN::Meta
+    CPAN::Meta::Requirements
+    CPAN::Meta::YAML
+    CPAN::Perl::Releases
+
+=head1 DESCRIPTION
+
+This module shows list of installed perl modules.
+

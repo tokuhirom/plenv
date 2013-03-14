@@ -397,6 +397,12 @@ sub CMD_list {
 
 sub CMD_versions { CMD_list(@_) } # alias
 
+sub CMD_list_modules {
+    home_init();
+    my $cmd = sprintf(q{"%s" exec perl -MExtUtils::Installed -e "print qq!\$_$/! for ExtUtils::Installed->new->modules"}, File::Spec->rel2abs($0));
+    exec $cmd;
+}
+
 sub installed_perls {
     my $self    = shift;
 
