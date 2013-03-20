@@ -444,7 +444,7 @@ set -e
 
 program="${0##*/}"
 
-export PLENV_ROOT="%s"
+export PLENV_HOME="%s"
 %s
 ...
         close $fh;
