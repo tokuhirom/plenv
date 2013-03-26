@@ -458,6 +458,7 @@ sub CMD_install_cpanm {
     home_init();
     my ($version, $file) = detect_version();
     install_cpanm($version);
+    rehash();
 }
 
 sub CMD_available {
