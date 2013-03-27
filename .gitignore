@@ -12,7 +12,6 @@ pm_to_blib
 blib/
 META.yml
 MYMETA.*
-META.json
 META.yml
 README
 versions/
@@ -25,3 +24,8 @@ nytprof/
 **/Params/Util/*.so
 share/plenv/lib/perl5/x86_64-linux/
 share/plenv/lib/perl5/darwin-2level/
+/plenv-*
+/.build
+/_build_params
+!Build/
+!META.json
