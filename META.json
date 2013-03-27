@@ -31,7 +31,7 @@
          "requires" : {
             "App::cpanminus" : "0",
             "Devel::PatchPerl" : "0.84",
-            "Perl::Build" : "0.06",
+            "Perl::Build" : "0.09",
             "Pod::Find" : "0",
             "Pod::Usage" : "0"
          }
