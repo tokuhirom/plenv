@@ -2,6 +2,10 @@ Revision history for Perl extension App::plenv
 
 {{$NEXT}}
 
+1.4.6 2013-03-27T12:11:54Z
+
+    - Latest Perl::Build deprecates `patchperl` parameter.
+
 1.4.5 2013-03-27T06:14:00Z
 
     - Depend to Perl-Build 0.09
