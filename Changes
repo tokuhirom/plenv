@@ -2,6 +2,14 @@ Revision history for Perl extension App::plenv
 
 {{$NEXT}}
 
+1.4.7 2013-03-27T12:22:53Z
+
+    - 1.4.5 & 1.4.6 was broken if you are using plenv by `git clone`.
+      I forgot to users using plenv by `git clone`.
+      I renamed `bin/` directory to `script/` at 1.4.5.
+      But it's so bad.
+      (tokuhirom)
+
 1.4.6 2013-03-27T12:11:54Z
 
     - Latest Perl::Build deprecates `patchperl` parameter.
