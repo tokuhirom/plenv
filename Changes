@@ -2,6 +2,10 @@ Revision history for Perl extension App::plenv
 
 {{$NEXT}}
 
+1.4.9 2013-03-28T02:46:35Z
+
+    - depend to Perl-Build 0.10
+
 1.4.8 2013-03-28T02:39:34Z
 
     - re-packaging
