@@ -6,7 +6,6 @@ requires 'Devel::PatchPerl' => '0.84'; # no IPC::Cmd
 
 on 'configure' => sub {
     requires 'Module::Build' => '0.38';
-    requires 'Module::Build::Pluggable' => '0.05';
 };
 
 on 'build' => sub {
