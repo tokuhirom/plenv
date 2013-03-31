@@ -2,6 +2,13 @@ Revision history for Perl extension App::plenv
 
 {{$NEXT}}
 
+1.4.11 2013-03-31T03:43:53Z
+
+    - pass test option to Perl::Build
+      (ks <ks-for-git@live.jp>)
+    - Depend to Perl::Build 0.13
+      (tokuhirom)
+
 1.4.10 2013-03-30T13:41:09Z
 
     - Removed deps for Module::Build::Pluggable

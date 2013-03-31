@@ -2,7 +2,7 @@ package App::plenv;
 use strict;
 use warnings;
 use 5.008002;
-our $VERSION = '1.4.10';
+our $VERSION = '1.4.11';
 
 
 
@@ -19,7 +19,7 @@ See L<plenv>
 
 =head1 AUTHOR
 
-Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF@ GMAIL COME<gt>
+Tokuhiro Matsuno E<lt>tokuhirom@gmail.comE<gt>
 
 =head1 SEE ALSO
 
