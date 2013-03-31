@@ -322,7 +322,7 @@ sub install {
                 build_dir => $build_dir,
                 dst_path => $dst_path,
                 configure_options => \@configure_options,
-                test => 0,
+                test => $test,
             )
         );
 
@@ -351,7 +351,7 @@ sub install {
                 build_dir => $build_dir,
                 dst_path => $dst_path,
                 configure_options => \@configure_options,
-                test => 0,
+                test => $test,
             )
         );
         Perl::Build->symlink_devel_executables(
