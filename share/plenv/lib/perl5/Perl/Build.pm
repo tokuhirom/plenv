@@ -3,8 +3,8 @@ use strict;
 use warnings;
 use utf8;
 
-use 5.008005;
-our $VERSION = '0.09';
+use 5.008002;
+our $VERSION = '0.13';
 
 use Carp ();
 use File::Basename;
@@ -173,6 +173,14 @@ sub install {
         or die "Missing mandatory parameter: configure_options";
 
     unshift @$configure_options, qq(-Dprefix=$dst_path);
+
+    # Perl5 installs public executable scripts(like `prove`) to /usr/local/share/
+    # if it exists.
+    #
+    # This -A'eval:scriptdir=$prefix/bin' option avoid this feature.
+    unless (grep { /eval:scriptdir=/} @$configure_options) {
+        push @$configure_options, "-A'eval:scriptdir=${dst_path}/bin'";
+    }
 
     # clean up environment
     delete $ENV{$_} for qw(PERL5LIB PERL5OPT);

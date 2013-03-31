@@ -1,4 +1,4 @@
-requires 'Perl::Build', '0.10';
+requires 'Perl::Build', '0.13';
 requires 'Pod::Find' => 0;
 requires 'Pod::Usage' => 0;
 requires 'App::cpanminus' => 0;
