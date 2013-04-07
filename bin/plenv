@@ -463,7 +463,7 @@ sub CMD_migrate_modules {
     install_cpanm($dst);
     open my $srcfh, "-|", $srcperl, '-MExtUtils::Installed', '-e', 'print $_, "\n" for ExtUtils::Installed->new->modules'
         or die "Cannot exec: $!";
-    open my $dstfh, "|-", $dstcpanm
+    open my $dstfh, "|-", $dstcpanm, '--mirror-only'
         or die "Cannot exec $dstcpanm: $!";
     while (<$srcfh>) {
         print $dstfh $_;
