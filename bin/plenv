@@ -546,6 +546,9 @@ plenv - perl binary manager
     # locate a program file in the plenv's path
     plenv which cpanm
 
+    # display version
+    plenv --version
+
 =head1 DESCRIPTION
 
 Use plenv to pick a Perl version for your application and guarantee
