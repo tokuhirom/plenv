@@ -2,6 +2,11 @@ Revision history for Perl extension App::plenv
 
 {{$NEXT}}
 
+1.4.12 2013-04-15T05:43:50Z
+
+    - Added `plenv --version`
+      (Suggested by miyagawa++)
+
 1.4.11 2013-03-31T03:43:53Z
 
     - pass test option to Perl::Build

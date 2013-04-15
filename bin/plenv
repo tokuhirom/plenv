@@ -10,7 +10,7 @@ use lib File::Spec->catdir($FindBin::RealBin, '..', 'share', 'plenv', 'lib', 'pe
 use File::Path qw(mkpath rmtree);
 use Getopt::Long;
 
-our $VERSION = '1.4.11';
+our $VERSION = '1.4.12';
 
 my $PLENV_HOME;
 my $LOCAL = "@{[ File::Spec->rel2abs($FindBin::RealBin) ]}/../share/plenv/";
