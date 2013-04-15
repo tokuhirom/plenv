@@ -8,6 +8,9 @@ use File::Basename qw/dirname basename/;
 use FindBin ();
 use lib File::Spec->catdir($FindBin::RealBin, '..', 'share', 'plenv', 'lib', 'perl5');
 use File::Path qw(mkpath rmtree);
+use Getopt::Long;
+
+our $VERSION = '1.4.11';
 
 my $PLENV_HOME;
 my $LOCAL = "@{[ File::Spec->rel2abs($FindBin::RealBin) ]}/../share/plenv/";
@@ -17,6 +20,17 @@ my $LOCAL = "@{[ File::Spec->rel2abs($FindBin::RealBin) ]}/../share/plenv/";
 # -------------------------------------------------------------------------
 
 sub main {
+    my $p = Getopt::Long::Parser->new(
+        config => [ "no_ignore_case", "pass_through" ],
+    );
+    $p->getoptions(
+        'v|version' => \my $version,
+    );
+    if ($version) {
+        print "plenv $VERSION\n";
+        exit 0;
+    }
+
     my $cmd = shift @ARGV or CMD_help();
     $cmd =~ s/-/_/g;
 
