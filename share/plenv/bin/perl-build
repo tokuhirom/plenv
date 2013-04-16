@@ -10,6 +10,7 @@ use File::Spec;
 
 my $test = undef;
 my $patches;
+my $build_dir;
 my (@D, @A, @U);
 Getopt::Long::Configure(
     'pass_through',
@@ -22,6 +23,7 @@ GetOptions(
     'A=s@' => \@A,
     'U=s@' => \@U,
     'patches=s' => \$patches,
+    'build-dir=s' => \$build_dir,
 );
 for (@D, @A, @U) {
     s/^=//;
@@ -46,6 +48,7 @@ if ($stuff =~ /\.(gz|bz2)$/) {
             dst_path          => $dest,
             configure_options => \@configure_options,
             test              => $test,
+            build_dir         => $build_dir,
         )
     );
 } else {
@@ -55,6 +58,7 @@ if ($stuff =~ /\.(gz|bz2)$/) {
             dst_path          => $dest,
             configure_options => \@configure_options,
             test              => $test,
+            build_dir         => $build_dir,
         )
     );
 }
@@ -98,6 +102,10 @@ This option enables C<< make test >> after building.
 =item --patches=Asan
 
 You can set I<PERL5_PATCHPERL_PLUGIN> environment variable by this option.
+
+=item --build-dir=path
+
+Specify perl build path. optional. (Default: temporary directory)
 
 =back
 

@@ -8,7 +8,7 @@ See [plenv](http://search.cpan.org/perldoc?plenv)
 
 # AUTHOR
 
-Tokuhiro Matsuno <tokuhirom AAJKLFJEF@ GMAIL COM>
+Tokuhiro Matsuno <tokuhirom@gmail.com>
 
 # SEE ALSO
 

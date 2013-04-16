@@ -8,6 +8,9 @@ use File::Basename qw/dirname basename/;
 use FindBin ();
 use lib File::Spec->catdir($FindBin::RealBin, '..', 'share', 'plenv', 'lib', 'perl5');
 use File::Path qw(mkpath rmtree);
+use Getopt::Long;
+
+our $VERSION = '1.4.12';
 
 my $PLENV_HOME;
 my $LOCAL = "@{[ File::Spec->rel2abs($FindBin::RealBin) ]}/../share/plenv/";
@@ -17,6 +20,17 @@ my $LOCAL = "@{[ File::Spec->rel2abs($FindBin::RealBin) ]}/../share/plenv/";
 # -------------------------------------------------------------------------
 
 sub main {
+    my $p = Getopt::Long::Parser->new(
+        config => [ "no_ignore_case", "pass_through" ],
+    );
+    $p->getoptions(
+        'v|version' => \my $version,
+    );
+    if ($version) {
+        print "plenv $VERSION\n";
+        exit 0;
+    }
+
     my $cmd = shift @ARGV or CMD_help();
     $cmd =~ s/-/_/g;
 
@@ -218,7 +232,7 @@ sub CMD_local {
 sub write_version_file {
     my ($version, $versionfile) = @_;
     $version =~ s/\s//g;
-    $version =~ s/^perl-//; # remove prefix
+    $version =~ s/^perl-// unless is_installed($version) ; # remove prefix
 
     if ($version ne 'system' && !is_installed($version)) {
         die "$version is not installed on plenv.";
@@ -463,7 +477,7 @@ sub CMD_migrate_modules {
     install_cpanm($dst);
     open my $srcfh, "-|", $srcperl, '-MExtUtils::Installed', '-e', 'print $_, "\n" for ExtUtils::Installed->new->modules'
         or die "Cannot exec: $!";
-    open my $dstfh, "|-", $dstcpanm
+    open my $dstfh, "|-", $dstcpanm, '--mirror-only'
         or die "Cannot exec $dstcpanm: $!";
     while (<$srcfh>) {
         print $dstfh $_;
@@ -531,6 +545,9 @@ plenv - perl binary manager
 
     # locate a program file in the plenv's path
     plenv which cpanm
+
+    # display version
+    plenv --version
 
 =head1 DESCRIPTION
 
