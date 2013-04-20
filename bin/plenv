@@ -266,6 +266,7 @@ sub install {
 
     my $installation_name;
     my $test;
+    my $force;
     my (@D, @A, @U);
     Getopt::Long::Configure(
         'pass_through',
@@ -274,6 +275,7 @@ sub install {
     );
     Getopt::Long::GetOptions(
         'test' => \$test,
+        'force' => \$force,
         'as=s', \$installation_name,
         'build-dir=s' => \my $build_dir,
         'D=s@' => \@D,
@@ -311,6 +313,7 @@ sub install {
     print "Creating $build_dir(building directory)\n";
     mkpath($build_dir);
 
+    my $is_updated = undef;
     if ($stuff =~ /\.(gz|bz2)$/) {
         # install from file
         my $dist_tarball_path = $stuff;
@@ -323,7 +326,11 @@ sub install {
         };
 
         if (is_installed( $installation_name )) {
-            die "\nABORT: $installation_name is already installed.\n\n";
+            unless( $force ){
+                die "\nABORT: $installation_name is already installed.\n\n";
+            }else{
+                $is_updated = 1;
+            }
         }
 
         # -de means "use default settings without interactive questions"
@@ -347,7 +354,11 @@ sub install {
         $installation_name ||= $version;
 
         if (is_installed( $installation_name )) {
-            die "\nABORT: $installation_name is already installed.\n\n";
+            unless( $force ){
+                die "\nABORT: $installation_name is already installed.\n\n";
+            }else{
+                $is_updated = 1;
+            }
         }
 
         if ($version =~ /^5\.1[13579]\./) {
