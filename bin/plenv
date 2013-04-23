@@ -93,7 +93,7 @@ sub CMD_which {
 
     my @path = grep { File::Spec->canonpath($_) ne File::Spec->canonpath("$PLENV_HOME/shims/") } File::Spec->path();
     if ($version ne 'system') {
-        unshift @path, "$PLENV_HOME/versions/$version/bin";
+        @path = ("$PLENV_HOME/versions/$version/bin");
     }
 
     if (my $fullpath = which($bin, @path)) {
