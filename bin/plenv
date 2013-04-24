@@ -313,7 +313,6 @@ sub install {
     print "Creating $build_dir(building directory)\n";
     mkpath($build_dir);
 
-    my $is_updated = undef;
     if ($stuff =~ /\.(gz|bz2)$/) {
         # install from file
         my $dist_tarball_path = $stuff;
@@ -325,12 +324,8 @@ sub install {
             $name;
         };
 
-        if (is_installed( $installation_name )) {
-            unless( $force ){
-                die "\nABORT: $installation_name is already installed.\n\n";
-            }else{
-                $is_updated = 1;
-            }
+        if (is_installed( $installation_name ) && !$force) {
+            die "\nABORT: $installation_name is already installed.\n\n";
         }
 
         # -de means "use default settings without interactive questions"
@@ -353,12 +348,8 @@ sub install {
         $version =~ s!^perl-!!;
         $installation_name ||= $version;
 
-        if (is_installed( $installation_name )) {
-            unless( $force ){
-                die "\nABORT: $installation_name is already installed.\n\n";
-            }else{
-                $is_updated = 1;
-            }
+        if (is_installed( $installation_name ) && !$force) {
+            die "\nABORT: $installation_name is already installed.\n\n";
         }
 
         if ($version =~ /^5\.1[13579]\./) {
