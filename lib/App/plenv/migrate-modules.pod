@@ -10,5 +10,5 @@ plenv-migrate-modules - Migrate CPAN modules from other Perl installation
 
     % plenv migrate-modules <from> <to>
 
-This subcommand installs CPAN modules installed on <from> version to <to> version.
+This sub command installs CPAN modules installed on <from> version to <to> version.
 

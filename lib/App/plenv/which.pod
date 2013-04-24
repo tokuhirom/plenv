@@ -12,4 +12,4 @@ plenv-which - locate a program file in the plenv's path
 
 =head1 DESCRIPTION
 
-Find a executable from current perl5's path and display it.
+Find a executable from current Perl5's path and display it.

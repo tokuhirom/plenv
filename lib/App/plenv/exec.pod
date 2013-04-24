@@ -1,6 +1,6 @@
 =head1 NAME
 
-plenv-exec - execute command under perl5
+plenv-exec - execute command under Perl5
 
 =head1 SYNOPSIS
 
@@ -10,5 +10,5 @@ plenv-exec - execute command under perl5
 
 =head1 DESCRIPTION
 
-This subcommand run the executable under current perl5's bin/ directory.
+This sub command run the executable under current Perl5's bin/ directory.
 

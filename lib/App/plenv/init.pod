@@ -8,4 +8,4 @@ plenv-init - initialize
 
 =head1 DESCRIPTION
 
-This subcommand outputs shell script to setup plenv.
+This sub command outputs shell script to setup plenv.

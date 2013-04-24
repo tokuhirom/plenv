@@ -1,6 +1,6 @@
 =head1 NAME
 
-plenv-available - Show available perl5 versions from CPAN
+plenv-available - Show available Perl5 versions from CPAN
 
 =head1 SYNOPSIS
 
@@ -18,5 +18,5 @@ plenv-available - Show available perl5 versions from CPAN
 
 =head1 DESCRIPTION
 
-This module shows available perl5 versions to install.
+This module shows available Perl5 versions to install.
 

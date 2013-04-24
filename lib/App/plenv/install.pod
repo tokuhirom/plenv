@@ -1,6 +1,6 @@
 =head1 NAME
 
-plenv-install - install perl5 into ~/.plenv/
+plenv-install - install Perl5 into ~/.plenv/
 
 =head1 SYNOPSIS
 
@@ -10,7 +10,7 @@ plenv-install - install perl5 into ~/.plenv/
 
 =head1 DESCRIPTION
 
-This subcommand install Perl binary into ~/.plenv/versions/.
+This sub command install Perl binary into ~/.plenv/versions/.
 
 =head1 OPTIONS
 
