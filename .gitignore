@@ -30,3 +30,4 @@ share/plenv/lib/perl5/darwin-2level/
 /_build_params
 !Build/
 !META.json
+!LICENSE
