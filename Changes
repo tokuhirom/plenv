@@ -2,6 +2,10 @@ Revision history for Perl extension App::plenv
 
 {{$NEXT}}
 
+1.4.14 2013-04-25T21:55:59Z
+
+    - Fixed packaging issue.
+
 1.4.13 2013-04-24T05:33:09Z
 
     - Do not handle `plenv exec perl --version` in core.
