@@ -4,7 +4,7 @@
       "Tokuhiro Matsuno <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.0.54, CPAN::Meta::Converter version 2.130880",
+   "generated_by" : "Minilla/v0.0.56, CPAN::Meta::Converter version 2.130880",
    "license" : [
       "perl_5"
    ],
@@ -70,15 +70,15 @@
          "web" : "https://github.com/tokuhirom/plenv"
       }
    },
-   "version" : "1.4.12",
+   "version" : "1.4.14",
    "x_contributors" : [
       "Masato Ikeda <masato.ikeda@gmail.com>",
       "Nishibayashi Takuji <takuji31@gmail.com>",
-      "Syohei YOSHIDA <syohex@gmail.com>",
       "xaicron <xaicron@gmail.com>",
       "Kozaki, Tsuneaki <kozaki.tsuneaki@gmail.com>",
       "moznion <moznion@gmail.com>",
       "ks <ks-for-git@live.jp>",
-      "Tatsuhiko Miyagawa <miyagawa@bulknews.net>"
+      "Tatsuhiko Miyagawa <miyagawa@bulknews.net>",
+      "Syohei YOSHIDA <syohex@gmail.com>"
    ]
 }
