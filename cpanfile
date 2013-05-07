@@ -2,6 +2,7 @@ requires 'Perl::Build', '0.13';
 requires 'Pod::Find' => 0;
 requires 'Pod::Usage' => 0;
 requires 'App::cpanminus' => 0;
+requires 'GetOpt::Long';
 requires 'Devel::PatchPerl' => '0.84'; # no IPC::Cmd
 
 on 'configure' => sub {
