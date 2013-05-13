@@ -15,6 +15,7 @@ on 'build' => sub {
     requires 'lib::core::only' => 0;
 };
 
-on 'development' => sub [
+on 'development' => sub {
     requires 'App::cpanminus', 1.6914; # --pure-perl
+    requires 'Module::Build', 0.4005;   # pure perl only
 };
