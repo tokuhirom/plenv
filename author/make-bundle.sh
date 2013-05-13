@@ -1,3 +1,5 @@
 #!/bin/bash
 minil build
-cpanm --no-man-pages -L share/plenv --installdeps .
+echo 5.8.1 > .perl-version
+cpanm --self-upgrade
+cpanm --pureperl --no-man-pages -L share/plenv --installdeps .
