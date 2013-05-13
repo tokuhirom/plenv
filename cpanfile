@@ -14,3 +14,7 @@ on 'build' => sub {
     requires 'Test::Requires' => 0;
     requires 'lib::core::only' => 0;
 };
+
+on 'development' => sub [
+    requires 'App::cpanminus', 1.6914; # --pure-perl
+};
