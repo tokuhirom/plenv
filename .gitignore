@@ -31,3 +31,4 @@ share/plenv/lib/perl5/darwin-2level/
 !Build/
 !META.json
 !LICENSE
+/.perl-version
