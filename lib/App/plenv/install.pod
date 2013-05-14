@@ -40,6 +40,12 @@ It is useful to save object files for debugging.
 
 (Default: temporary directory to use)
 
+=item --test
+
+Run the test suite.
+
+(Default: do not run test cases)
+
 =back
 
 =head1 INSTALLATION SOURCE
