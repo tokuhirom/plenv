@@ -1,6 +1,6 @@
-#!/home/tokuhirom/.plenv/versions/5.8.9/bin/perl
+#!/Users/tokuhirom/.plenv/versions/5.16.3/bin/perl
 
-eval 'exec /home/tokuhirom/.plenv/versions/5.8.9/bin/perl  -S $0 ${1+"$@"}'
+eval 'exec /Users/tokuhirom/.plenv/versions/5.16.3/bin/perl  -S $0 ${1+"$@"}'
     if 0; # not running under some shell
 
 package
@@ -23,7 +23,7 @@ patchperl - patch a perl source tree
 
 =head1 VERSION
 
-version 0.84
+version 0.86
 
 =head1 AUTHOR
 

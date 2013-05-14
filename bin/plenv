@@ -23,6 +23,9 @@ sub main {
     my $cmd = shift @ARGV or CMD_help();
     if ($cmd eq '--version' || $cmd eq '-v') {
         $cmd = '__plenv_version';
+    } elsif ($cmd eq '-h') {
+        # `plenv -h` is alias for `plenv help`
+        $cmd = 'help';
     }
     $cmd =~ s/-/_/g;
 
@@ -419,6 +422,7 @@ sub rehash {
 
     my %seen;
     for my $bin (map { basename($_) } grep { -x $_ } <$PLENV_HOME/versions/*/bin/*>) {
+        next if $bin eq 'plenv'; # Do not create shims for 'plenv' itself.
         next if $seen{$bin}++;
 
         my $shimbin = File::Spec->catfile($PLENV_HOME, 'shims', $bin);
