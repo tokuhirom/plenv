@@ -38,7 +38,7 @@ You can specify the directory to work building.
 
 It is useful to save object files for debugging.
 
-(Default: temporary directory to use)
+(Default: "build" in plenv directory)
 
 =item --test
 
@@ -67,3 +67,4 @@ If you specify the version number, plenv fetches tar ball for the version from C
 When you specify the path to tar ball, plenv extract it and install.
 
 =back
+
