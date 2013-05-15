@@ -10,7 +10,7 @@ use lib File::Spec->catdir($FindBin::RealBin, '..', 'share', 'plenv', 'lib', 'pe
 use File::Path qw(mkpath rmtree);
 use Getopt::Long;
 
-our $VERSION = '1.4.14';
+our $VERSION = '1.4.15';
 
 my $PLENV_HOME;
 my $LOCAL = "@{[ File::Spec->rel2abs($FindBin::RealBin) ]}/../share/plenv/";
@@ -269,6 +269,7 @@ sub install {
 
     my $installation_name;
     my $test;
+    my $force;
     my (@D, @A, @U);
     Getopt::Long::Configure(
         'pass_through',
@@ -277,6 +278,7 @@ sub install {
     );
     Getopt::Long::GetOptions(
         'test' => \$test,
+        'force' => \$force,
         'as=s', \$installation_name,
         'build-dir=s' => \my $build_dir,
         'D=s@' => \@D,
@@ -325,7 +327,7 @@ sub install {
             $name;
         };
 
-        if (is_installed( $installation_name )) {
+        if (is_installed( $installation_name ) && !$force) {
             die "\nABORT: $installation_name is already installed.\n\n";
         }
 
@@ -349,7 +351,7 @@ sub install {
         $version =~ s!^perl-!!;
         $installation_name ||= $version;
 
-        if (is_installed( $installation_name )) {
+        if (is_installed( $installation_name ) && !$force) {
             die "\nABORT: $installation_name is already installed.\n\n";
         }
 

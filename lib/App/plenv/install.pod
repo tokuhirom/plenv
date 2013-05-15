@@ -46,6 +46,10 @@ Run the test suite.
 
 (Default: do not run test cases)
 
+=item --force
+
+Force install.
+
 =back
 
 =head1 INSTALLATION SOURCE

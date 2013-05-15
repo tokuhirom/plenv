@@ -2,6 +2,15 @@ Revision history for Perl extension App::plenv
 
 {{$NEXT}}
 
+1.4.15 2013-05-14T08:08:27Z
+
+    - Added `plenv install --force` option
+      (WATANABE Hiroaki)
+    - Make `plenv -h` as an alias of `plenv help`
+      (Suggested by Tatsuhiko Miyagawa)
+    - Document about --test option for `plenv install`
+      (tokuhirom)
+
 1.4.14 2013-04-25T21:55:59Z
 
     - Fixed packaging issue.
