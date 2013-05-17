@@ -265,6 +265,7 @@ sub install {
     my $stuff = shift @ARGV;
 
     require Perl::Build;
+    Perl::Build->VERSION(0.18);
     require Getopt::Long;
 
     my $installation_name;
@@ -284,6 +285,7 @@ sub install {
         'D=s@' => \@D,
         'A=s@' => \@A,
         'U=s@' => \@U,
+        'j|jobs=i' => \my $jobs,
     );
 
     shift @ARGV if @ARGV >= 1 && $ARGV[0] eq '--';
@@ -336,6 +338,7 @@ sub install {
                 dst_path => $dst_path,
                 configure_options => \@configure_options,
                 test => $test,
+                jobs => $jobs,
             )
         );
 
@@ -365,6 +368,7 @@ sub install {
                 dst_path => $dst_path,
                 configure_options => \@configure_options,
                 test => $test,
+                jobs => $jobs,
             )
         );
         Perl::Build->symlink_devel_executables(

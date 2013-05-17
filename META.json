@@ -4,7 +4,7 @@
       "Tokuhiro Matsuno <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.4.2, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Minilla/v0.4.2, CPAN::Meta::Converter version 2.130880",
    "license" : [
       "perl_5"
    ],
@@ -50,9 +50,9 @@
       "runtime" : {
          "requires" : {
             "App::cpanminus" : "0",
-            "Devel::PatchPerl" : "0.86",
+            "Devel::PatchPerl" : "0.88",
             "Getopt::Long" : "0",
-            "Perl::Build" : "0.13",
+            "Perl::Build" : "0.20",
             "Pod::Find" : "0",
             "Pod::Usage" : "0",
             "perl" : "5.008002"

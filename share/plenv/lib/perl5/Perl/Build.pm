@@ -4,7 +4,7 @@ use warnings;
 use utf8;
 
 use 5.008002;
-our $VERSION = '0.13';
+our $VERSION = '0.20';
 
 use Carp ();
 use File::Basename;
@@ -13,7 +13,8 @@ use CPAN::Perl::Releases;
 use File::pushd qw(pushd);
 use File::Temp;
 use HTTP::Tiny;
-use Devel::PatchPerl;
+use Devel::PatchPerl 0.88;
+use Perl::Build::Built;
 
 our $CPAN_MIRROR = $ENV{PERL_BUILD_CPAN_MIRROR} || 'http://search.cpan.org/CPAN';
 
@@ -138,6 +139,40 @@ sub install_from_cpan {
         dst_path          => $dst_path,
         configure_options => $configure_options,
         test              => $args{test},
+        jobs              => $args{jobs},
+    );
+}
+
+sub install_from_url {
+    my ($class, $dist_tarball_url, %args) = @_;
+    $args{patchperl} && Carp::croak "The patchperl argument was deprected.";
+
+    my $build_dir = $args{build_dir}
+        || File::Temp::tempdir( CLEANUP => 1 );
+    my $tarball_dir = $args{tarball_dir}
+        || File::Temp::tempdir( CLEANUP => 1 );
+    my $dst_path = $args{dst_path}
+        or die "Missing mandatory parameter: dst_path";
+    my $configure_options = $args{configure_options}
+        || ['-de'];
+
+    my $dist_tarball = basename($dist_tarball_url);
+    my $dist_tarball_path = catfile($tarball_dir, $dist_tarball);
+    if (-f $dist_tarball_path) {
+        print "Use the previously fetched ${dist_tarball}\n";
+    }
+    else {
+        print "Fetching $dist_tarball_path ($dist_tarball_url)\n";
+        http_mirror( $dist_tarball_url, $dist_tarball_path );
+    }
+
+    my $dist_extracted_path = Perl::Build->extract_tarball($dist_tarball_path, $build_dir);
+    Perl::Build->install(
+        src_path          => $dist_extracted_path,
+        dst_path          => $dst_path,
+        configure_options => $configure_options,
+        test              => $args{test},
+        jobs              => $args{jobs},
     );
 }
 
@@ -158,6 +193,7 @@ sub install_from_tarball {
         dst_path          => $dst_path,
         configure_options => $configure_options,
         test              => $args{test},
+        jobs              => $args{jobs},
     );
 }
 
@@ -171,6 +207,8 @@ sub install {
         or die "Missing mandatory parameter: dst_path";
     my $configure_options = $args{configure_options}
         or die "Missing mandatory parameter: configure_options";
+    my $jobs = $args{jobs}; # optional
+    my $test = $args{test}; # optional
 
     unshift @$configure_options, qq(-Dprefix=$dst_path);
 
@@ -188,6 +226,10 @@ sub install {
     {
         my $dir = pushd($src_path);
 
+        # determine_version is a public API.
+        my $dist_version = Devel::PatchPerl->determine_version();
+        print "Configuring perl '$dist_version'\n";
+
         # clean up
         $class->do_system("rm -f config.sh Policy.sh");
 
@@ -203,12 +245,29 @@ sub install {
         # }
 
         # build
-        $class->do_system('make');
-        if ($args{test}) {
-            $class->do_system('make test');
+        my @make = qw(make);
+        if ($jobs) {
+            push @make, '-j', $jobs;
+        }
+        $class->do_system(\@make);
+        if ($test) {
+            local $ENV{TEST_JOBS} = $jobs;
+            # Test via "make test_harness" if available so we'll get
+            # automatic parallel testing via $HARNESS_OPTIONS. The
+            # "test_harness" target was added in 5.7.3, which was the last
+            # development release before 5.8.0.
+            my $test_target = 'test';
+            if ($dist_version && $dist_version =~ /^5\.([0-9]+)\.([0-9]+)/
+                && ($1 >= 8 || $1 == 7 && $2 == 3)) {
+                $test_target = "test_harness";
+            }
+            $class->do_system([@make, $test_target]);
         }
         $class->do_system('make install');
     }
+    return Perl::Build::Built->new({
+        installed_path => $dst_path,
+    });
 }
 
 sub do_system {
@@ -248,6 +307,8 @@ __END__
 
 =encoding utf8
 
+=for stopwords tarball Optional symlinks patchperl
+
 =head1 NAME
 
 Perl::Build - perl builder
@@ -267,7 +328,7 @@ Perl::Build - perl builder
 =head2 Programmable interface
 
     # install perl from CPAN
-    Perl::Build->install_from_cpan(
+    my $result = Perl::Build->install_from_cpan(
         '5.16.2' => (
             dst_path          => '/path/to/perl-5.16.2/',
             configure_options => ['-des'],
@@ -275,7 +336,7 @@ Perl::Build - perl builder
     );
 
     # install perl from tar ball
-    Perl::Build->install_from_cpan(
+    my $result = Perl::Build->install_from_cpan(
         'path/to/perl-5.16.2.tar.gz' => (
             dst_path          => '/path/to/perl-5.16.2/',
             configure_options => ['-des'],
@@ -310,13 +371,19 @@ Command line arguments for ./Configure.
 
 (Default: C<< ['-de'] >>)
 
-=item tarball_dir(Optional)
+=item tarball_dir (Optional)
 
 Temporary directory to put tar ball.
 
-=item build_dir(Optional)
+=item build_dir (Optional)
 
 Temporary directory to build binary.
+
+=item jobs: Int(Optional)
+
+Parallel building and testing.
+
+(Default: 1)
 
 =back
 
@@ -328,7 +395,7 @@ You can pass following options in %args.
 
 =over 4
 
-=item dst_path(Required)
+=item dst_path (Required)
 
 Destination directory to install perl.
 
@@ -338,9 +405,15 @@ Command line arguments for ./Configure.
 
 (Default: C<< ['-de'] >>)
 
-=item build_dir(Optional)
+=item build_dir (Optional)
 
 Temporary directory to build binary.
+
+=item jobs: Int(Optional)
+
+Parallel building and testing.
+
+(Default: 1)
 
 =back
 
@@ -350,11 +423,11 @@ Build and install Perl5 from extracted source directory.
 
 =over 4
 
-=item src_path(Required)
+=item src_path (Required)
 
 Source code directory to build.  That contains extracted Perl5 source code.
 
-=item dst_path(Required)
+=item dst_path (Required)
 
 Destination directory to install perl.
 
@@ -370,7 +443,15 @@ If you set this value as true, Perl::Build runs C<< make test >> after building.
 
 (Default: 0)
 
+=item jobs: Int(Optional)
+
+Parallel building and testing.
+
+(Default: 1)
+
 =back
+
+Returns an instance of L<Perl::Build::Built> to facilitate using the built perl from code.
 
 =item Perl::Build->symlink_devel_executables($bin_dir:Str)
 
@@ -384,7 +465,14 @@ Perl5 binary generated with C< -Dusedevel >, is "perl-5.12.2" form. This method 
 
 =item How can I use patchperl plugins?
 
-If you want to use patchperl plugins, please google "PERL5_PATCHPERL_PLUGIN".
+If you want to use patchperl plugins, please Google "PERL5_PATCHPERL_PLUGIN".
+
+=item What's the difference between perlbrew?
+
+L<perlbrew> is a perl5 installation manager. But perl-build is a simple perl5 compilation and installation assistant tool.
+It makes perl5 installation easily. That's all. perl-build doesn't care about the user's environment.
+
+So, perl-build is just a installer.
 
 =back
 
@@ -398,12 +486,38 @@ Thanks
 
 =head1 AUTHOR
 
-Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF@ GMAIL COME<gt>
+Tokuhiro Matsuno E<lt>tokuhirom@gmail.comE<gt>
 
 
 =head1 LICENSE
 
-This software takes most of the code from L<App::perlbrew>.
+Copyright (C) Tokuhiro Matsuno
 
-Perl::Build uses same license with perlbrew.
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+This software takes lot of the code from L<App::perlbrew>. App::perlbrew's license is:
+
+    The MIT License
+
+    Copyright (c) 2010,2011 Kang-min Liu
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+
 
