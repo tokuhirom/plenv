@@ -2,6 +2,13 @@ Revision history for Perl extension App::plenv
 
 {{$NEXT}}
 
+1.5.0 2013-05-17T02:14:45Z
+
+    - ~/.plenv/build/ as a default building directory. And do not remove building directory by default
+      (tokuhirom)
+    - Support parallel building. Please try `-j` option!
+      (tokuhirom)
+
 1.4.15 2013-05-14T08:08:27Z
 
     - Added `plenv install --force` option

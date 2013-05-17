@@ -4,7 +4,7 @@
       "Tokuhiro Matsuno <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.4.2, CPAN::Meta::Converter version 2.130880",
+   "generated_by" : "Minilla/v0.4.2, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -71,7 +71,7 @@
          "web" : "https://github.com/tokuhirom/plenv"
       }
    },
-   "version" : "1.4.15",
+   "version" : "1.5.0",
    "x_contributors" : [
       "Masato Ikeda <masato.ikeda@gmail.com>",
       "Nishibayashi Takuji <takuji31@gmail.com>",
