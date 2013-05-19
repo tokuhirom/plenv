@@ -391,6 +391,16 @@ sub CMD_list {
     }
 }
 
+sub CMD_uninstall {
+    home_init();
+    my $name = shift @ARGV or show_help('uninstall');
+
+    is_installed($name)
+        or die "$name is not installed on plenv.";
+
+    rmtree( File::Spec->catdir($PLENV_HOME, 'versions', $name) );
+}
+
 sub CMD_versions { CMD_list(@_) } # alias
 
 sub CMD_list_modules {

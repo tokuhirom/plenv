@@ -1,0 +1,11 @@
+=head1 NAME
+
+plenv-uninstall - uninstall perl installation
+
+=head1 SYNOPSIS
+
+    plenv uninstall 5.16.2
+
+=head1 DESCRIPTION
+
+This sub command uninstall the given perl installation.
