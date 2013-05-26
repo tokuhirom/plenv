@@ -2,7 +2,7 @@ package App::plenv;
 use strict;
 use warnings;
 use 5.008002;
-our $VERSION = '1.5.0';
+our $VERSION = 'v1.6.0';
 
 
 

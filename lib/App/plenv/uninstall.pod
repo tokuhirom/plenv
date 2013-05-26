@@ -1,3 +1,7 @@
+=pod
+
+=for stopwords plenv-uninstall
+
 =head1 NAME
 
 plenv-uninstall - uninstall perl installation
