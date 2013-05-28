@@ -11,7 +11,7 @@
 #
 # For detailed information on installing Perl versions with
 # perl-build, including a list of environment variables for adjusting
-# compilation, see: https://github.com/sstephenson/perl-build#usage
+# compilation, see: https://github.com/tokuhirom/perl-build#usage
 #
 set -e
 [ -n "$PLENV_DEBUG" ] && set -x
