@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Summary: List hook scripts for a given plenv command
+# Usage: plenv hooks <command>
+
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+
+# Provide plenv completions
+if [ "$1" = "--complete" ]; then
+  echo exec
+  echo rehash
+  echo which
+  exit
+fi
+
+PLENV_COMMAND="$1"
+if [ -z "$PLENV_COMMAND" ]; then
+  plenv-help --usage hooks >&2
+  exit 1
+fi
+
+resolve_link() {
+  $(type -p greadlink readlink | head -1) $1
+}
+
+realpath() {
+  local cwd="$(pwd)"
+  local path="$1"
+
+  while [ -n "$path" ]; do
+    cd "${path%/*}"
+    local name="${path##*/}"
+    path="$(resolve_link "$name" || true)"
+  done
+
+  echo "$(pwd)/$name"
+  cd "$cwd"
+}
+
+IFS=: hook_paths=($PLENV_HOOK_PATH)
+
+shopt -s nullglob
+for path in "${hook_paths[@]}"; do
+  for script in "$path/$PLENV_COMMAND"/*.bash; do
+    echo $(realpath $script)
+  done
+done
+shopt -u nullglob

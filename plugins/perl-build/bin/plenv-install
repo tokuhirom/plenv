@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+#
+# Summary: Install a Perl version using the perl-build plugin
+#
+# Usage: plenv install [-v|--verbose] <version>
+#        plenv install [-v|--verbose] /path/to/definition
+#        plenv install -l|--list
+#
+#   -l/--list        List all available versions
+#   -v/--verbose     Verbose mode: print compilation status to stdout
+#
+# For detailed information on installing Perl versions with
+# perl-build, including a list of environment variables for adjusting
+# compilation, see: https://github.com/sstephenson/perl-build#usage
+#
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+
+# Provide plenv completions
+# if [ "$1" = "--complete" ]; then
+#    exec perl-build --definitions
+# fi
+
+if [ -z "$PLENV_ROOT" ]; then
+    PLENV_ROOT="${HOME}/.plenv"
+fi
+
+function parse_options ()
+{
+    OPTIONS=();
+    ARGUMENTS=();
+    local arg option index;
+    for arg in "$@";
+    do
+        if [ "${arg:0:1}" = "-" ]; then
+            if [ "${arg:1:1}" = "-" ]; then
+                OPTIONS[${#OPTIONS[*]}]="${arg:2}";
+            else
+                index=1;
+                while option="${arg:$index:1}"; do
+                    [ -n "$option" ] || break;
+                    OPTIONS[${#OPTIONS[*]}]="$option";
+                    index=$(($index+1));
+                done;
+            fi;
+        else
+            ARGUMENTS[${#ARGUMENTS[*]}]="$arg";
+        fi;
+    done
+};
+
+usage() {
+  # We can remove the sed fallback once plenv 0.4.0 is widely available.
+  plenv-help install 2>/dev/null || sed -ne '/^#/!q;s/.//;s/.//;1,4d;p' < "$0"
+  [ -z "$1" ] || exit "$1"
+}
+
+unset VERBOSE
+
+#   CURRENT=$(cd $(dirname $0) && pwd)
+#   PERL_BUILD=$CURRENT/perl-build
+
+#   exec $PERL_BUILD $*
+parse_options "$@"
+for option in "${OPTIONS[@]}"; do
+  case "$option" in
+  "h" | "help" )
+    usage 0
+    ;;
+  "l" | "list" )
+    echo "Available versions:"
+    perl-build --definitions | sed 's/^/  /'
+    exit
+    ;;
+  "v" | "verbose" )
+    VERBOSE="-v"
+    ;;
+  "version" )
+    exec perl-build --version
+    ;;
+  * )
+    usage 1
+    ;;
+  esac
+done
+
+DEFINITION="${ARGUMENTS[0]}"
+[ -n "$DEFINITION" ] || usage 1
+
+for script in $(plenv-hooks install); do
+  source "$script"
+done
+
+VERSION_NAME="${DEFINITION##*/}"
+PREFIX="${PLENV_ROOT}/versions/${VERSION_NAME}"
+
+CACHE_DIR=${PLENV_ROOT}/build/
+mkdir -p $CACHE_DIR
+
+BUILD_DIR=${PLENV_ROOT}/build/
+mkdir -p $BUILD_DIR
+
+perl-build --build-dir=$BUILD_DIR --tarball-dir=$CACHE_DIR $VERBOSE "$DEFINITION" "$PREFIX"
+plenv rehash
+

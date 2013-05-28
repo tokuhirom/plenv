@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+set -e
+export -n CDPATH
+
+if [ "$1" = "--debug" ]; then
+  export PLENV_DEBUG=1
+  shift
+fi
+
+if [ -n "$PLENV_DEBUG" ]; then
+  export PS4='+ [${BASH_SOURCE##*/}:${LINENO}] '
+  set -x
+fi
+
+resolve_link() {
+  $(type -p greadlink readlink | head -1) "$1"
+}
+
+abs_dirname() {
+  local cwd="$(pwd)"
+  local path="$1"
+
+  while [ -n "$path" ]; do
+    cd "${path%/*}"
+    local name="${path##*/}"
+    path="$(resolve_link "$name" || true)"
+  done
+
+  pwd
+  cd "$cwd"
+}
+
+if [ -z "${PLENV_ROOT}" ]; then
+  PLENV_ROOT="${HOME}/.plenv"
+else
+  PLENV_ROOT="${PLENV_ROOT%/}"
+fi
+export PLENV_ROOT
+
+if [ -z "${PLENV_DIR}" ]; then
+  PLENV_DIR="$(pwd)"
+else
+  cd "$PLENV_DIR" 2>/dev/null || {
+    echo "plenv: cannot change working directory to \`$PLENV_DIR'"
+    exit 1
+  } >&2
+  PLENV_DIR="$(pwd)"
+  cd "$OLDPWD"
+fi
+export PLENV_DIR
+
+
+shopt -s nullglob
+
+bin_path="$(abs_dirname "$0")"
+for plugin_bin in "${PLENV_ROOT}/plugins/"*/bin; do
+  bin_path="${bin_path}:${plugin_bin}"
+done
+export PATH="${bin_path}:${PATH}"
+
+hook_path="${PLENV_HOOK_PATH}:${PLENV_ROOT}/plenv.d:/usr/local/etc/plenv.d:/etc/plenv.d:/usr/lib/plenv/hooks"
+for plugin_hook in "${PLENV_ROOT}/plugins/"*/etc/plenv.d; do
+  hook_path="${hook_path}:${plugin_hook}"
+done
+export PLENV_HOOK_PATH="$hook_path"
+
+shopt -u nullglob
+
+
+command="$1"
+case "$command" in
+"" | "-h" | "--help" )
+  echo -e "$(plenv---version)\n$(plenv-help)" >&2
+  ;;
+"-v" )
+  exec plenv---version
+  ;;
+* )
+  command_path="$(command -v "plenv-$command" || true)"
+  if [ -z "$command_path" ]; then
+    echo "plenv: no such command \`$command'" >&2
+    exit 1
+  fi
+
+  shift 1
+  exec "$command_path" "$@"
+  ;;
+esac

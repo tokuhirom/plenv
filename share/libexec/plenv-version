@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Summary: Show the current Perl version and its origin
+#
+# Shows the currently selected Perl version and how it was
+# selected. To obtain only the version string, use `plenv
+# version-name'.
+
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+
+echo "$(plenv-version-name) (set by $(plenv-version-origin))"

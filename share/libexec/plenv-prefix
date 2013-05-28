@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Summary: Display prefix for a Perl version
+# Usage: plenv prefix [<version>]
+#
+# Displays the directory where a Perl version is installed. If no
+# version is given, `plenv prefix' displays the location of the
+# currently selected version.
+
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+
+# Provide plenv completions
+if [ "$1" = "--complete" ]; then
+  echo system
+  exec plenv-versions --bare
+fi
+
+if [ -n "$1" ]; then
+  export PLENV_VERSION="$1"
+elif [ -z "$PLENV_VERSION" ]; then
+  PLENV_VERSION="$(plenv-version-name)"
+fi
+
+if [ "$PLENV_VERSION" = "system" ]; then
+  PERL_PATH="$(plenv-which perl)"
+  PERL_PATH="${PERL_PATH%/*}"
+  echo "${PERL_PATH%/bin}"
+  exit
+fi
+
+PLENV_PREFIX_PATH="${PLENV_ROOT}/versions/${PLENV_VERSION}"
+if [ ! -d "$PLENV_PREFIX_PATH" ]; then
+  echo "plenv: version \`${PLENV_VERSION}' not installed" >&2
+  exit 1
+fi
+
+echo "$PLENV_PREFIX_PATH"

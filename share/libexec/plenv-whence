@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Summary: List all Perl versions that contain the given executable
+# Usage: plenv whence [--path] <command>
+
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+
+# Provide plenv completions
+if [ "$1" = "--complete" ]; then
+  echo --path
+  exec plenv shims --short
+fi
+
+if [ "$1" = "--path" ]; then
+  print_paths="1"
+  shift
+else
+  print_paths=""
+fi
+
+whence() {
+  local command="$1"
+  plenv-versions --bare | while read version; do
+    path="$(plenv-prefix "$version")/bin/${command}"
+    if [ -x "$path" ]; then
+      [ "$print_paths" ] && echo "$path" || echo "$version"
+    fi
+  done
+}
+
+PLENV_COMMAND="$1"
+if [ -z "$PLENV_COMMAND" ]; then
+  plenv-help --usage whence >&2
+  exit 1
+fi
+
+result="$(whence "$PLENV_COMMAND")"
+[ -n "$result" ] && echo "$result"
