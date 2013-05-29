@@ -58588,7 +58588,7 @@ GetOptions(
     'j|jobs=i' => \my $jobs,
     'tarball-dir=s' => \my $tarball_dir,
     'version' => \my $show_version,
-    'symlink-devel-executables!' => $symlink_devel_executables,
+    'symlink-devel-executables!' => \$symlink_devel_executables,
 );
 for (@D, @A, @U) {
     s/^=//;

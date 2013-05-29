@@ -82,6 +82,6 @@ mkdir -p $CACHE_DIR
 BUILD_DIR=${PLENV_ROOT}/build/
 mkdir -p $BUILD_DIR
 
-perl-build --symlink-devel-executables --build-dir=$BUILD_DIR --tarball-dir=$CACHE_DIR -Dusedevel "${OPTIONS[@]}" $DEFINITION "$PREFIX"
+/usr/bin/perl -- `which perl-build` --symlink-devel-executables --build-dir=$BUILD_DIR --tarball-dir=$CACHE_DIR -Dusedevel "${OPTIONS[@]}" $DEFINITION "$PREFIX"
 plenv rehash
 
