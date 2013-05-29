@@ -57,11 +57,11 @@ for option in "${OPTIONS[@]}"; do
     ;;
   "-l" | "--list" )
     echo "Available versions:"
-    perl-build --definitions | sed 's/^/  /'
+    /usr/bin/perl -- `which perl-build` --definitions | sed 's/^/  /'
     exit
     ;;
   "--version" )
-    exec perl-build --version
+    exec /usr/bin/perl -- `which perl-build` --version
     ;;
   esac
 done
