@@ -35120,7 +35120,7 @@ $fatpacked{"Perl/Build.pm"} = <<'PERL_BUILD';
   use utf8;
   
   use 5.008002;
-  our $VERSION = '0.20';
+  our $VERSION = '1.00';
   
   use Carp ();
   use File::Basename;
@@ -35137,7 +35137,7 @@ $fatpacked{"Perl/Build.pm"} = <<'PERL_BUILD';
   sub available_perls {
       my ( $class, $dist ) = @_;
   
-      my $url = "http://www.cpan.org/src/README.html";
+      my $url = "http://www.cpan.org/src/5.0/";
       my $html = http_get( $url );
   
       unless($html) {
@@ -35146,11 +35146,13 @@ $fatpacked{"Perl/Build.pm"} = <<'PERL_BUILD';
   
       my @available_versions;
   
+      my %uniq;
       for ( split "\n", $html ) {
-          push @available_versions, $1
-            if m|<td><a href="http://www.cpan.org/src/.+?">(.+?)</a></td>|;
+          if (my ($version) = m|<a href="perl-(.+)\.tar\.gz">(.+?)</a>|) {
+              next if $uniq{$version}++;
+              push @available_versions, $version;
+          }
       }
-      s/\.tar\.gz// for @available_versions;
   
       return @available_versions;
   }
@@ -35647,7 +35649,7 @@ $fatpacked{"Perl/Build/Built.pm"} = <<'PERL_BUILD_BUILT';
   use utf8;
   
   use 5.008002;
-  our $VERSION = '0.20';
+  our $VERSION = '1.00';
   
   use Carp ();
   use File::Spec::Functions qw( catdir catfile );
