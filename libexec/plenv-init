@@ -6,7 +6,7 @@ set -e
 [ -n "$PLENV_DEBUG" ] && set -x
 
 print=""
-no_rehash=""
+no_rehash=1
 for args in "$@"
 do
   if [ "$args" = "-" ]; then
