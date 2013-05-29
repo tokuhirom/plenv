@@ -1,3 +1,0 @@
-#define PERL_REVISION 9
-#define PERL_VERSION 9
-#define PERL_SUBVERSION 9

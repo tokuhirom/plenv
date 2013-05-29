@@ -1,4 +1,0 @@
-[FileGatherer]
-exclude_match = [
-    "^share/plenv/"
-]
