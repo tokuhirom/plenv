@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+#
+# Summary: Install cpanm
+#
+# Usage: plenv install-cpanm
+#
+# Install cpanm to current perl version
+#
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+
+if [ -z "$PLENV_ROOT" ]; then
+    PLENV_ROOT="${HOME}/.plenv"
+fi
+
+function parse_options ()
+{
+    OPTIONS=();
+    ARGUMENTS=();
+    local arg option index;
+    for arg in "$@";
+    do
+        if [ "${arg:0:1}" = "-" ]; then
+            if [ "${arg:1:1}" = "-" ]; then
+                OPTIONS[${#OPTIONS[*]}]="${arg:2}";
+            else
+                index=1;
+                while option="${arg:$index:1}"; do
+                    [ -n "$option" ] || break;
+                    OPTIONS[${#OPTIONS[*]}]="$option";
+                    index=$(($index+1));
+                done;
+            fi;
+        else
+            ARGUMENTS[${#ARGUMENTS[*]}]="$arg";
+        fi;
+    done
+};
+
+usage() {
+  # We can remove the sed fallback once plenv 0.4.0 is widely available.
+  plenv-help install-cpanm 2>/dev/null || sed -ne '/^#/!q;s/.//;s/.//;1,4d;p' < "$0"
+  [ -z "$1" ] || exit "$1"
+}
+
+unset VERBOSE
+
+#   CURRENT=$(cd $(dirname $0) && pwd)
+#   PERL_BUILD=$CURRENT/perl-build
+
+#   exec $PERL_BUILD $*
+parse_options "$@"
+for option in "${OPTIONS[@]}"; do
+  case "$option" in
+  "h" | "help" )
+    usage 0
+    ;;
+  * )
+    usage 1
+    ;;
+  esac
+done
+
+curl -L http://cpanmin.us/ | plenv exec perl - --installdeps
+plenv rehash
