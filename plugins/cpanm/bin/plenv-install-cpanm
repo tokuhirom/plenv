@@ -61,5 +61,5 @@ for option in "${OPTIONS[@]}"; do
   esac
 done
 
-curl -L http://cpanmin.us/ | plenv exec perl - --installdeps App::cpanminus
+curl -L http://cpanmin.us/ | plenv exec perl - App::cpanminus
 plenv rehash
