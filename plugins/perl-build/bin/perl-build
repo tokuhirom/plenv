@@ -58569,6 +58569,7 @@ use File::Spec;
 my $test = undef;
 my $patches;
 my $build_dir;
+my $symlink_devel_executables;
 my (@D, @A, @U);
 Getopt::Long::Configure(
     'pass_through',
@@ -58587,6 +58588,7 @@ GetOptions(
     'j|jobs=i' => \my $jobs,
     'tarball-dir=s' => \my $tarball_dir,
     'version' => \my $show_version,
+    'symlink-devel-executables!' => $symlink_devel_executables,
 );
 for (@D, @A, @U) {
     s/^=//;
@@ -58651,6 +58653,12 @@ if ($stuff =~ m{^http://}) {
             jobs              => $jobs,
             tarball_dir       => $tarball_dir,
         )
+    );
+}
+
+if ($symlink_devel_executables) {
+    Perl::Build->symlink_devel_executables(
+        File::Spec->catdir($dest, 'bin')
     );
 }
 
@@ -58719,6 +58727,10 @@ Display the available perl versions and exit.
 =item --version
 
 Show version number and exit.
+
+=item --symlink-devel-executables
+
+Create symlinks for development version perl commands.
 
 =back
 
