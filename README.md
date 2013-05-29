@@ -84,19 +84,162 @@ You can use homebrew to install plenv.
 
         $ exec $SHELL -l
 
-# Perl version detection
 
-plenv detects current perl version with following order.
+### Neckbeard Configuration
 
-- PLENV\_VERSION environment variable
-- .perl-version file in current and upper directories.
-- global settings(~/.plenv/version)
-- use system perl
+Skip this section unless you must know what every line in your shell
+profile is doing.
+
+`plenv init` is the only command that crosses the line of loading
+extra commands into your shell. Here's what `plenv init` actually does:
+
+1. Sets up your shims path. This is the only requirement for plenv to
+   function properly. You can do this by hand by prepending
+   `~/.plenv/shims` to your `$PATH`.
+
+2. Installs autocompletion. This is entirely optional but pretty
+   useful. Sourcing `~/.plenv/completions/plenv.bash` will set that
+   up. There is also a `~/.plenv/completions/plenv.zsh` for Zsh
+   users.
+
+3. Rehashes shims. From time to time you'll need to rebuild your
+   shim files. Doing this automatically makes sure everything is up to
+   date. You can always run `plenv rehash` manually.
+
+4. Installs the sh dispatcher. This bit is also optional, but allows
+   plenv and plugins to change variables in your current shell, making
+   commands like `plenv shell` possible. The sh dispatcher doesn't do
+   anything crazy like override `cd` or hack your shell prompt, but if
+   for some reason you need `plenv` to be a real script rather than a
+   shell function, you can safely skip it.
+
+Run `plenv init -` for yourself to see exactly what happens under the
+hood.
 
 # DEPENDENCIES
 
     * Perl 5.8.1+
-    * wget or curl or fetch.
+    * bash
+
+## Command Reference
+
+Like `git`, the `plenv` command delegates to subcommands based on its
+first argument. The most common subcommands are:
+
+### plenv local
+
+Sets a local application-specific perl version by writing the version
+name to a `.perl-version` file in the current directory. This version
+overrides the global version, and can be overridden itself by setting
+the `PLENV_VERSION` environment variable or with the `plenv shell`
+command.
+
+    $ plenv local 5.8.2
+
+When run without a version number, `plenv local` reports the currently
+configured local version. You can also unset the local version:
+
+    $ plenv local --unset
+
+Previous versions of plenv stored local version specifications in a
+file named `.plenv-version`. For backwards compatibility, plenv will
+read a local version specified in an `.plenv-version` file, but a
+`.perl-version` file in the same directory will take precedence.
+
+### plenv global
+
+Sets the global version of perl to be used in all shells by writing
+the version name to the `~/.plenv/version` file. This version can be
+overridden by an application-specific `.perl-version` file, or by
+setting the `plenv_VERSION` environment variable.
+
+    $ plenv global 5.8.2
+
+The special version name `system` tells plenv to use the system perl
+(detected by searching your `$PATH`).
+
+When run without a version number, `plenv global` reports the
+currently configured global version.
+
+### plenv shell
+
+Sets a shell-specific perl version by setting the `plenv_VERSION`
+environment variable in your shell. This version overrides
+application-specific versions and the global version.
+
+    $ plenv shell 5.8.2
+
+When run without a version number, `plenv shell` reports the current
+value of `plenv_VERSION`. You can also unset the shell version:
+
+    $ plenv shell --unset
+
+Note that you'll need plenv's shell integration enabled (step 3 of
+the installation instructions) in order to use this command. If you
+prefer not to use shell integration, you may simply set the
+`PLENV_VERSION` variable yourself:
+
+    $ export PLENV_VERSION=5.8.2
+
+### plenv versions
+
+Lists all perl versions known to plenv, and shows an asterisk next to
+the currently active version.
+
+    $ plenv versions
+      system
+      5.12.0
+      5.14.0
+      5.16.1
+      5.16.2
+      5.17.11
+      5.17.7
+      5.17.8
+      5.18.0
+      5.18.0-RC3
+      5.18.0-RC4
+    * 5.19.0 (set by /home/tokuhirom/.plenv/version)
+      5.6.2
+      5.8.1
+      5.8.2
+      5.8.3
+      5.8.5
+      5.8.9
+
+### plenv version
+
+Displays the currently active perl version, along with information on
+how it was set.
+
+    $ plenv version
+    5.19.0 (set by /home/tokuhirom/.plenv/version)
+
+### plenv rehash
+
+Installs shims for all perl executables known to plenv (i.e.,
+`~/.plenv/versions/*/bin/*`). Run this command after you install a new
+version of perl, or install a gem that provides commands.
+
+    $ plenv rehash
+
+### plenv which
+
+Displays the full path to the executable that plenv will invoke when
+you run the given command.
+
+    $ plenv which cpanm
+    /home/tokuhirom/.plenv/versions/5.19.0/bin/cpanm
+
+### plenv whence
+
+Lists all perl versions with the given command installed.
+
+    $ plenv whence plackup
+    5.17.11
+    5.17.7
+    5.18.0
+    5.18.0-RC4
+    5.19.0
 
 # FAQ
 
