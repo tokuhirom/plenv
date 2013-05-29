@@ -33,16 +33,7 @@ function parse_options ()
     for arg in "$@";
     do
         if [ "${arg:0:1}" = "-" ]; then
-            if [ "${arg:1:1}" = "-" ]; then
-                OPTIONS[${#OPTIONS[*]}]="${arg:2}";
-            else
-                index=1;
-                while option="${arg:$index:1}"; do
-                    [ -n "$option" ] || break;
-                    OPTIONS[${#OPTIONS[*]}]="$option";
-                    index=$(($index+1));
-                done;
-            fi;
+            OPTIONS[${#OPTIONS[*]}]="$arg";
         else
             ARGUMENTS[${#ARGUMENTS[*]}]="$arg";
         fi;
@@ -57,29 +48,20 @@ usage() {
 
 unset VERBOSE
 
-#   CURRENT=$(cd $(dirname $0) && pwd)
-#   PERL_BUILD=$CURRENT/perl-build
-
 #   exec $PERL_BUILD $*
 parse_options "$@"
 for option in "${OPTIONS[@]}"; do
   case "$option" in
-  "h" | "help" )
+  "-h" | "--help" )
     usage 0
     ;;
-  "l" | "list" )
+  "-l" | "--list" )
     echo "Available versions:"
     perl-build --definitions | sed 's/^/  /'
     exit
     ;;
-  "v" | "verbose" )
-    VERBOSE="-v"
-    ;;
-  "version" )
+  "--version" )
     exec perl-build --version
-    ;;
-  * )
-    usage 1
     ;;
   esac
 done
@@ -94,12 +76,12 @@ done
 VERSION_NAME="${DEFINITION##*/}"
 PREFIX="${PLENV_ROOT}/versions/${VERSION_NAME}"
 
-CACHE_DIR=${PLENV_ROOT}/build/
+CACHE_DIR=${PLENV_ROOT}/cache/
 mkdir -p $CACHE_DIR
 
 BUILD_DIR=${PLENV_ROOT}/build/
 mkdir -p $BUILD_DIR
 
-perl-build --build-dir=$BUILD_DIR --tarball-dir=$CACHE_DIR $VERBOSE "$DEFINITION" "$PREFIX"
+perl-build --build-dir=$BUILD_DIR --tarball-dir=$CACHE_DIR "${OPTIONS[@]}" $DEFINITION "$PREFIX"
 plenv rehash
 
