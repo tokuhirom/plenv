@@ -7,11 +7,11 @@
 # Runs an executable by first preparing PATH so that the selected Perl
 # version's `bin' directory is at the front.
 #
-# For example, if the currently selected Perl version is 1.9.3-p327:
+# For example, if the currently selected Perl version is 5.18.0:
 #   plenv exec bundle install
 #
 # is equivalent to:
-#   PATH="$PLENV_ROOT/versions/1.9.3-p327/bin:$PATH" bundle install
+#   PATH="$PLENV_ROOT/versions/5.18.0/bin:$PATH" bundle install
 
 set -e
 [ -n "$PLENV_DEBUG" ] && set -x
