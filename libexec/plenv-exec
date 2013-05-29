@@ -8,10 +8,10 @@
 # version's `bin' directory is at the front.
 #
 # For example, if the currently selected Perl version is 5.18.0:
-#   plenv exec bundle install
+#   plenv exec carton install
 #
 # is equivalent to:
-#   PATH="$PLENV_ROOT/versions/5.18.0/bin:$PATH" bundle install
+#   PATH="$PLENV_ROOT/versions/5.18.0/bin:$PATH" carton install
 
 set -e
 [ -n "$PLENV_DEBUG" ] && set -x
