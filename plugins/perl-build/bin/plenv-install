@@ -76,6 +76,11 @@ done
 VERSION_NAME="${DEFINITION##*/}"
 PREFIX="${PLENV_ROOT}/versions/${VERSION_NAME}"
 
+if [ -d $PREFIX ]; then
+    echo "$PREFIX is already installed"
+    exit 1
+fi
+
 CACHE_DIR=${PLENV_ROOT}/cache/
 mkdir -p $CACHE_DIR
 
