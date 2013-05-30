@@ -32,3 +32,4 @@ share/plenv/lib/perl5/darwin-2level/
 !LICENSE
 /.perl-version
 /cache/
+/plugins/

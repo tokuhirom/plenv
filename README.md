@@ -100,6 +100,7 @@ easy to fork and contribute any changes back upstream.
    process of installing new Perl versions.
 
     ~~~
+    $ git clone git://github.com/tokuhirom/Perl-Build.git ~/.plenv/plugins/perl-build/
     $ plenv install 5.18.0
     ~~~
 
