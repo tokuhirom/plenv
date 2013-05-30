@@ -1,4 +1,3 @@
-Makefile
 .c
 ppport.h
 *.sw[po]

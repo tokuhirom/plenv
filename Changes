@@ -1,6 +1,7 @@
-Revision history for Perl extension App::plenv
+v2.0.0-rc1 2013-05-30T15:02:43
 
-{{$NEXT}}
+    - Switch to rbenv based code.
+      (tokuhirom)
 
 v1.6.0 2013-05-26T10:32:21Z
 
