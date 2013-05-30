@@ -42,3 +42,4 @@ perl -i -pe 's/no_rehash=""/no_rehash=1/' libexec/plenv-init
 git_revision="$(git describe --tags HEAD | sed -e 's/-.*//' 2>/dev/null || true)"
 export GIT_REVISION=$git_revision
 perl -i -pe 's/version="[0-9.]+"/version="$ENV{GIT_REVISION}"/' libexec/plenv---version
+perl -i -pe 's!print_summaries commands local global shell install uninstall rehash version versions which whence!print_summaries commands local global shell install uninstall rehash version versions which whence list-modules migrate-modules install-cpanm!; s!%-9s!%-17s!' libexec/plenv-help
