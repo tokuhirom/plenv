@@ -48,41 +48,107 @@ plenv supports project local version determination.
 
 i.e. .perl-version file support.
 
-# INSTALLATION
+## INSTALLATION
 
-## INSTALL FROM Homebrew
+**Compatibility note**: plenv is _incompatible_ with perlbrew. Please make
+  sure to fully uninstall perlbrew and remove any references to it from
+  your shell initialization files before installing plenv.
 
-You can use homebrew to install plenv.
+If you're on Mac OS X, consider
+[installing with Homebrew](#homebrew-on-mac-os-x).
 
-    $ brew install plenv
 
-## INSTALL WITH GIT
+### Basic GitHub Checkout
 
-1\. Check out plenv into ~/.plenv/
+This will get you going with the latest version of plenv and make it
+easy to fork and contribute any changes back upstream.
 
-    $ git clone git://github.com/tokuhirom/plenv.git ~/.plenv
+1. Check out plenv into `~/.plenv`.
 
-2\. Add ~/.plenv/bin/ to your $PATH for access to the \`plenv\` command-line utility.
+    ~~~ sh
+    $ git clone git://github.com/sstephenson/plenv.git ~/.plenv
+    ~~~
 
+2. Add `~/.plenv/bin` to your `$PATH` for access to the `plenv`
+   command-line utility.
+
+    ~~~ sh
     $ echo 'export PATH="$HOME/.plenv/bin:$PATH"' >> ~/.bash_profile
+    ~~~
 
     **Ubuntu note**: Modify your `~/.profile` instead of `~/.bash_profile`.
 
     **Zsh note**: Modify your `~/.zshrc` file instead of `~/.bash_profile`.
 
-# SETUP SHELL SETTINGS
+3. Add `plenv init` to your shell to enable shims and autocompletion.
 
-- Add \`plenv init\` to your shell to enable shims and autocompletion.
+    ~~~ sh
+    $ echo 'eval "$(plenv init -)"' >> ~/.bash_profile
+    ~~~
 
-        $ echo 'eval "$(plenv init -)"' >> ~/.bash_profile
+    _Same as in previous step, use `~/.profile` on Ubuntu, `~/.zshrc` for Zsh._
 
-    _Same as in previous step, use \`~/.profile\` on Ubuntu, \`~/.zshrc\` for Zsh._
-
-- Restart your shell as a login shell so the path changes take effect.
-
+4. Restart your shell as a login shell so the path changes take effect.
     You can now begin using plenv.
 
-        $ exec $SHELL -l
+    ~~~ sh
+    $ exec $SHELL -l
+    ~~~
+
+5. Install [perl-build](https://github.com/tokuhirom/perl-build),
+   which provides an `plenv install` command that simplifies the
+   process of installing new Perl versions.
+
+    ~~~
+    $ plenv install 5.18.0
+    ~~~
+
+   As an alternative, you can download and compile Perl yourself into
+   `~/.plenv/versions/`.
+
+6. Rebuild the shim executables. You should do this any time you
+   install a new Perl executable (for example, when installing a new
+   Perl version, or when installing a cpanm that provides a command).
+
+    ~~~
+    $ plenv rehash
+    ~~~
+
+#### Upgrading
+
+If you've installed plenv manually using git, you can upgrade your
+installation to the cutting-edge version at any time.
+
+~~~ sh
+$ cd ~/.plenv
+$ git pull
+~~~
+
+To use a specific release of plenv, check out the corresponding tag:
+
+~~~ sh
+$ cd ~/.plenv
+$ git fetch
+$ git checkout v0.3.0
+~~~
+
+### Homebrew on Mac OS X
+
+You can also install plenv using the
+[Homebrew](http://mxcl.github.com/homebrew/) package manager on Mac OS
+X.
+
+~~~
+$ brew update
+$ brew install plenv
+$ brew install perl-build
+~~~
+
+To later update these installs, use `upgrade` instead of `install`.
+
+Afterwards you'll still need to add `eval "$(plenv init -)"` to your
+profile as stated in the caveats. You'll only ever have to do this
+once.
 
 
 ### Neckbeard Configuration
@@ -218,7 +284,7 @@ how it was set.
 
 Installs shims for all perl executables known to plenv (i.e.,
 `~/.plenv/versions/*/bin/*`). Run this command after you install a new
-version of perl, or install a gem that provides commands.
+version of perl, or install a cpanm that provides commands.
 
     $ plenv rehash
 
