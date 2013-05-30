@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+#
+# Summary: Set or show the shell-specific Perl version
+#
+# Usage: plenv shell <version>
+#        plenv shell --unset
+#
+# Sets a shell-specific Perl version by setting the `PLENV_VERSION'
+# environment variable in your shell. This version overrides local
+# application-specific versions and the global version.
+#
+# <version> should be a string matching a Perl version known to plenv.
+# The special version string `system' will use your default system Perl.
+# Run `plenv versions' for a list of available Perl versions.
+
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+
+# Provide plenv completions
+if [ "$1" = "--complete" ]; then
+  echo --unset
+  echo system
+  exec plenv-versions --bare
+fi
+
+version="$1"
+
+if [ -z "$version" ]; then
+  if [ -z "$PLENV_VERSION" ]; then
+    echo "plenv: no shell-specific version configured" >&2
+    exit 1
+  else
+    echo "echo \"\$PLENV_VERSION\""
+    exit
+  fi
+fi
+
+if [ "$version" = "--unset" ]; then
+  echo "unset PLENV_VERSION"
+  exit
+fi
+
+# Make sure the specified version is installed.
+if plenv-prefix "$version" >/dev/null; then
+  echo "export PLENV_VERSION=\"${version}\""
+else
+  echo "return 1"
+  exit 1
+fi

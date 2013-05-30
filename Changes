@@ -2,6 +2,11 @@ Revision history for Perl extension App::plenv
 
 {{$NEXT}}
 
+v1.6.0 2013-05-26T10:32:21Z
+
+    - uninstall command
+      (Shoichi Kaji)
+
 1.5.0 2013-05-17T02:14:45Z
 
     - ~/.plenv/build/ as a default building directory. And do not remove building directory by default

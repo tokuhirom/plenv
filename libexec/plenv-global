@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+#
+# Summary: Set or show the global Perl version
+#
+# Usage: plenv global <version>
+#
+# Sets the global Perl version. You can override the global version at
+# any time by setting a directory-specific version with `plenv local'
+# or by setting the `PLENV_VERSION' environment variable.
+#
+# <version> should be a string matching a Perl version known to plenv.
+# The special version string `system' will use your default system Perl.
+# Run `plenv versions' for a list of available Perl versions.
+
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+
+# Provide plenv completions
+if [ "$1" = "--complete" ]; then
+  echo system
+  exec plenv-versions --bare
+fi
+
+PLENV_VERSION="$1"
+PLENV_VERSION_FILE="${PLENV_ROOT}/version"
+
+if [ -n "$PLENV_VERSION" ]; then
+  plenv-version-file-write "$PLENV_VERSION_FILE" "$PLENV_VERSION"
+else
+  plenv-version-file-read "$PLENV_VERSION_FILE" ||
+  plenv-version-file-read "${PLENV_ROOT}/global" ||
+  plenv-version-file-read "${PLENV_ROOT}/default" ||
+  echo system
+fi

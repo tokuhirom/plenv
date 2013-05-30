@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Usage: plenv version-file-write <file> <version>
+
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+
+PLENV_VERSION_FILE="$1"
+PLENV_VERSION="$2"
+
+if [ -z "$PLENV_VERSION" ] || [ -z "$PLENV_VERSION_FILE" ]; then
+  plenv-help --usage version-file-write >&2
+  exit 1
+fi
+
+# Make sure the specified version is installed.
+plenv-prefix "$PLENV_VERSION" >/dev/null
+
+# Write the version out to disk.
+echo "$PLENV_VERSION" > "$PLENV_VERSION_FILE"

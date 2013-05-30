@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Usage: plenv completions <command> [arg1 arg2...]
+
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+
+COMMAND="$1"
+if [ -z "$COMMAND" ]; then
+  plenv-help --usage completions >&2
+  exit 1
+fi
+
+COMMAND_PATH="$(command -v "plenv-$COMMAND" || command -v "plenv-sh-$COMMAND")"
+if grep -i "^\([#%]\|--\|//\) provide plenv completions" "$COMMAND_PATH" >/dev/null; then
+  shift
+  exec "$COMMAND_PATH" --complete "$@"
+fi

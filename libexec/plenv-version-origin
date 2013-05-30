@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Summary: Explain how the current Perl version is set
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+
+if [ -n "$PLENV_VERSION" ]; then
+  echo "PLENV_VERSION environment variable"
+else
+  plenv-version-file
+fi

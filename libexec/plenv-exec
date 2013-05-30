@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+#
+# Summary: Run an executable with the selected Perl version
+#
+# Usage: plenv exec <command> [arg1 arg2...]
+#
+# Runs an executable by first preparing PATH so that the selected Perl
+# version's `bin' directory is at the front.
+#
+# For example, if the currently selected Perl version is 5.18.0:
+#   plenv exec carton install
+#
+# is equivalent to:
+#   PATH="$PLENV_ROOT/versions/5.18.0/bin:$PATH" carton install
+
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+
+# Provide plenv completions
+if [ "$1" = "--complete" ]; then
+  exec plenv shims --short
+fi
+
+PLENV_VERSION="$(plenv-version-name)"
+PLENV_COMMAND="$1"
+
+if [ -z "$PLENV_COMMAND" ]; then
+  plenv-help --usage exec >&2
+  exit 1
+fi
+
+export PLENV_VERSION
+PLENV_COMMAND_PATH="$(plenv-which "$PLENV_COMMAND")"
+PLENV_BIN_PATH="${PLENV_COMMAND_PATH%/*}"
+
+OLDIFS="$IFS"
+IFS=$'\n' scripts=(`plenv-hooks exec`)
+IFS="$OLDIFS"
+for script in "${scripts[@]}"; do
+  source "$script"
+done
+
+shift 1
+if [ "$PLENV_VERSION" != "system" ]; then
+  export PATH="${PLENV_BIN_PATH}:${PATH}"
+fi
+exec -a "$PLENV_COMMAND" "$PLENV_COMMAND_PATH" "$@"

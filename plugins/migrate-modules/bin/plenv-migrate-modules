@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+#
+# Summary: Migrate cpan modules from other version
+#
+# Usage: plenv migrate-modules <from> <to>
+#
+# See `plenv versions` for a complete list of installed versions.
+#
+
+set -e
+
+# Provide plenv completions
+if [ "$1" = "--complete" ]; then
+  exec plenv versions --bare
+fi
+
+if [ -z "$plenv_ROOT" ]; then
+  plenv_ROOT="${HOME}/.plenv"
+fi
+
+FROM="$1"
+case "$FROM" in
+"" | -* )
+  # We can remove the sed fallback once plenv 0.4.0 is widely available.
+  { plenv-help uninstall 2>/dev/null ||
+    sed -ne '/^#/!q;s/.\{1,2\}//;1,4d;p' < "$0"
+  } >&2
+  exit 1
+  ;;
+esac
+
+TO="$2"
+case "$TO" in
+"" | -* )
+  # We can remove the sed fallback once plenv 0.4.0 is widely available.
+  { plenv-help uninstall 2>/dev/null ||
+    sed -ne '/^#/!q;s/.\{1,2\}//;1,4d;p' < "$0"
+  } >&2
+  exit 1
+  ;;
+esac
+
+echo "Migrating $FROM to $TO"
+
+PLENV_VERSION=$TO plenv install-cpanm
+PLENV_VERSION=$FROM perl -MExtUtils::Installed -e 'print $_, "\n" for ExtUtils::Installed->new->modules' | PLENV_VERSION=$TO cpanm --mirror-only
+PLENV_VERSION=$TO plenv rehash

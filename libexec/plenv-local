@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+#
+# Summary: Set or show the local application-specific Perl version
+#
+# Usage: plenv local <version>
+#        plenv local --unset
+#
+# Sets the local application-specific Perl version by writing the
+# version name to a file named `.perl-version'.
+#
+# When you run a Perl command, plenv will look for a `.perl-version'
+# file in the current directory and each parent directory. If no such
+# file is found in the tree, plenv will use the global Perl version
+# specified with `plenv global'. A version specified with the
+# `PLENV_VERSION' environment variable takes precedence over local
+# and global versions.
+#
+# For backwards compatibility, plenv will also read version
+# specifications from `.plenv-version' files, but a `.perl-version'
+# file in the same directory takes precedence.
+#
+# <version> should be a string matching a Perl version known to plenv.
+# The special version string `system' will use your default system Perl.
+# Run `plenv versions' for a list of available Perl versions.
+
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+
+# Provide plenv completions
+if [ "$1" = "--complete" ]; then
+  echo --unset
+  echo system
+  exec plenv-versions --bare
+fi
+
+PLENV_VERSION="$1"
+
+if [ "$PLENV_VERSION" = "--unset" ]; then
+  rm -f .perl-version .plenv-version
+elif [ -n "$PLENV_VERSION" ]; then
+  previous_file="$(PLENV_VERSION= plenv-version-origin || true)"
+  plenv-version-file-write .perl-version "$PLENV_VERSION"
+  if [ "$previous_file" -ef .plenv-version ]; then
+    rm -f .plenv-version
+    { echo "plenv: removed existing \`.plenv-version' file and migrated"
+      echo "       local version specification to \`.perl-version' file"
+    } >&2
+  fi
+else
+  plenv-version-file-read .perl-version ||
+  plenv-version-file-read .plenv-version ||
+  { echo "plenv: no local version configured for this directory"
+    exit 1
+  } >&2
+fi

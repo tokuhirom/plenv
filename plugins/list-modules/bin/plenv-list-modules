@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#
+# Summary: List cpan modules in current perl
+#
+# Usage: plenv list-modules
+#
+
+set -e
+
+# Provide plenv completions
+if [ "$1" = "--complete" ]; then
+  exec plenv versions --bare
+fi
+
+if [ -z "$plenv_ROOT" ]; then
+  plenv_ROOT="${HOME}/.plenv"
+fi
+
+plenv exec perl -MExtUtils::Installed -e 'print "$_$/" for ExtUtils::Installed->new->modules'

@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Summary: Show the current Perl version
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+
+if [ -z "$PLENV_VERSION" ]; then
+  PLENV_VERSION_FILE="$(plenv-version-file)"
+  PLENV_VERSION="$(plenv-version-file-read "$PLENV_VERSION_FILE" || true)"
+fi
+
+if [ -z "$PLENV_VERSION" ] || [ "$PLENV_VERSION" = "system" ]; then
+  echo "system"
+  exit
+fi
+
+version_exists() {
+  local version="$1"
+  [ -d "${PLENV_ROOT}/versions/${version}" ]
+}
+
+if version_exists "$PLENV_VERSION"; then
+  echo "$PLENV_VERSION"
+elif version_exists "${PLENV_VERSION#perl-}"; then
+  { echo "warning: ignoring extraneous \`perl-' prefix in version \`${PLENV_VERSION}'"
+    echo "         (set by $(plenv-version-origin))"
+  } >&2
+  echo "${PLENV_VERSION#perl-}"
+else
+  echo "plenv: version \`$PLENV_VERSION' is not installed" >&2
+  exit 1
+fi
