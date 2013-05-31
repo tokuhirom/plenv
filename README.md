@@ -66,7 +66,7 @@ easy to fork and contribute any changes back upstream.
 1. Check out plenv into `~/.plenv`.
 
     ~~~ sh
-    $ git clone git://github.com/sstephenson/plenv.git ~/.plenv
+    $ git clone git://github.com/tokuhirom/plenv.git ~/.plenv
     ~~~
 
 2. Add `~/.plenv/bin` to your `$PATH` for access to the `plenv`
