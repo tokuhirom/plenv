@@ -1,3 +1,8 @@
+2.0.0 2013-06-02T10:33:38
+
+    - Show installation information if there is no perl-build.
+      (suggested by miyagawa++)
+
 1.9.4 2013-06-01T14:07:24
 
     - Documentation fix
