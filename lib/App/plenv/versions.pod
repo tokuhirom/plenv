@@ -1,7 +1,0 @@
-=head1 NAME
-
-plenv-versions - Alias for `plenv-list`
-
-=head1 DESCRIPTION
-
-This is a alias command for L<plenv-list>. Please see it.
