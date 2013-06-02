@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-echo "Please install perl-build. See https://github.com/tokuhirom/plenv/blob/master/README.md#installation"
-exit 1
