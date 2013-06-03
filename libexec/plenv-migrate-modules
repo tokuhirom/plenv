@@ -4,6 +4,8 @@
 #
 # Usage: plenv migrate-modules <from> <to>
 #
+#  -n: Do not run test cases while installing by cpanm
+#
 # See `plenv versions` for a complete list of installed versions.
 #
 
@@ -17,6 +19,15 @@ fi
 if [ -z "$plenv_ROOT" ]; then
   plenv_ROOT="${HOME}/.plenv"
 fi
+
+no_test=""
+for args in "$@"
+do
+  if [ "$args" = "-n" ]; then
+    no_test="-n"
+    shift
+  fi
+done
 
 FROM="$1"
 case "$FROM" in
@@ -43,5 +54,5 @@ esac
 echo "Migrating $FROM to $TO"
 
 PLENV_VERSION=$TO plenv install-cpanm
-PLENV_VERSION=$FROM perl -MExtUtils::Installed -e 'print $_, "\n" for ExtUtils::Installed->new->modules' | PLENV_VERSION=$TO cpanm --mirror-only
+PLENV_VERSION=$FROM perl -MExtUtils::Installed -e 'print $_, "\n" for ExtUtils::Installed->new->modules' | PLENV_VERSION=$TO cpanm $no_test --mirror-only
 PLENV_VERSION=$TO plenv rehash
