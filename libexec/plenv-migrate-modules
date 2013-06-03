@@ -22,7 +22,7 @@ FROM="$1"
 case "$FROM" in
 "" | -* )
   # We can remove the sed fallback once plenv 0.4.0 is widely available.
-  { plenv-help uninstall 2>/dev/null ||
+  { plenv-help migrate-modules 2>/dev/null ||
     sed -ne '/^#/!q;s/.\{1,2\}//;1,4d;p' < "$0"
   } >&2
   exit 1
@@ -33,7 +33,7 @@ TO="$2"
 case "$TO" in
 "" | -* )
   # We can remove the sed fallback once plenv 0.4.0 is widely available.
-  { plenv-help uninstall 2>/dev/null ||
+  { plenv-help migrate-modules 2>/dev/null ||
     sed -ne '/^#/!q;s/.\{1,2\}//;1,4d;p' < "$0"
   } >&2
   exit 1
