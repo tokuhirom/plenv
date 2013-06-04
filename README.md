@@ -130,7 +130,7 @@ To use a specific release of plenv, check out the corresponding tag:
 ~~~ sh
 $ cd ~/.plenv
 $ git fetch
-$ git checkout v0.3.0
+$ git checkout 2.0.0
 ~~~
 
 ### Homebrew on Mac OS X
