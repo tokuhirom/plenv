@@ -82,7 +82,7 @@ case "$command" in
       echo "plenv: Please install perl-build. See https://github.com/tokuhirom/plenv/blob/master/README.md#installation"
       exit 1
     else
-      echo "plenv: no such command \`$command'" >&3
+      echo "plenv: no such command \`$command'" >&2
       exit 1
     fi
   fi
