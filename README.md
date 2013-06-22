@@ -7,7 +7,7 @@ plenv - perl binary manager
     plenv help
 
     # list available perl versions
-    plenv available
+    plenv install --list
 
     # install perl5 binary
     plenv install 5.16.2 -Dusethreads
