@@ -44,9 +44,13 @@ with \[Carton\](http://github.com/miyagawa/carton/) for painless Perl upgrades a
 
 # plenv vs. perlbrew
 
-plenv supports project local version determination.
+Like perlbrew, plenv installs perls under your home directory and lets you install modules locally, and allows you to switch to arbitrary perl versions on your shell.
 
-i.e. .perl-version file support.
+Unlike perlbrew, plenv is implemented in bash, and provides simple shell script wrappers (called "shims") for each perl executable files. It doesn't export any shell functions that switches `PATH` before running commands.
+
+Unlike perlbrew, plenv allows you to set local perl version per directory, using `.perl-version` file.
+
+Unlike perlbrew, plenv doesn't provide built-in local::lib integrations, but [plenv-contrib](https://github.com/miyagawa/plenv-contrib) implements `use` and `lib` commands for a replacement.
 
 ## INSTALLATION
 
