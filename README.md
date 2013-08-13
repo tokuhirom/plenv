@@ -328,7 +328,11 @@ Lists all perl versions with the given command installed.
 
         % plenv migrate-modules 5.8.2 5.16.2
 
-    It make a list of installed modules in 5.8.2, and install these modules to 5.16.2 environment.
+    It make a list of installed modules in 5.8.2, and install the newest versions of these modules
+    to 5.16.2 environment. Note that because the module version won't necessarily be the same between
+    the two versions, there maybe changes that affect compatibility, dependencies or other behaviors
+    your applications depend on.
+
 
 - How can I enable -g option without slowing down binary?
 
