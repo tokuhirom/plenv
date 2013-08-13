@@ -333,6 +333,14 @@ Lists all perl versions with the given command installed.
     the two versions, there maybe changes that affect compatibility, dependencies or other behaviors
     your applications depend on.
 
+    You can reuse installed modules from a binary-compatible perl version
+    directly without reinstalling. For example, if you have installed lots of
+    modules in 5.18.1 and install a variant of 5.18.1 with dtrace support,
+    you might not want to migrate all those modules.
+
+        % plenv install 5.18.1 -Dusedtrace --as 5.18.1-dtrace
+        % plenv shell 5.18.1-dtrace
+        % PERL5LIB=$(PLENV_VERSION=5.18.1 perl -e'print join ":",@INC') perl <command>
 
 - How can I enable -g option without slowing down binary?
 
