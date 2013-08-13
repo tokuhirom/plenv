@@ -40,7 +40,7 @@ plenv - perl binary manager
 
 Use plenv to pick a Perl version for your application and guarantee
 that your development environment matches production. Put plenv to work
-with \[Carton\](http://github.com/miyagawa/carton/) for painless Perl upgrades and bulletproof deployments.
+with [Carton](http://github.com/miyagawa/carton/) for painless Perl upgrades and bulletproof deployments.
 
 # plenv vs. perlbrew
 
