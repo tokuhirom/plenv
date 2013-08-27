@@ -16,7 +16,7 @@ if [ "$1" = "--complete" ]; then
   exec plenv versions --bare
 fi
 
-if [ -z "$plenv_ROOT" ]; then
+if [ -z "$PLENV_ROOT" ]; then
   PLENV_ROOT="${HOME}/.plenv"
 fi
 
