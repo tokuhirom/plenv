@@ -13,7 +13,7 @@ if [ "$1" = "--complete" ]; then
 fi
 
 if [ -z "$plenv_ROOT" ]; then
-  plenv_ROOT="${HOME}/.plenv"
+  PLENV_ROOT="${HOME}/.plenv"
 fi
 
 plenv exec perl -MExtUtils::Installed -e 'print "$_$/" for ExtUtils::Installed->new->modules'
