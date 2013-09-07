@@ -191,6 +191,7 @@ hood.
 
     * Perl 5.8.1+
     * bash
+    * curl(If you want to use plenv install-cpanm)
 
 ## Command Reference
 
