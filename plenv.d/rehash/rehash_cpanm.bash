@@ -9,19 +9,6 @@ set -e
 [ -n "\$PLENV_DEBUG" ] && set -x
 
 program="\${0##*/}"
-if [ "\$program" = "perl" ]; then
-  for arg; do
-    case "\$arg" in
-    -e* | -- ) break ;;
-    */* )
-      if [ -f "\$arg" ]; then
-        export PLENV_DIR="\${arg%/*}"
-        break
-      fi
-      ;;
-    esac
-  done
-fi
 
 export PLENV_ROOT="$PLENV_ROOT"
 "$(command -v plenv)" exec "\$program" "\$@"
