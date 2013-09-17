@@ -12,7 +12,6 @@ program="\${0##*/}"
 
 export PLENV_ROOT="$PLENV_ROOT"
 "$(command -v plenv)" exec "\$program" "\$@"
-"$(command -v plenv)" rehash
 SH
 
 chmod +x "$CPANM_SHIM_PATH"
