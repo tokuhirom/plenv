@@ -1,7 +1,3 @@
 language: perl
-before_install:
-  - "perlbrew -f install-cpanm"
-  - "cpanm Module::Build::Pluggable"
-perl:
-  - 5.16
-  - 5.14
+script:
+    - 'PATH=$PWD/shims:$PATH make test'
