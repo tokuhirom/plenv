@@ -42,21 +42,8 @@ remove_prototype_shim() {
 create_prototype_shim() {
   command -p cat > "$PROTOTYPE_SHIM_PATH" <<SH
 #!$(command -v bash)
-set -e
 [[ -n "\$PLENV_DEBUG" ]] && set -x
-
-program="\${0##*/}"
-if [[ "\$program" = "perl" ]]; then
-  for arg; do
-    [[ "\$arg" =~ ^-(-$|[0A-Za-z]*[eE]) ]] && break
-    if [[ "\$arg" =~ / && -f "\$arg" ]]; then
-      export PLENV_DIR="\${arg%/*}"
-      break
-    fi
-  done
-fi
-
-PLENV_ROOT='$PLENV_ROOT' exec '$(command -v plenv)' exec "\$program" "\$@"
+PLENV_ROOT='$PLENV_ROOT' exec '$(command -v plenv)' exec "\${0##*/}" "\$@"
 SH
   command -p chmod +x "$PROTOTYPE_SHIM_PATH"
 }
