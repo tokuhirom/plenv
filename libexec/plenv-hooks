@@ -38,7 +38,7 @@ IFS=: hook_paths=($PLENV_HOOK_PATH)
 shopt -s nullglob
 for path in "${hook_paths[@]}"; do
   for script in "$path/$PLENV_COMMAND"/*.bash; do
-    echo $(realpath $script)
+    realpath "$script"
   done
 done
 shopt -u nullglob
