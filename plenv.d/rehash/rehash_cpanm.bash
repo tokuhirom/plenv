@@ -32,7 +32,7 @@ if [[ ! "\$CURRENT_PERL_VERSION" =~ $regexp_system_perl ]] &&
 fi
 
 export PLENV_ROOT="$PLENV_ROOT"
-"$(command -v plenv)" exec "\$program" "\$@"
+'$(command -v plenv)' exec "\$program" "\$@"
 rc=\$?
 for arg in \$@
 do
@@ -42,7 +42,7 @@ do
     ;;
   esac
 done
-"$(command -v plenv)" rehash
+'$(command -v plenv)' rehash
 exit \$rc
 CPANM_SHIM
     else
