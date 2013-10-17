@@ -20,7 +20,7 @@ expand_path() {
     return 1
   fi
 
-  local cwd="$(pwd)"
+  local cwd="$PWD"
   cd "$1"
   pwd
   cd "$cwd"
