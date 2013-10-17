@@ -41,7 +41,7 @@ remove_prototype_shim() {
 # serves as a locking mechanism.
 create_prototype_shim() {
   command -p cat > "$PROTOTYPE_SHIM_PATH" <<SH
-#!/usr/bin/env bash
+#!$(command -v bash)
 set -e
 [[ -n "\$PLENV_DEBUG" ]] && set -x
 
