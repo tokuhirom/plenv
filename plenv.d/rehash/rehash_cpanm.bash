@@ -15,7 +15,7 @@ for _shim in "${cpan_clients[@]}"; do
   if [[ " ${registered_shims[*]} " == *" $_shim "* ]]; then 
     if [[ $_shim == "cpanm" ]]; then
       command -p cat > "$SHIM_PATH/$_shim" <<CPANM_SHIM
-#!/usr/bin/env bash
+#!$(command -v bash)
 set -e
 [ -n "\$PLENV_DEBUG" ] && set -x
 
