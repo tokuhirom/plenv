@@ -56,8 +56,7 @@ if [[ "\$program" = "perl" ]]; then
   done
 fi
 
-export PLENV_ROOT="$PLENV_ROOT"
-exec "$(command -v plenv)" exec "\$program" "\$@"
+PLENV_ROOT='$PLENV_ROOT' exec '$(command -v plenv)' exec "\$program" "\$@"
 SH
   command -p chmod +x "$PROTOTYPE_SHIM_PATH"
 }
