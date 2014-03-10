@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 # Summary: Configure the shell environment for plenv
-# Usage: eval "$(plenv init - [--no-rehash] [<shell>])"
+# Usage: eval "$(plenv init - [--no-rehash] [--no-completion] [<shell>])"
 
 set -e
 [ -n "$PLENV_DEBUG" ] && set -x
 
 print=""
 no_rehash=1
+no_completion=""
 for args in "$@"
 do
   if [ "$args" = "-" ]; then
@@ -16,6 +17,11 @@ do
 
   if [ "$args" = "--no-rehash" ]; then
     no_rehash=1
+    shift
+  fi
+
+  if [ "$args" = "--no-completion" ]; then
+    no_completion=1
     shift
   fi
 done
@@ -85,11 +91,13 @@ if [[ ":${PATH}:" != *:"${PLENV_ROOT}/shims":* ]]; then
   echo 'export PATH="'${PLENV_ROOT}'/shims:${PATH}"'
 fi
 
-case "$shell" in
-bash | zsh )
-  echo "source \"$root/completions/plenv.${shell}\""
-  ;;
-esac
+if [ -z "$no_completion" ]; then
+  case "$shell" in
+  bash | zsh )
+    echo "source \"$root/completions/plenv.${shell}\""
+    ;;
+  esac
+fi
 
 if [ -z "$no_rehash" ]; then
   echo 'plenv rehash 2>/dev/null'
