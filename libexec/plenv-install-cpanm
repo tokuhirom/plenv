@@ -61,5 +61,6 @@ for option in "${OPTIONS[@]}"; do
   esac
 done
 
-curl -p -L http://cpanmin.us/ | plenv exec perl - ExtUtils::MakeMaker App::cpanminus
+PLENV_INSTALL_CPANM=${PLENV_INSTALL_CPANM:--p}
+curl ${PLENV_INSTALL_CPANM} -L http://cpanmin.us/ | plenv exec perl - ExtUtils::MakeMaker App::cpanminus
 plenv rehash
