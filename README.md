@@ -323,6 +323,10 @@ Lists all perl versions with the given command installed.
 
     This command install cpanm to current environment.
 
+    If you are installing via a proxy and encounter problems you can set curl arguments used via the PLENV_INSTALL_CPANM environment variable (default is **-p**):
+
+        % PLENV_INSTALL_CPANM="-v" plenv install-cpanm
+
 - What should I do for installing the module which I used for new Perl until now? 
 
     You can use ` migrate-modules ` subcommand.
