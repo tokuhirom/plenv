@@ -7,7 +7,16 @@ if [ "$1" = "--complete" ]; then
   exec plenv-rehash --complete
 fi
 
+shell="($basename "${PLENV_SHELL:-$SHELL}")"
+
 # When plenv shell integration is enabled, delegate to plenv-rehash,
 # then tell the shell to empty its command lookup cache.
 plenv-rehash
-echo "hash -r 2>/dev/null || true"
+case "$shell" in
+fish)
+  # no rehash support
+  ;;
+* )
+  echo "hash -r 2>/dev/null || true"
+  ;;
+esac
