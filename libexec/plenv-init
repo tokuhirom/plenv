@@ -64,6 +64,9 @@ if [ -z "$print" ]; then
   ksh )
     profile='~/.profile'
     ;;
+  fish )
+    profile='~/.config/fish/config.fish'
+    ;;
   * )
     profile='your profile'
     ;;
@@ -72,7 +75,14 @@ if [ -z "$print" ]; then
   { echo "# Load plenv automatically by adding"
     echo "# the following to ${profile}:"
     echo
-    echo 'eval "$(plenv init -)"'
+    case "$shell" in
+    fish )
+      echo 'status --is-interactive; and . (plenv init -|psub)'
+      ;;
+    * )
+      echo 'eval "$(plenv init -)"'
+      ;;
+    esac
     echo
   } >&2
 
@@ -81,13 +91,24 @@ fi
 
 mkdir -p "${PLENV_ROOT}/"{shims,versions}
 
-if [[ ":${PATH}:" != *:"${PLENV_ROOT}/shims":* ]]; then
+case "$shell" in
+fish )
+  echo "setenv PATH '${PLENV_ROOT}/shims' \$PATH"
+  echo "setenv PLENV_SHELL $shell"
+  ;;
+* )
   echo 'export PATH="'${PLENV_ROOT}'/shims:${PATH}"'
-fi
+  echo "export PLENV_SHELL=$shell"
+  ;;
+esac
 
+completion="$root/completions/plenv.${shell}"
 case "$shell" in
 bash | zsh )
-  echo "source \"$root/completions/plenv.${shell}\""
+  echo "source '$completion'"
+  ;;
+fish )
+  echo ". '$completion'"
   ;;
 esac
 
@@ -97,6 +118,21 @@ fi
 
 commands=(`plenv-commands --sh`)
 case "$shell" in
+fish )
+  cat <<EOS
+function plenv
+  set command \$argv[1]
+  set -e argv[1]
+
+  switch "\$command"
+  case ${commands[*]}
+    eval (plenv "sh-\$command" \$argv)
+  case '*'
+    command plenv "\$command" \$argv
+  end
+end
+EOS
+  ;;
 ksh )
   cat <<EOS
 function plenv {
@@ -111,6 +147,7 @@ EOS
   ;;
 esac
 
+if [ "$shell" != "fish" ]; then
 IFS="|"
 cat <<EOS
   command="\$1"
@@ -126,3 +163,4 @@ cat <<EOS
   esac
 }
 EOS
+fi
