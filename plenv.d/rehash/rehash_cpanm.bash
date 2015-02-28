@@ -25,4 +25,4 @@ done
 exit \$rc
 SH
 
-chmod +x "$CPANM_SHIM_PATH"
+$PLENV_CMD_CHMOD +x "$CPANM_SHIM_PATH"

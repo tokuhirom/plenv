@@ -27,7 +27,7 @@ if [ -z "$shell" ]; then
   shell="$(basename "${shell:-$SHELL}")"
 fi
 
-READLINK=$(type -p greadlink readlink | head -1)
+READLINK=$(type -p greadlink readlink | while read line; do echo $line; break; done)
 if [ -z "$READLINK" ]; then
   echo "plenv: cannot find readlink - are you missing GNU coreutils?" >&2
   exit 1
@@ -119,7 +119,7 @@ fi
 commands=(`plenv-commands --sh`)
 case "$shell" in
 fish )
-  cat <<EOS
+  $PLENV_CMD_CAT <<EOS
 function plenv
   set command \$argv[1]
   set -e argv[1]
@@ -134,7 +134,7 @@ end
 EOS
   ;;
 ksh )
-  cat <<EOS
+  $PLENV_CMD_CAT <<EOS
 function plenv {
   typeset command
 EOS
@@ -149,7 +149,7 @@ esac
 
 if [ "$shell" != "fish" ]; then
 IFS="|"
-cat <<EOS
+$PLENV_CMD_CAT <<EOS
   command="\$1"
   if [ "\$#" -gt 0 ]; then
     shift
