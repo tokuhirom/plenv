@@ -31,7 +31,7 @@ set +o noclobber
 trap remove_prototype_shim EXIT
 
 remove_prototype_shim() {
-  rm -f "$PROTOTYPE_SHIM_PATH"
+  $PLENV_CMD_RM -f "$PROTOTYPE_SHIM_PATH"
 }
 
 # The prototype shim file is a script that re-execs itself, passing
@@ -40,7 +40,7 @@ remove_prototype_shim() {
 # technique is fast, uses less disk space than unique files, and also
 # serves as a locking mechanism.
 create_prototype_shim() {
-  cat > "$PROTOTYPE_SHIM_PATH" <<SH
+  $PLENV_CMD_CAT > "$PROTOTYPE_SHIM_PATH" <<SH
 #!/usr/bin/env bash
 set -e
 [ -n "\$PLENV_DEBUG" ] && set -x
@@ -59,7 +59,7 @@ fi
 export PLENV_ROOT="$PLENV_ROOT"
 exec "$(command -v plenv)" exec "\$program" "\$@"
 SH
-  chmod +x "$PROTOTYPE_SHIM_PATH"
+  $PLENV_CMD_CHMOD +x "$PROTOTYPE_SHIM_PATH"
 }
 
 # If the contents of the prototype shim file differ from the contents
@@ -68,7 +68,7 @@ SH
 remove_outdated_shims() {
   for shim in *; do
     if ! diff "$PROTOTYPE_SHIM_PATH" "$shim" >/dev/null 2>&1; then
-      for shim in *; do rm -f "$shim"; done
+      for shim in *; do $PLENV_CMD_RM -f "$shim"; done
     fi
     break
   done
@@ -108,7 +108,7 @@ register_shim() {
 install_registered_shims() {
   local shim
   for shim in "${registered_shims[@]}"; do
-    [ -e "$shim" ] || ln -f "$PROTOTYPE_SHIM_PATH" "$shim"
+    [ -e "$shim" ] || $PLENV_CMD_LN -f "$PROTOTYPE_SHIM_PATH" "$shim"
   done
 }
 
@@ -120,7 +120,7 @@ remove_stale_shims() {
   local shim
   for shim in *; do
     if [[ "$registered_shims_index" != *"/$shim/"* ]]; then
-      rm -f "$shim"
+      $PLENV_CMD_RM -f "$shim"
     fi
   done
 }
