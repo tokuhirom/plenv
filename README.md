@@ -317,25 +317,25 @@ Lists all perl versions with the given command installed.
 
 - How can I install cpanm?
 
-    Try to use following command.
+    Try using the following command:
 
         % plenv install-cpanm
 
-    This command install cpanm to current environment.
+    This command installs cpanm in the current environment.
 
     If you are installing via a proxy and encounter problems you can set curl arguments via PLENV_INSTALL_CPANM (default is **-p**):
 
         % PLENV_INSTALL_CPANM="-v" plenv install-cpanm
 
-- What should I do for installing the module which I used for new Perl until now? 
+- How can I install the modules I used in another Perl environment in my new one?
 
-    You can use ` migrate-modules ` subcommand.
+    You can use the ` migrate-modules ` subcommand.
 
         % plenv migrate-modules 5.8.2 5.16.2
 
-    It make a list of installed modules in 5.8.2, and install the newest versions of these modules
-    to 5.16.2 environment. Note that because the module version won't necessarily be the same between
-    the two versions, there maybe changes that affect compatibility, dependencies or other behaviors
+    It makes a list of the installed modules in 5.8.2, and installs the newest versions of those modules
+    to the 5.16.2 environment. Note that because the module version won't necessarily be the same between
+    the two versions, there may be changes that affect compatibility, dependencies, or other behaviors
     your applications depend on.
 
     You can reuse installed modules from a binary-compatible perl version
@@ -363,7 +363,7 @@ Tokuhiro Matsuno <tokuhirom AAJKLFJEF@ GMAIL COM>
 
 # SEE ALSO
 
-[App::perlbrew](http://search.cpan.org/perldoc?App::perlbrew) provides same feature. But plenv provides project local file: __ .perl-version __.
+[App::perlbrew](http://search.cpan.org/perldoc?App::perlbrew) provides the same features. But plenv provides project local file: __ .perl-version __.
 
 Most of part was inspired from [rbenv](https://github.com/sstephenson/rbenv).
 
