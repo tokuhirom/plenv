@@ -353,10 +353,6 @@ Lists all perl versions with the given command installed.
 
         % plenv install 5.16.2 -DDEBUGGING=-g
 
-- Does plenv support [stableperl](http://blog.schmorp.de/2015-06-06-a-stable-perl.html)?
-
-    Yes, plenv can treat stableperl if plenv is with [Perl::Build](https://github.com/tokuhirom/Perl-Build) which supports stableperl. Distribution of stableperl has the `stableperl` prefix.
-
 # BUG REPORTING
 
 Plese use github issues: [http://github.com/tokuhirom/plenv/](http://github.com/tokuhirom/plenv/).
