@@ -193,6 +193,15 @@ hood.
     * bash
     * curl(If you want to use plenv install-cpanm)
 
+### FreeBSD users
+
+Mount fdescfs on `/dev/fd` for using bash.
+Please add following line to `/etc/fstab` and restart.
+
+```
+fdesc	/dev/fd		fdescfs		rw	0	0
+```
+
 ## Command Reference
 
 Like `git`, the `plenv` command delegates to subcommands based on its
