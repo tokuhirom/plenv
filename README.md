@@ -90,7 +90,9 @@ easy to fork and contribute any changes back upstream.
     $ echo 'eval "$(plenv init -)"' >> ~/.bash_profile
     ~~~
 
-    _Same as in previous step, use `~/.profile` on Ubuntu, `~/.zshrc` for Zsh._
+    _Same as in previous step, use `~/.profile` on Ubuntu._
+    
+    **Zsh note**: Use `echo 'eval "$(plenv init - zsh)"' >> ~/.zshrc`
 
 4. Restart your shell as a login shell so the path changes take effect.
     You can now begin using plenv.
