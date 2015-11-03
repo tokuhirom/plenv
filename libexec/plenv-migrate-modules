@@ -54,5 +54,5 @@ esac
 echo "Migrating $FROM to $TO"
 
 PLENV_VERSION=$TO plenv install-cpanm
-PLENV_VERSION=$FROM perl -MExtUtils::Installed -e 'print $_, "\n" for ExtUtils::Installed->new(skip_cwd => 1)->modules' | PLENV_VERSION=$TO cpanm $no_test --mirror-only
+PLENV_VERSION=$FROM perl -MExtUtils::Installed -e 'for (ExtUtils::Installed->new(skip_cwd => 1)->modules) {next if /\APerl\z/; print $_, "\n";}' | PLENV_VERSION=$TO cpanm $no_test --mirror-only
 PLENV_VERSION=$TO plenv rehash
