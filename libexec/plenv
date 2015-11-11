@@ -26,11 +26,6 @@ if [ -z "$READLINK" ]; then
   exit 1
 fi
 
-export PLENV_CMD_CAT=$(type -p /bin/cat /usr/bin/cat | head1)
-export PLENV_CMD_LN=$(type -p /bin/ln /usr/bin/ln | head1)
-export PLENV_CMD_CHMOD=$(type -p /bin/chmod /usr/bin/chmod | head1)
-export PLENV_CMD_RM=$(type -p /bin/rm /usr/bin/rm | head1)
-
 abs_dirname() {
   local cwd="$(pwd)"
   local path="$1"

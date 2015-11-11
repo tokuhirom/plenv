@@ -3,7 +3,7 @@ set -e
 
 CPANM_SHIM_PATH="$SHIM_PATH/cpanm"
 
-cat > "$CPANM_SHIM_PATH" <<SH
+command -p cat > "$CPANM_SHIM_PATH" <<SH
 #!/usr/bin/env bash
 set -e
 [ -n "\$PLENV_DEBUG" ] && set -x
@@ -25,4 +25,4 @@ done
 exit \$rc
 SH
 
-$PLENV_CMD_CHMOD +x "$CPANM_SHIM_PATH"
+command -p chmod +x "$CPANM_SHIM_PATH"

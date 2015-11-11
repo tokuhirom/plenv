@@ -36,12 +36,12 @@ fi
 PLENV_VERSION="$1"
 
 if [ "$PLENV_VERSION" = "--unset" ]; then
-  $PLENV_CMD_RM -f .perl-version .plenv-version
+  command -p rm -f .perl-version .plenv-version
 elif [ -n "$PLENV_VERSION" ]; then
   previous_file="$(PLENV_VERSION= plenv-version-origin || true)"
   plenv-version-file-write .perl-version "$PLENV_VERSION"
   if [ "$previous_file" -ef .plenv-version ]; then
-    $PLENV_CMD_RM -f .plenv-version
+    command -p rm -f .plenv-version
     { echo "plenv: removed existing \`.plenv-version' file and migrated"
       echo "       local version specification to \`.perl-version' file"
     } >&2

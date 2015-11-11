@@ -116,7 +116,7 @@ fi
 commands=(`plenv-commands --sh`)
 case "$shell" in
 fish )
-  $PLENV_CMD_CAT <<EOS
+  command -p cat <<EOS
 function plenv
   set command \$argv[1]
   set -e argv[1]
@@ -131,7 +131,7 @@ end
 EOS
   ;;
 ksh )
-  $PLENV_CMD_CAT <<EOS
+  command -p cat <<EOS
 function plenv {
   typeset command
 EOS
@@ -146,7 +146,7 @@ esac
 
 if [ "$shell" != "fish" ]; then
 IFS="|"
-$PLENV_CMD_CAT <<EOS
+command -p cat <<EOS
   command="\$1"
   if [ "\$#" -gt 0 ]; then
     shift
