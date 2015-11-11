@@ -40,4 +40,4 @@ shopt -s nullglob
       fi
     done
   done
-} | sort | uniq
+} | sort -u

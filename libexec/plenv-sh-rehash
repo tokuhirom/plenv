@@ -7,7 +7,8 @@ if [ "$1" = "--complete" ]; then
   exec plenv-rehash --complete
 fi
 
-shell="($basename "${PLENV_SHELL:-$SHELL}")"
+shell="${PLENV_SHELL:-$SHELL}"
+shell="${shell##*/}"
 
 # When plenv shell integration is enabled, delegate to plenv-rehash,
 # then tell the shell to empty its command lookup cache.
