@@ -28,12 +28,6 @@ if [ -z "$shell" ]; then
   shell="${shell##*/}"
 fi
 
-READLINK=$(type -p greadlink readlink | while read line; do echo $line; break; done)
-if [ -z "$READLINK" ]; then
-  echo "plenv: cannot find readlink - are you missing GNU coreutils?" >&2
-  exit 1
-fi
-
 abs_dirname() {
   local cwd="$(pwd)"
   local path="$1"

@@ -25,6 +25,7 @@ if [ -z "$READLINK" ]; then
   echo "plenv: cannot find readlink - are you missing GNU coreutils?" >&2
   exit 1
 fi
+export READLINK
 
 abs_dirname() {
   local cwd="$(pwd)"
