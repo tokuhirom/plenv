@@ -6,21 +6,20 @@ set -e
 [ -n "$PLENV_DEBUG" ] && set -x
 
 print=""
-no_rehash=1
-for args in "$@"
-do
-  if [ "$args" = "-" ]; then
-    print=1
-    shift
-  fi
+shell=""
 
-  if [ "$args" = "--no-rehash" ]; then
-    no_rehash=1
-    shift
-  fi
+for arg in "$@" ; do
+  case "$arg" in
+  - )
+    print=1
+    ;;
+  --no-rehash )
+    ;;
+  * )
+    [ -z "$shell" ] && shell="$arg"
+  esac
 done
 
-shell="$1"
 if [ -z "$shell" ]; then
   shell="$(ps c -p $(ps -p $$ -o 'ppid=' 2>/dev/null) -o 'comm=' 2>/dev/null || true)"
   shell="${shell##-}"
@@ -111,10 +110,6 @@ fish )
   echo ". '$completion'"
   ;;
 esac
-
-if [ -z "$no_rehash" ]; then
-  echo 'plenv rehash 2>/dev/null'
-fi
 
 commands=(`plenv-commands --sh`)
 case "$shell" in
