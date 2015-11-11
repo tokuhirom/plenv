@@ -110,48 +110,44 @@ fi
 commands=(`plenv-commands --sh`)
 case "$shell" in
 fish )
-  command -p cat <<EOS
+  echo '
 function plenv
-  set command \$argv[1]
+  set command $argv[1]
   set -e argv[1]
 
-  switch "\$command"
-  case ${commands[*]}
-    eval (plenv "sh-\$command" \$argv)
-  case '*'
-    command plenv "\$command" \$argv
+  switch "$command"
+  case '"${commands[*]}"'
+    eval (plenv "sh-$command" $argv)
+  case '\''*'\''
+    command plenv "$command" $argv
   end
-end
-EOS
+end'
   ;;
 ksh )
-  command -p cat <<EOS
+  echo '
 function plenv {
-  typeset command
-EOS
+  typeset command'
   ;;
 * )
-  cat <<EOS
+  echo '
 plenv() {
-  local command
-EOS
+  local command'
   ;;
 esac
 
 if [ "$shell" != "fish" ]; then
 IFS="|"
-command -p cat <<EOS
-  command="\$1"
-  if [ "\$#" -gt 0 ]; then
+echo '
+  command="$1"
+  if [ "$#" -gt 0 ]; then
     shift
   fi
 
-  case "\$command" in
-  ${commands[*]})
-    eval "\`plenv "sh-\$command" "\$@"\`";;
+  case "$command" in
+  '"${commands[*]}"')
+    eval "`plenv "sh-$command" "$@"`";;
   *)
-    command plenv "\$command" "\$@";;
+    command plenv "$command" "$@";;
   esac
-}
-EOS
+}'
 fi
