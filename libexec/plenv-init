@@ -33,10 +33,6 @@ if [ -z "$READLINK" ]; then
   exit 1
 fi
 
-resolve_link() {
-  $READLINK "$1"
-}
-
 abs_dirname() {
   local cwd="$(pwd)"
   local path="$1"
@@ -44,7 +40,7 @@ abs_dirname() {
   while [ -n "$path" ]; do
     cd "${path%/*}"
     local name="${path##*/}"
-    path="$(resolve_link "$name" || true)"
+    path="$($READLINK "$name" || true)"
   done
 
   pwd

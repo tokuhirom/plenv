@@ -31,10 +31,6 @@ export PLENV_CMD_LN=$(type -p /bin/ln /usr/bin/ln | head1)
 export PLENV_CMD_CHMOD=$(type -p /bin/chmod /usr/bin/chmod | head1)
 export PLENV_CMD_RM=$(type -p /bin/rm /usr/bin/rm | head1)
 
-resolve_link() {
-  $READLINK "$1"
-}
-
 abs_dirname() {
   local cwd="$(pwd)"
   local path="$1"
@@ -42,7 +38,7 @@ abs_dirname() {
   while [ -n "$path" ]; do
     cd "${path%/*}"
     local name="${path##*/}"
-    path="$(resolve_link "$name" || true)"
+    path="$($READLINK "$name" || true)"
   done
 
   pwd
