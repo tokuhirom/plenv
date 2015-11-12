@@ -19,7 +19,7 @@ read READLINK < <( type -p greadlink readlink ) || {
 export READLINK
 
 abs_dirname() {
-  local cwd="$(pwd)"
+  local cwd="$PWD"
   local path="$1"
 
   while [ -n "$path" ]; do
@@ -40,13 +40,13 @@ fi
 export PLENV_ROOT
 
 if [ -z "${PLENV_DIR}" ]; then
-  PLENV_DIR="$(pwd)"
+  PLENV_DIR="$PWD"
 else
   cd "$PLENV_DIR" 2>/dev/null || {
     echo "plenv: cannot change working directory to \`$PLENV_DIR'"
     exit 1
   } >&2
-  PLENV_DIR="$(pwd)"
+  PLENV_DIR="$PWD"
   cd "$OLDPWD"
 fi
 export PLENV_DIR

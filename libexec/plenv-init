@@ -28,7 +28,7 @@ if [ -z "$shell" ]; then
 fi
 
 abs_dirname() {
-  local cwd="$(pwd)"
+  local cwd="$PWD"
   local path="$1"
 
   while [ -n "$path" ]; do

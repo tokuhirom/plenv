@@ -20,7 +20,7 @@ if [ -z "$PLENV_COMMAND" ]; then
 fi
 
 realpath() {
-  local cwd="$(pwd)"
+  local cwd="$PWD"
   local path="$1"
 
   while [ -n "$path" ]; do
@@ -29,7 +29,7 @@ realpath() {
     path="$($READLINK "$name" || true)"
   done
 
-  echo "$(pwd)/$name"
+  echo "$PWD/$name"
   cd "$cwd"
 }
 
