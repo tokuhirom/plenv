@@ -21,20 +21,11 @@ for arg in "$@" ; do
 done
 
 if [ -z "$shell" ]; then
-  shell="$(ps c -p $(ps -p $$ -o 'ppid=' 2>/dev/null) -o 'comm=' 2>/dev/null || true)"
+  shell="$(ps c -p $PPID -o 'comm=' 2>/dev/null || true)"
   shell="${shell##-}"
-  shell="$(basename "${shell:-$SHELL}")"
+  shell="${shell:-$SHELL}"
+  shell="${shell##*/}"
 fi
-
-READLINK=$(type -p greadlink readlink | while read line; do echo $line; break; done)
-if [ -z "$READLINK" ]; then
-  echo "plenv: cannot find readlink - are you missing GNU coreutils?" >&2
-  exit 1
-fi
-
-resolve_link() {
-  $READLINK "$1"
-}
 
 abs_dirname() {
   local cwd="$(pwd)"
@@ -43,7 +34,7 @@ abs_dirname() {
   while [ -n "$path" ]; do
     cd "${path%/*}"
     local name="${path##*/}"
-    path="$(resolve_link "$name" || true)"
+    path="$($READLINK "$name" || true)"
   done
 
   pwd
@@ -114,48 +105,44 @@ esac
 commands=(`plenv-commands --sh`)
 case "$shell" in
 fish )
-  $PLENV_CMD_CAT <<EOS
+  echo '
 function plenv
-  set command \$argv[1]
+  set command $argv[1]
   set -e argv[1]
 
-  switch "\$command"
-  case ${commands[*]}
-    eval (plenv "sh-\$command" \$argv)
-  case '*'
-    command plenv "\$command" \$argv
+  switch "$command"
+  case '"${commands[*]}"'
+    eval (plenv "sh-$command" $argv)
+  case '\''*'\''
+    command plenv "$command" $argv
   end
-end
-EOS
+end'
   ;;
 ksh )
-  $PLENV_CMD_CAT <<EOS
+  echo '
 function plenv {
-  typeset command
-EOS
+  typeset command'
   ;;
 * )
-  cat <<EOS
+  echo '
 plenv() {
-  local command
-EOS
+  local command'
   ;;
 esac
 
 if [ "$shell" != "fish" ]; then
 IFS="|"
-$PLENV_CMD_CAT <<EOS
-  command="\$1"
-  if [ "\$#" -gt 0 ]; then
+echo '
+  command="$1"
+  if [ "$#" -gt 0 ]; then
     shift
   fi
 
-  case "\$command" in
-  ${commands[*]})
-    eval "\`plenv "sh-\$command" "\$@"\`";;
+  case "$command" in
+  '"${commands[*]}"')
+    eval "`plenv "sh-$command" "$@"`";;
   *)
-    command plenv "\$command" "\$@";;
+    command plenv "$command" "$@";;
   esac
-}
-EOS
+}'
 fi

@@ -24,7 +24,8 @@ if [ "$1" = "--complete" ]; then
 fi
 
 version="$1"
-shell="$(basename "${PLENV_SHELL:-$SHELL}")"
+shell="${PLENV_SHELL:-$SHELL}"
+shell="${shell##*/}"
 
 if [ -z "$version" ]; then
   if [ -z "$PLENV_VERSION" ]; then

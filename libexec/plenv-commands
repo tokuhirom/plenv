@@ -5,20 +5,20 @@
 set -e
 [ -n "$PLENV_DEBUG" ] && set -x
 
-# Provide plenv completions
-if [ "$1" = "--complete" ]; then
+case "$1" in
+--complete ) # Provide plenv completions
   echo --sh
   echo --no-sh
   exit
-fi
-
-if [ "$1" = "--sh" ]; then
+  ;;
+--sh )
   sh=1
-  shift
-elif [ "$1" = "--no-sh" ]; then
+  ;;
+--no-sh )
   nosh=1
-  shift
-fi
+  ;;
+esac
+
 
 IFS=: paths=($PATH)
 
@@ -27,17 +27,11 @@ shopt -s nullglob
 { for path in "${paths[@]}"; do
     for command in "${path}/plenv-"*; do
       command="${command##*plenv-}"
-      if [ -n "$sh" ]; then
-        if [ ${command:0:3} = "sh-" ]; then
-          echo ${command##sh-}
-        fi
-      elif [ -n "$nosh" ]; then
-        if [ ${command:0:3} != "sh-" ]; then
-          echo ${command##sh-}
-        fi
-      else
-        echo ${command##sh-}
-      fi
+      case "$command" in
+        sh-*) [ -n "$nosh" ] && continue ;;
+           *) [ -n "$sh"   ] && continue ;;
+      esac
+      echo ${command##sh-}
     done
   done
-} | sort | uniq
+} | sort -u
