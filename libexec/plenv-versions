@@ -32,8 +32,8 @@ if [ -n "$include_system" ] && PLENV_VERSION=system plenv-which perl >/dev/null 
   print_version system
 fi
 
-for entry in $(ls "${PLENV_ROOT}/versions/" \
-    | sort -t. -k1,1n -k2,2n -k3,3n)
+for entry in $(command -p ls "${PLENV_ROOT}/versions/" \
+    | command -p sort -t. -k1,1n -k2,2n -k3,3n)
 do
   if [ -d "${PLENV_ROOT}/versions/$entry" ]; then
     print_version "$entry"
