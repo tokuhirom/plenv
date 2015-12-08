@@ -70,7 +70,7 @@ easy to fork and contribute any changes back upstream.
 1. Check out plenv into `~/.plenv`.
 
     ~~~ sh
-    $ git clone git://github.com/tokuhirom/plenv.git ~/.plenv
+    $ git clone https://github.com/tokuhirom/plenv.git ~/.plenv
     ~~~
 
 2. Add `~/.plenv/bin` to your `$PATH` for access to the `plenv`
@@ -106,7 +106,7 @@ easy to fork and contribute any changes back upstream.
    process of installing new Perl versions.
 
     ~~~
-    $ git clone git://github.com/tokuhirom/Perl-Build.git ~/.plenv/plugins/perl-build/
+    $ git clone https://github.com/tokuhirom/Perl-Build.git ~/.plenv/plugins/perl-build/
     $ plenv install 5.18.0
     ~~~
 
