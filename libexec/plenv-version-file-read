@@ -2,4 +2,5 @@
 # Usage: plenv version-file-read <file>
 # Reads the first non-whitespace word from the specified version file,
 # careful not to load it whole in case there's something crazy in it.
-command -p awk 'NF > 0 { print $1 ; exit 0 } END { exit 1 }' "$1"
+[ -e "$1" ] && \
+  command -p awk 'NF > 0 { print $1 ; exit 0 } END { exit 1 }' "$1"
