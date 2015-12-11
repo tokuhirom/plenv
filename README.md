@@ -139,6 +139,30 @@ $ git fetch
 $ git checkout 2.0.0
 ~~~
 
+### Installation Without Git
+
+To install on a system without git, simply download the latest archive
+and unpack it to `~/.plenv`. You will need to repeat this process to
+upgrade your installation.
+
+~~~ sh
+$ wget -O plenv.tar.gz https://github.com/tokuhirom/plenv/archive/master.tar.gz
+$ mkdir ~/.plenv
+$ tar --directory=~/.plenv --strip-components=1 -zxvf plenv.tar.gz
+~~~
+
+Follow the remaining standard instructions starting at step 2 of
+[Basic GitHub Checkout](#basic-github-checkout).
+
+Plugins such as perl-build and plenv-contrib will need to be installed
+into `~/.plenv/plugins` similarly.
+
+~~~ sh
+$ wget -O perl-build.tar.gz https://github.com/tokuhirom/Perl-Build/archive/master.tar.gz
+$ mkdir -p ~/.plenv/plugins/perl-build
+$ tar --directory=~/.plenv/plugins/perl-build --strip-components=1 -zxvf perl-build.tar.gz
+~~~
+
 ### Homebrew on Mac OS X
 
 You can also install plenv using the
