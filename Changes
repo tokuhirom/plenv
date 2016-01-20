@@ -1,3 +1,37 @@
+2.2.0 2016-01-20T00:00:00
+
+    - Fix fork bomb issue and cleanup
+      (Aristotle Pagaltzis)
+    - Fix migrate-modules issue
+      (jest, msestak)
+    - Fix list modules issue
+      (chocolateboy)
+    - Support fish shell
+      (syohex)
+    - Fix proxy issue for install-cpanm
+      (Stephen)
+    - Don't execute unnecessary rehash
+      (Dave Miles)
+    - Fix install-cpanm issue
+      (tokuhirom)
+    - Improve shell detection
+      (Finn Smith)
+    - Add fish completion file
+      (Nicolas Leclercq)
+    - Support greadlink environment
+      (tokuhirom)
+    - Fix for ksh and dash
+      (Desmond O. Chang)
+
+2.1.1 2013-09-17T15:22:48
+
+    - Fixed Travis CI issue
+      (tokuhirom, Ingy)
+    - Correct argument handling
+      (Ingy)
+    - Remove needless code
+      (Ingy)
+
 2.1.0 2013-09-04T10:43:51
 
     - Some minor tweaks.
