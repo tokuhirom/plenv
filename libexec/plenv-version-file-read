@@ -3,5 +3,5 @@
 # Reads the first non-whitespace word from the specified version file,
 # careful not to load it whole in case there's something crazy in it.
 if [ -e "$1" ]; then
-  command -p awk 'NF > 0 { print $1 ; exit 0 } END { exit 1 }' "$1"
+  command -p awk 'BEGIN {rc=1} NF > 0 { print $1 ; exit rc=0 } END { exit rc }' "$1"
 fi
