@@ -48,7 +48,7 @@ set -e
 program="\${0##*/}"
 if [ "\$program" == "perl" ]; then
   for arg; do
-    [[ "\$arg" =~ ^(--$|-[0A-Za-z]*[eE].*) ]] && break
+    [[ "\$arg" =~ "^(--$|-[0A-Za-z]*[eE].*)" ]] && break
     if [[ "\$arg" =~ / ]] && [ -f "\$arg" ]; then
       export PLENV_DIR="\${arg%/*}"
       break
