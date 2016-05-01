@@ -60,7 +60,7 @@ for plugin_bin in "${PLENV_ROOT}/plugins/"*/bin; do
 done
 export PATH="${bin_path}:${PATH}"
 
-hook_path="${PLENV_HOOK_PATH}:${PLENV_ROOT}/plenv.d:/usr/local/etc/plenv.d:/etc/plenv.d:/usr/lib/plenv/hooks"
+hook_path="${PLENV_HOOK_PATH:+$PLENV_HOOK_PATH:}${PLENV_ROOT}/plenv.d:/usr/local/etc/plenv.d:/etc/plenv.d:/usr/lib/plenv/hooks"
 for plugin_hook in "${PLENV_ROOT}/plugins/"*/etc/plenv.d; do
   hook_path="${hook_path}:${plugin_hook}"
 done

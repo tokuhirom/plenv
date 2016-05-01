@@ -3,10 +3,10 @@
 # Usage: plenv hooks <command>
 
 set -e
-[ -n "$PLENV_DEBUG" ] && set -x
+[[ -n "$PLENV_DEBUG" ]] && set -x
 
 # Provide plenv completions
-if [ "$1" = "--complete" ]; then
+if [[ "$1" = "--complete" ]]; then
   echo exec
   echo rehash
   echo which
@@ -14,7 +14,7 @@ if [ "$1" = "--complete" ]; then
 fi
 
 PLENV_COMMAND="$1"
-if [ -z "$PLENV_COMMAND" ]; then
+if [[ -z "$PLENV_COMMAND" ]]; then
   plenv-help --usage hooks >&2
   exit 1
 fi
@@ -23,7 +23,7 @@ realpath() {
   local cwd="$PWD"
   local path="$1"
 
-  while [ -n "$path" ]; do
+  while [[ -n "$path" ]]; do
     cd "${path%/*}"
     local name="${path##*/}"
     path="$($READLINK "$name" || true)"
@@ -38,7 +38,7 @@ IFS=: hook_paths=($PLENV_HOOK_PATH)
 shopt -s nullglob
 for path in "${hook_paths[@]}"; do
   for script in "$path/$PLENV_COMMAND"/*.bash; do
-    echo $(realpath $script)
+    realpath "$script"
   done
 done
 shopt -u nullglob
