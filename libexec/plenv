@@ -90,6 +90,14 @@ case "$command" in
   fi
 
   shift 1
+
+  if [ "$command" = "install" ];then
+    system_perl=$(PLENV_VERSION=system plenv-which perl 2> /dev/null || true)
+    if [ "$system_perl" != "" ]; then
+      exec "$system_perl" "$command_path" "$@"
+    fi
+  fi
+
   exec "$command_path" "$@"
   ;;
 esac
