@@ -388,6 +388,12 @@ Lists all perl versions with the given command installed.
 
         % plenv install 5.16.2 -DDEBUGGING=-g
 
+- How can I uninstall plenv ?
+
+    Remove plenv configuration lines(`plenv init` and PATH) from your shell start up configuration. And remove `plenv` directory as below.
+
+        % rm -rf `plenv root`
+
 # BUG REPORTING
 
 Plese use github issues: [http://github.com/tokuhirom/plenv/](http://github.com/tokuhirom/plenv/).
