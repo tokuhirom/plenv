@@ -83,8 +83,8 @@ mkdir -p "${PLENV_ROOT}/"{shims,versions}
 
 case "$shell" in
 fish )
-  echo "setenv PATH '${PLENV_ROOT}/shims' \$PATH"
-  echo "setenv PLENV_SHELL $shell"
+  echo "set -gx PATH '${PLENV_ROOT}/shims' \$PATH"
+  echo "set -gx PLENV_SHELL $shell"
   ;;
 * )
   echo 'export PATH="'${PLENV_ROOT}'/shims:${PATH}"'
