@@ -4,7 +4,8 @@ set -e
 CPAN_TEMP_HEREDOC="$SHIM_PATH/.cpan-heredoc"
 
 cpan_clients=( 'cpan' 'cpanm' 'cpanp' )
-regexp_system_perl="^system$"
+regexp_system_perl='^system$'
+regexp_local_lib_path='$CURRENT_PERL_VERSION@.+'
 # Check whether all cpan-related shims are existed in the list of
 # registered shims and then create separately shims for cpanm and 
 # other cpan clients (with respecting of the ExtUtils::MakeMaker's
@@ -22,10 +23,12 @@ set -e
 
 program="\${0##*/}"
 
+CURRENT_PERL_VERSION=\$(plenv version-name)
+
 # Respect this env vars for system-wide perl and when they're set by
-# `plenv use` command (see plenv-contrib for local::lib integration).
-if [[ ! \$(plenv version-name) =~ $regexp_system_perl ]] &&
-   [[ ! -z \${PERL_MM_OPT##*/} ]] ; then
+# \`plenv use\`  command (see plenv-contrib for local::lib integration).
+if [[ ! "\$CURRENT_PERL_VERSION" =~ $regexp_system_perl ]] &&
+   [[ ! "\${PERL_MM_OPT##*/}" =~ $regexp_local_lib_path ]] &&
   unset PERL_MM_OPT
   unset PERL_MB_OPT
 fi
