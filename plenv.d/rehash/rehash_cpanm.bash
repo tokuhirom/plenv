@@ -28,7 +28,7 @@ CURRENT_PERL_VERSION=\$(plenv version-name)
 # Respect this env vars for system-wide perl and when they're set by
 # \`plenv use\`  command (see plenv-contrib for local::lib integration).
 if [[ ! "\$CURRENT_PERL_VERSION" =~ $regexp_system_perl ]] &&
-   [[ ! "\${PERL_MM_OPT##*/}" =~ $regexp_local_lib_path ]] &&
+   [[ ! "\${PERL_MM_OPT##*/}" =~ $regexp_local_lib_path ]]; then 
   unset PERL_MM_OPT
   unset PERL_MB_OPT
 fi
@@ -55,8 +55,12 @@ set -e
 
 program="\${0##*/}"
 
-# Respect this env vars only for system-wide perl
-if [[ ! \$(plenv-version-name) =~ $regexp_system_perl ]]; then
+CURRENT_PERL_VERSION=\$(plenv version-name)
+
+# Respect this env vars for system-wide perl and when they're set by
+# \`plenv use\`  command (see plenv-contrib for local::lib integration).
+if [[ ! "\$CURRENT_PERL_VERSION" =~ $regexp_system_perl ]] &&
+   [[ ! "\${PERL_MM_OPT##*/}" =~ $regexp_local_lib_path ]]; then
   unset PERL_MM_OPT
   unset PERL_MB_OPT
 fi
