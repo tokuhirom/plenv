@@ -11,7 +11,7 @@ if [ -z "$COMMAND" ]; then
 fi
 
 COMMAND_PATH="$(command -v "plenv-$COMMAND" || command -v "plenv-sh-$COMMAND")"
-if grep -i "^\([#%]\|--\|//\) provide plenv completions" "$COMMAND_PATH" >/dev/null; then
+if grep -i "^.*\([#%]\|--\|//\) provide plenv completions" "$COMMAND_PATH" >/dev/null; then
   shift
   exec "$COMMAND_PATH" --complete "$@"
 fi
