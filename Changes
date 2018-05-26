@@ -1,3 +1,16 @@
+2.3.0 2018-05-26T18:18:00
+
+    - plenv-init: fix setenv / set usage for fish
+      (Finn Smith)
+    - use system perl by preference when installing
+      (Songmu)
+    - Don't install EUMM when installing cpanm
+      (skaji)
+    - plenv: fix ':' in head of $PLENV_HOOK_PATH
+      (Olivier Mengué)
+    - Don't overwrite exit status at END block
+      (Syohei YOSHIDA)
+
 2.2.0 2016-01-21T11:33:00
 
     - Fix fork bomb issue and cleanup
