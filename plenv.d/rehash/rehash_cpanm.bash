@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-CPAN_TEMP_HEREDOC="$SHIM_PATH/.cpan-heredoc"
-
 cpan_clients=( 'cpan' 'cpanm' 'cpanp' )
 regexp_system_perl='^system$'
 regexp_local_lib_path='$CURRENT_PERL_VERSION@.+'
