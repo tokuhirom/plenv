@@ -21,7 +21,7 @@ set -e
 
 program="\${0##*/}"
 
-CURRENT_PERL_VERSION=\$(plenv version-name)
+CURRENT_PERL_VERSION=\$("$(command -v plenv)" version-name)
 
 # Respect this env vars for system-wide perl and when they're set by
 # \`plenv use\`  command (see plenv-contrib for local::lib integration).
@@ -53,7 +53,7 @@ set -e
 
 program="\${0##*/}"
 
-CURRENT_PERL_VERSION=\$(plenv version-name)
+CURRENT_PERL_VERSION=\$("$(command -v plenv)"  version-name)
 
 # Respect this env vars for system-wide perl and when they're set by
 # \`plenv use\`  command (see plenv-contrib for local::lib integration).
