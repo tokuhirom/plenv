@@ -16,4 +16,4 @@ if [ -z "$PLENV_ROOT" ]; then
   PLENV_ROOT="${HOME}/.plenv"
 fi
 
-plenv exec perl -MExtUtils::Installed -e 'print "$_$/" for ExtUtils::Installed->new(skip_cwd => 1)->modules'
+plenv exec perl -MExtUtils::Installed -e 'print "$_$/" for grep $_ ne "Perl", ExtUtils::Installed->new(skip_cwd => 1)->modules'
