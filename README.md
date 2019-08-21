@@ -102,7 +102,7 @@ easy to fork and contribute any changes back upstream.
     ~~~
 
 5. Install [perl-build](https://github.com/tokuhirom/perl-build),
-   which provides an `plenv install` command that simplifies the
+   which provides a `plenv install` command that simplifies the
    process of installing new Perl versions.
 
     ~~~
@@ -250,7 +250,7 @@ configured local version. You can also unset the local version:
 
 Previous versions of plenv stored local version specifications in a
 file named `.plenv-version`. For backwards compatibility, plenv will
-read a local version specified in an `.plenv-version` file, but a
+read a local version specified in a `.plenv-version` file, but a
 `.perl-version` file in the same directory will take precedence.
 
 ### plenv global

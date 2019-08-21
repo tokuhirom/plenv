@@ -159,7 +159,7 @@ v1.6.0 2013-05-26T10:32:21Z
       - Loop for @D, @A, @U makes no sense
       - Remove '--' if @ARGV contains it(See also Getopt::Long document).
      (Syohei YOSHIDA)
-   - speciallize the shim file for cpanm. Speciallized version of 'cpanm'
+   - specialize the shim file for cpanm. Specialized version of 'cpanm'
      shim runs rehashing after installing.
      (tokuhirom)
 
