@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+#
+# Summary: Set or show the local application-specific Perl lib dirs
+#
+# Usage: plenv libdirs <dir|dirs>
+#        plenv libdirs --unset
+#        plenv libdirs --prepend <path>
+#        plenv libdirs --append/--add <path>
+#        plenv libdirs --remove/rm <path>
+#
+# Sets the local application-specific Perl libdirs by writing the
+# lib directories to a file named `.perl-libdirs'.
+# TODO Rest of docs
+#
+# When you run a Perl command, plenv will look for a `.perl-libdirs'
+# file in the current directory and each parent directory. If such
+# a file is found in the tree, plenv will take the first line of the file
+# and copy it to environment variable PERL5LIB.
+#
+# If PERL5LIB has already been set (even if it is an empty string),
+# plenv will do nothing.
+#
+# File `.perl-libdirs` first line follows the syntax of PERL5LIB
+# variable: paths are separated with `:` character. The second line,
+# if used, has settings.
+#
+# Parameters `--prepend` and `--append` add a path. Parameter
+# `--remove` deletes a path.
+#
+# N.B. If you add a path which itself has a sub dir "lib", this will
+# be detected and added to the path.
+
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+
+# Provide plenv completions
+if [ "$1" = "--complete" ]; then
+  echo --unset
+  echo --prepend
+  echo --append
+  echo --add
+  echo --remove
+  echo --rm
+  # TODO Add file/path completion
+  exit
+fi
+
+PLENV_LIBDIRS="$1"
+function chop_trailing_slash { echo "${1%\/}"; }
+function append_lib_dir {
+  if [ -d "${1}/lib" ]; then echo "${1}/lib"; else echo "$1"; fi
+  return 0
+}
+
+if [ "$PLENV_LIBDIRS" = "--unset" ]; then
+  command -p rm -f .perl-libdirs .plenv-libdirs
+elif [ "$PLENV_LIBDIRS" = "--prepend" ]; then
+  PLENV_LIBDIRS="$(plenv-libdirs)"
+  PLENV_NEW_DIR="$(append_lib_dir "$(chop_trailing_slash "$2")")"
+  plenv-libdirs-file-write .perl-libdirs "$PLENV_NEW_DIR${PLENV_LIBDIRS:+":"}$PLENV_LIBDIRS"
+elif [ "$PLENV_LIBDIRS" = "--add" ] || [ "$PLENV_LIBDIRS" = "--append" ]; then
+  PLENV_LIBDIRS="$(plenv-libdirs)"
+  PLENV_NEW_DIR="$(append_lib_dir "$(chop_trailing_slash "$2")")"
+  plenv-libdirs-file-write .perl-libdirs "$PLENV_LIBDIRS${PLENV_LIBDIRS:+":"}$PLENV_NEW_DIR"
+elif [ "$PLENV_LIBDIRS" = "--remove" ] || [ "$PLENV_LIBDIRS" = "--rm" ]; then
+  PLENV_LIBDIRS="$(plenv-libdirs)"
+  PLENV_LIBDIRS=${PLENV_LIBDIRS//":$2:"/":"}
+  PLENV_LIBDIRS=${PLENV_LIBDIRS/#"$2:"/}
+  PLENV_LIBDIRS=${PLENV_LIBDIRS/%":$2"/}
+  plenv-libdirs-file-write .perl-libdirs "$PLENV_LIBDIRS"
+elif [[ $PLENV_LIBDIRS =~ ^-- ]]; then
+  { echo "plenv: Unknown argument $PLENV_LIBDIRS"
+    exit 1
+  } >&2
+elif [ -n "$PLENV_LIBDIRS" ]; then
+  plenv-libdirs-file-write .perl-libdirs "$PLENV_LIBDIRS"
+else
+  plenv-libdirs-file-read .perl-libdirs ||
+  { echo "plenv: no local libdirs configured for this directory"
+    exit 1
+  } >&2
+fi
+

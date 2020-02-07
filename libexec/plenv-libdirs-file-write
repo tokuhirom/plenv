@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Usage: plenv libdirs-file-write <file> <libdirs>
+
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+
+PLENV_LIBDIRS_FILE="$1"
+PLENV_LIBDIRS="$2"
+
+if [ -z "$PLENV_LIBDIRS" ] || [ -z "$PLENV_LIBDIRS_FILE" ]; then
+  plenv-help --usage libdirs-file-write >&2
+  exit 1
+fi
+
+# Make sure the specified libdirs is installed.
+# plenv-prefix "$PLENV_LIBDIRS" >/dev/null
+# TODO Check the validity of dirs?
+
+# Write the libdirs out to disk.
+echo "$PLENV_LIBDIRS" > "$PLENV_LIBDIRS_FILE"
+

@@ -33,6 +33,16 @@ export PLENV_VERSION
 PLENV_COMMAND_PATH="$(plenv-which "$PLENV_COMMAND")"
 PLENV_BIN_PATH="${PLENV_COMMAND_PATH%/*}"
 
+PLENV_LIBDIRS="$(plenv-libdirs)"
+PLENV_PERL5LIB="${PERL5LIB-NOT_SET}"
+# If PERL5LIB is set (even if empty), we simply let it pass without changes
+if [ "$PLENV_PERL5LIB" = "NOT_SET" ]; then
+    if [ -n "$PLENV_LIBDIRS" ]; then
+        PERL5LIB="$PLENV_LIBDIRS"
+        export PERL5LIB
+    fi
+fi
+
 OLDIFS="$IFS"
 IFS=$'\n' scripts=(`plenv-hooks exec`)
 IFS="$OLDIFS"
