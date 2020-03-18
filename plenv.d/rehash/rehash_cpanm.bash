@@ -37,7 +37,7 @@ rc=\$?
 for arg in \$@
 do
   case \$arg in
-    '-h'|'--help'|'-v'|'--version'|'--info'|'-L'|'--local-lib-contained'|'-l'|'--local-lib')
+    '-h'|'--help'|'-V'|'--version'|'--info'|'-L'|'--local-lib-contained'|'-l'|'--local-lib')
       exit \$rc
     ;;
   esac
