@@ -1,3 +1,11 @@
+2.3.1 2020-03-22T00:00:00
+
+    - Fix document(Ville Skyttä)
+    - skip Perl module from plenv list-modules(Shoichi Kaji)
+    - Fix non-interactive ssh session issue(Georgiy Odisharia)
+    - Respect envvars by cpan only for system perl(Georgiy Odisharia)
+
+
 2.3.0 2018-05-26T18:18:00
 
     - plenv-init: fix setenv / set usage for fish
