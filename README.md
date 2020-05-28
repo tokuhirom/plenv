@@ -61,6 +61,9 @@ Unlike perlbrew, plenv doesn't provide built-in local::lib integrations, but [pl
 If you're on Mac OS X, consider
 [installing with Homebrew](#homebrew-on-mac-os-x).
 
+### The automatic installer
+
+Visit the installer project: https://github.com/gingerhot/plenv-installer
 
 ### Basic GitHub Checkout
 
@@ -91,7 +94,7 @@ easy to fork and contribute any changes back upstream.
     ~~~
 
     _Same as in previous step, use `~/.profile` on Ubuntu._
-    
+
     **Zsh note**: Use `echo 'eval "$(plenv init - zsh)"' >> ~/.zshrc`
 
 4. Restart your shell as a login shell so the path changes take effect.
