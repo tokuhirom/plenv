@@ -166,7 +166,7 @@ $ tar --directory=~/.plenv/plugins/perl-build --strip-components=1 -zxvf perl-bu
 ### Homebrew on Mac OS X
 
 You can also install plenv using the
-[Homebrew](http://mxcl.github.com/homebrew/) package manager on Mac OS
+[Homebrew](https://brew.sh/) package manager on Mac OS
 X.
 
 ~~~
