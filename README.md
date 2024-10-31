@@ -40,7 +40,7 @@ plenv - perl binary manager
 
 Use plenv to pick a Perl version for your application and guarantee
 that your development environment matches production. Put plenv to work
-with [Carton](http://github.com/miyagawa/carton/) for painless Perl upgrades and bulletproof deployments.
+with [Carton](https://github.com/miyagawa/carton/) for painless Perl upgrades and bulletproof deployments.
 
 # plenv vs. perlbrew
 
@@ -396,7 +396,7 @@ Lists all perl versions with the given command installed.
 
 # BUG REPORTING
 
-Plese use github issues: [http://github.com/tokuhirom/plenv/](http://github.com/tokuhirom/plenv/).
+Plese use github issues: [https://github.com/tokuhirom/plenv/](https://github.com/tokuhirom/plenv/).
 
 # AUTHOR
 
@@ -404,7 +404,7 @@ Tokuhiro Matsuno <tokuhirom AAJKLFJEF@ GMAIL COM>
 
 # SEE ALSO
 
-[App::perlbrew](http://search.cpan.org/perldoc?App::perlbrew) provides the same features. But plenv provides project local file: __ .perl-version __.
+[App::perlbrew](https://search.cpan.org/perldoc?App::perlbrew) provides the same features. But plenv provides project local file: __ .perl-version __.
 
 Most of part was inspired from [rbenv](https://github.com/sstephenson/rbenv).
 

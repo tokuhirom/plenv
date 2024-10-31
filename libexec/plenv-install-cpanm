@@ -62,5 +62,5 @@ for option in "${OPTIONS[@]}"; do
 done
 
 PLENV_INSTALL_CPANM=${PLENV_INSTALL_CPANM:--p}
-curl ${PLENV_INSTALL_CPANM} -L http://cpanmin.us/ | plenv exec perl - App::cpanminus
+curl ${PLENV_INSTALL_CPANM} -L https://cpanmin.us/ | plenv exec perl - App::cpanminus
 plenv rehash
