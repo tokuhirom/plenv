@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Summary: Explain user error of calling this command instead of shell function
+# Usage: plenv shell [...]
+
+set -e
+[ -n "$PLENV_DEBUG" ] && set -x
+
+echo "Your shell is not yet configured to use plenv." >&2
+echo "See: https://github.com/tokuhirom/plenv#installation" >&2
+exit 1
