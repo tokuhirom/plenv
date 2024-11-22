@@ -27,6 +27,8 @@ version="$1"
 shell="${PLENV_SHELL:-$SHELL}"
 shell="${shell##*/}"
 
+version=$(plenv-version-munge $version)
+
 if [ -z "$version" ]; then
   if [ -z "$PLENV_VERSION" ]; then
     echo "plenv: no shell-specific version configured" >&2

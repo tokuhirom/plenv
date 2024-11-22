@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Summary: munge the passed Perl version using plugins
+
+version="$1"
+if [ "$version" != '' ]; then
+
+    OLDIFS="$IFS"
+    IFS=$'\n' scripts=(`plenv-hooks version-munge`)
+    IFS="$OLDIFS"
+
+    for script in "${scripts[@]}"; do
+	source "$script"
+    done
+
+fi
+
+echo "$version"
