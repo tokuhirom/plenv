@@ -258,7 +258,7 @@ read a local version specified in a `.plenv-version` file, but a
 Sets the global version of perl to be used in all shells by writing
 the version name to the `~/.plenv/version` file. This version can be
 overridden by an application-specific `.perl-version` file, or by
-setting the `plenv_VERSION` environment variable.
+setting the `PLENV_VERSION` environment variable.
 
     $ plenv global 5.8.2
 
@@ -270,14 +270,14 @@ currently configured global version.
 
 ### plenv shell
 
-Sets a shell-specific perl version by setting the `plenv_VERSION`
+Sets a shell-specific perl version by setting the `PLENV_VERSION`
 environment variable in your shell. This version overrides
 application-specific versions and the global version.
 
     $ plenv shell 5.8.2
 
 When run without a version number, `plenv shell` reports the current
-value of `plenv_VERSION`. You can also unset the shell version:
+value of `PLENV_VERSION`. You can also unset the shell version:
 
     $ plenv shell --unset
 
